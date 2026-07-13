@@ -18,7 +18,6 @@
 #define CPU_BLOCK_END()
 
 static inline void fetch_ea_32_long(uint32_t rmdat) {
-        eal_r = eal_w = NULL;
         easeg = cpu_state.ea_seg->base;
         if (cpu_rm == 4) {
                 uint8_t sib = rmdat >> 8;
@@ -64,17 +63,26 @@ static inline void fetch_ea_32_long(uint32_t rmdat) {
                         cpu_state.eaaddr = getlong();
                 }
         }
-        if (easeg != 0xFFFFFFFF && ((easeg + cpu_state.eaaddr) & 0xFFF) <= 0xFFC) {
-                uint32_t addr = easeg + cpu_state.eaaddr;
-                if (readlookup2[addr >> 12] != -1)
-                        eal_r = (uint32_t *)(readlookup2[addr >> 12] + addr);
-                if (writelookup2[addr >> 12] != -1)
-                        eal_w = (uint32_t *)(writelookup2[addr >> 12] + addr);
+        {
+                uint32_t addr_full = easeg + cpu_state.eaaddr;
+                int outer = (easeg != 0xFFFFFFFF) & ((addr_full & 0xFFF) <= 0xFFC);
+
+                /* Force addr to 0 when the outer condition is false – safe index */
+                uint32_t addr = addr_full & -(uint32_t)outer;
+                uint32_t page = addr >> 12;
+
+                int has_read = (readlookup2[page] != -1) & outer;
+                int has_write = (writelookup2[page] != -1) & outer;
+
+                uintptr_t rptr = (uintptr_t)(readlookup2[page] + addr);
+                uintptr_t wptr = (uintptr_t)(writelookup2[page] + addr);
+
+                eal_r = (uint32_t *)(rptr & -(uintptr_t)has_read);
+                eal_w = (uint32_t *)(wptr & -(uintptr_t)has_write);
         }
 }
 
 static inline void fetch_ea_16_long(uint32_t rmdat) {
-        eal_r = eal_w = NULL;
         easeg = cpu_state.ea_seg->base;
         if (!cpu_mod && cpu_rm == 6) {
                 cpu_state.eaaddr = getword();
@@ -98,12 +106,22 @@ static inline void fetch_ea_16_long(uint32_t rmdat) {
                 }
                 cpu_state.eaaddr &= 0xFFFF;
         }
-        if (easeg != 0xFFFFFFFF && ((easeg + cpu_state.eaaddr) & 0xFFF) <= 0xFFC) {
-                uint32_t addr = easeg + cpu_state.eaaddr;
-                if (readlookup2[addr >> 12] != -1)
-                        eal_r = (uint32_t *)(readlookup2[addr >> 12] + addr);
-                if (writelookup2[addr >> 12] != -1)
-                        eal_w = (uint32_t *)(writelookup2[addr >> 12] + addr);
+        {
+                uint32_t addr_full = easeg + cpu_state.eaaddr;
+                int outer = (easeg != 0xFFFFFFFF) & ((addr_full & 0xFFF) <= 0xFFC);
+
+                /* Force addr to 0 when the outer condition is false – safe index */
+                uint32_t addr = addr_full & -(uint32_t)outer;
+                uint32_t page = addr >> 12;
+
+                int has_read = (readlookup2[page] != -1) & outer;
+                int has_write = (writelookup2[page] != -1) & outer;
+
+                uintptr_t rptr = (uintptr_t)(readlookup2[page] + addr);
+                uintptr_t wptr = (uintptr_t)(writelookup2[page] + addr);
+
+                eal_r = (uint32_t *)(rptr & -(uintptr_t)has_read);
+                eal_w = (uint32_t *)(wptr & -(uintptr_t)has_write);
         }
 }
 
