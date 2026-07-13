@@ -8,10 +8,9 @@
 
   PCem tracks a 'dirty mask' for each physical page, in which each bit
   represents 64 bytes. This is only tracked for pages that have code in - when a
-  page first has a codeblock generated, it is evicted from the writelookup and
-  added to the page_lookup for this purpose. When in the page_lookup, each write
-  will go through the mem_write_ram*_page() functions and set the dirty mask
-  appropriately.
+  page first has a codeblock generated, it is added to the page_lookup for
+  this purpose. When in the page_lookup, each write will go through the
+  mem_write_ram*_page() functions and set the dirty mask appropriately.
 
   Each codeblock also contains a code mask (actually two masks, one for each
   page the block is/may be in), again with each bit representing 64 bytes.

@@ -50,49 +50,8 @@ static void build_load_routine(codeblock_t *block, int size, int is_float) {
 
         /*In - R0 = address
           Out - R0 = data, R1 = abrt*/
-        /*MOV R1, R0, LSR #12
-          MOV R2, #readlookup2
-          LDR R1, [R2, R1, LSL #2]
-          CMP R1, #-1
-          BNE +
-          LDRB R0, [R1, R0]
-          MOV R1, #0
-          MOV PC, LR
-        * STR LR, [SP, -4]!
-          BL readmembl
-          LDRB R1, cpu_state.abrt
-          LDR PC, [SP], #4
-        */
+        /*Load routine - always calls readmem* slow path*/
         codegen_alloc(block, 80);
-        host_arm_MOV_REG_LSR(block, REG_R1, REG_R0, 12);
-        host_arm_MOV_IMM(block, REG_R2, (uint32_t)readlookup2);
-        host_arm_LDR_REG_LSL(block, REG_R1, REG_R2, REG_R1, 2);
-        if (size != 1) {
-                host_arm_TST_IMM(block, REG_R0, size - 1);
-                misaligned_offset = host_arm_BNE_(block);
-        }
-        host_arm_CMP_IMM(block, REG_R1, -1);
-        branch_offset = host_arm_BEQ_(block);
-        if (size == 1 && !is_float)
-                host_arm_LDRB_REG(block, REG_R0, REG_R1, REG_R0);
-        else if (size == 2 && !is_float)
-                host_arm_LDRH_REG(block, REG_R0, REG_R1, REG_R0);
-        else if (size == 4 && !is_float)
-                host_arm_LDR_REG(block, REG_R0, REG_R1, REG_R0);
-        else if (size == 4 && is_float) {
-                host_arm_ADD_REG(block, REG_R0, REG_R0, REG_R1);
-                host_arm_VLDR_S(block, REG_D_TEMP, REG_R0, 0);
-        } else if (size == 8) {
-                host_arm_ADD_REG(block, REG_R0, REG_R0, REG_R1);
-                host_arm_VLDR_D(block, REG_D_TEMP, REG_R0, 0);
-        }
-        host_arm_MOV_IMM(block, REG_R1, 0);
-        host_arm_MOV_REG(block, REG_PC, REG_LR);
-
-        *branch_offset |= ((((uintptr_t)&block_write_data[block_pos] - (uintptr_t)branch_offset) - 8) & 0x3fffffc) >> 2;
-        if (size != 1)
-                *misaligned_offset |=
-                        ((((uintptr_t)&block_write_data[block_pos] - (uintptr_t)misaligned_offset) - 8) & 0x3fffffc) >> 2;
         host_arm_STR_IMM_WB(block, REG_LR, REG_HOST_SP, -4);
         if (size == 1)
                 host_arm_BL(block, (uintptr_t)readmembl);
@@ -118,49 +77,8 @@ static void build_store_routine(codeblock_t *block, int size, int is_float) {
 
         /*In - R0 = address
           Out - R0 = data, R1 = abrt*/
-        /*MOV R1, R0, LSR #12
-          MOV R2, #readlookup2
-          LDR R1, [R2, R1, LSL #2]
-          CMP R1, #-1
-          BNE +
-          LDRB R0, [R1, R0]
-          MOV R1, #0
-          MOV PC, LR
-        * STR LR, [SP, -4]!
-          BL readmembl
-          LDRB R1, cpu_state.abrt
-          LDR PC, [SP], #4
-        */
+        /*Load routine - always calls readmem* slow path*/
         codegen_alloc(block, 80);
-        host_arm_MOV_REG_LSR(block, REG_R2, REG_R0, 12);
-        host_arm_MOV_IMM(block, REG_R3, (uint32_t)writelookup2);
-        host_arm_LDR_REG_LSL(block, REG_R2, REG_R3, REG_R2, 2);
-        if (size != 1) {
-                host_arm_TST_IMM(block, REG_R0, size - 1);
-                misaligned_offset = host_arm_BNE_(block);
-        }
-        host_arm_CMP_IMM(block, REG_R2, -1);
-        branch_offset = host_arm_BEQ_(block);
-        if (size == 1 && !is_float)
-                host_arm_STRB_REG(block, REG_R1, REG_R2, REG_R0);
-        else if (size == 2 && !is_float)
-                host_arm_STRH_REG(block, REG_R1, REG_R2, REG_R0);
-        else if (size == 4 && !is_float)
-                host_arm_STR_REG(block, REG_R1, REG_R2, REG_R0);
-        else if (size == 4 && is_float) {
-                host_arm_ADD_REG(block, REG_R0, REG_R0, REG_R2);
-                host_arm_VSTR_S(block, REG_D_TEMP, REG_R0, 0);
-        } else if (size == 8) {
-                host_arm_ADD_REG(block, REG_R0, REG_R0, REG_R2);
-                host_arm_VSTR_D(block, REG_D_TEMP, REG_R0, 0);
-        }
-        host_arm_MOV_IMM(block, REG_R1, 0);
-        host_arm_MOV_REG(block, REG_PC, REG_LR);
-
-        *branch_offset |= ((((uintptr_t)&block_write_data[block_pos] - (uintptr_t)branch_offset) - 8) & 0x3fffffc) >> 2;
-        if (size != 1)
-                *misaligned_offset |=
-                        ((((uintptr_t)&block_write_data[block_pos] - (uintptr_t)misaligned_offset) - 8) & 0x3fffffc) >> 2;
         host_arm_STR_IMM_WB(block, REG_LR, REG_HOST_SP, -4);
         if (size == 4 && is_float)
                 host_arm_VMOV_32_S(block, REG_R1, REG_D_TEMP);

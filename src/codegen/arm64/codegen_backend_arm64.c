@@ -52,46 +52,8 @@ static void build_load_routine(codeblock_t *block, int size, int is_float) {
 
         /*In - W0 = address
           Out - W0 = data, W1 = abrt*/
-        /*MOV W1, W0, LSR #12
-          MOV X2, #readlookup2
-          LDR X1, [X2, X1, LSL #3]
-          CMP X1, #-1
-          BEQ +
-          LDRB W0, [X1, X0]
-          MOV W1, #0
-          RET
-        * STP X29, X30, [SP, #-16]
-          BL readmembl
-          LDRB R1, cpu_state.abrt
-          LDP X29, X30, [SP, #-16]
-          RET
-        */
+        /*Load routine - always calls readmem* slow path*/
         codegen_alloc(block, 80);
-        host_arm64_MOV_REG_LSR(block, REG_W1, REG_W0, 12);
-        host_arm64_MOVX_IMM(block, REG_X2, (uint64_t)readlookup2);
-        host_arm64_LDRX_REG_LSL3(block, REG_X1, REG_X2, REG_X1);
-        if (size != 1) {
-                host_arm64_TST_IMM(block, REG_W0, size - 1);
-                misaligned_offset = host_arm64_BNE_(block);
-        }
-        host_arm64_CMPX_IMM(block, REG_X1, -1);
-        branch_offset = host_arm64_BEQ_(block);
-        if (size == 1 && !is_float)
-                host_arm64_LDRB_REG(block, REG_W0, REG_W1, REG_W0);
-        else if (size == 2 && !is_float)
-                host_arm64_LDRH_REG(block, REG_W0, REG_W1, REG_W0);
-        else if (size == 4 && !is_float)
-                host_arm64_LDR_REG(block, REG_W0, REG_W1, REG_W0);
-        else if (size == 4 && is_float)
-                host_arm64_LDR_REG_F32(block, REG_V_TEMP, REG_W1, REG_W0);
-        else if (size == 8)
-                host_arm64_LDR_REG_F64(block, REG_V_TEMP, REG_W1, REG_W0);
-        host_arm64_MOVZ_IMM(block, REG_W1, 0);
-        host_arm64_RET(block, REG_X30);
-
-        host_arm64_branch_set_offset(branch_offset, &block_write_data[block_pos]);
-        if (size != 1)
-                host_arm64_branch_set_offset(misaligned_offset, &block_write_data[block_pos]);
         host_arm64_STP_PREIDX_X(block, REG_X29, REG_X30, REG_XSP, -16);
         if (size == 1)
                 host_arm64_call(block, (void *)readmembl);
@@ -119,46 +81,8 @@ static void build_store_routine(codeblock_t *block, int size, int is_float) {
 
         /*In - R0 = address, R1 = data
           Out - R1 = abrt*/
-        /*MOV W2, W0, LSR #12
-          MOV X3, #writelookup2
-          LDR X2, [X3, X2, LSL #3]
-          CMP X2, #-1
-          BEQ +
-          STRB W1, [X2, X0]
-          MOV W1, #0
-          RET
-        * STP X29, X30, [SP, #-16]
-          BL writemembl
-          LDRB R1, cpu_state.abrt
-          LDP X29, X30, [SP, #-16]
-          RET
-        */
+        /*Store routine - always calls writemem* slow path*/
         codegen_alloc(block, 80);
-        host_arm64_MOV_REG_LSR(block, REG_W2, REG_W0, 12);
-        host_arm64_MOVX_IMM(block, REG_X3, (uint64_t)writelookup2);
-        host_arm64_LDRX_REG_LSL3(block, REG_X2, REG_X3, REG_X2);
-        if (size != 1) {
-                host_arm64_TST_IMM(block, REG_W0, size - 1);
-                misaligned_offset = host_arm64_BNE_(block);
-        }
-        host_arm64_CMPX_IMM(block, REG_X2, -1);
-        branch_offset = host_arm64_BEQ_(block);
-        if (size == 1 && !is_float)
-                host_arm64_STRB_REG(block, REG_X1, REG_X2, REG_X0);
-        else if (size == 2 && !is_float)
-                host_arm64_STRH_REG(block, REG_X1, REG_X2, REG_X0);
-        else if (size == 4 && !is_float)
-                host_arm64_STR_REG(block, REG_X1, REG_X2, REG_X0);
-        else if (size == 4 && is_float)
-                host_arm64_STR_REG_F32(block, REG_V_TEMP, REG_X2, REG_X0);
-        else if (size == 8)
-                host_arm64_STR_REG_F64(block, REG_V_TEMP, REG_X2, REG_X0);
-        host_arm64_MOVZ_IMM(block, REG_X1, 0);
-        host_arm64_RET(block, REG_X30);
-
-        host_arm64_branch_set_offset(branch_offset, &block_write_data[block_pos]);
-        if (size != 1)
-                host_arm64_branch_set_offset(misaligned_offset, &block_write_data[block_pos]);
         host_arm64_STP_PREIDX_X(block, REG_X29, REG_X30, REG_XSP, -16);
         if (size == 4 && is_float)
                 host_arm64_FMOV_W_S(block, REG_W1, REG_V_TEMP);

@@ -21,7 +21,7 @@ drive_info_t drive_info[10] = {0};
 
 int status_is_open = 0;
 
-extern int sreadlnum, swritelnum, segareads, segawrites, scycles_lost;
+extern int segareads, segawrites, scycles_lost;
 extern int render_fps, fps;
 
 extern uint64_t main_time;
@@ -129,8 +129,6 @@ int get_status(char *machine, char *device) {
                 ,
                 mips, flops,
                 /*#ifndef DYNAREC
-                        sreadlnum,
-                        swritelnum,
                 #endif*/
                 segareads, segawrites, cpu_get_speed() - scycles_lost, pit_timer0_freq(),
                 ((double)main_time * 100.0) / status_diff, ((double)main_time * 100.0) / timer_freq,

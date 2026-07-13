@@ -1,43 +1,15 @@
 #ifndef _386_COMMON_H_
 #define _386_COMMON_H_
 
-#define readmemb(s, a)                                                                                                           \
-        ((readlookup2[(uint32_t)((s) + (a)) >> 12] == -1)                                                                        \
-                 ? readmembl((s) + (a))                                                                                          \
-                 : *(uint8_t *)(readlookup2[(uint32_t)((s) + (a)) >> 12] + (uint32_t)((s) + (a))))
-#define readmemw(s, a)                                                                                                           \
-        ((readlookup2[(uint32_t)((s) + (a)) >> 12] == -1 || (((s) + (a)) & 1))                                                   \
-                 ? readmemwl((s) + (a))                                                                                          \
-                 : *(uint16_t *)(readlookup2[(uint32_t)((s) + (a)) >> 12] + (uint32_t)((s) + (a))))
-#define readmeml(s, a)                                                                                                           \
-        ((readlookup2[(uint32_t)((s) + (a)) >> 12] == -1 || (((s) + (a)) & 3))                                                   \
-                 ? readmemll((s) + (a))                                                                                          \
-                 : *(uint32_t *)(readlookup2[(uint32_t)((s) + (a)) >> 12] + (uint32_t)((s) + (a))))
-#define readmemq(s, a)                                                                                                           \
-        ((readlookup2[(uint32_t)((s) + (a)) >> 12] == -1 || (((s) + (a)) & 7))                                                   \
-                 ? readmemql((s) + (a))                                                                                          \
-                 : *(uint64_t *)(readlookup2[(uint32_t)((s) + (a)) >> 12] + (uint32_t)((s) + (a))))
+#define readmemb(s, a)  readmembl((s) + (a))
+#define readmemw(s, a)  readmemwl((s) + (a))
+#define readmeml(s, a)  readmemll((s) + (a))
+#define readmemq(s, a)  readmemql((s) + (a))
 
-#define writememb(s, a, v)                                                                                                       \
-        if (writelookup2[(uint32_t)((s) + (a)) >> 12] == -1)                                                                     \
-                writemembl((s) + (a), v);                                                                                        \
-        else                                                                                                                     \
-                *(uint8_t *)(writelookup2[(uint32_t)((s) + (a)) >> 12] + (uint32_t)((s) + (a))) = v
-#define writememw(s, a, v)                                                                                                       \
-        if (writelookup2[(uint32_t)((s) + (a)) >> 12] == -1 || (((s) + (a)) & 1))                                                \
-                writememwl((s) + (a), v);                                                                                        \
-        else                                                                                                                     \
-                *(uint16_t *)(writelookup2[(uint32_t)((s) + (a)) >> 12] + (uint32_t)((s) + (a))) = v
-#define writememl(s, a, v)                                                                                                       \
-        if (writelookup2[(uint32_t)((s) + (a)) >> 12] == -1 || (((s) + (a)) & 3))                                                \
-                writememll((s) + (a), v);                                                                                        \
-        else                                                                                                                     \
-                *(uint32_t *)(writelookup2[(uint32_t)((s) + (a)) >> 12] + (uint32_t)((s) + (a))) = v
-#define writememq(s, a, v)                                                                                                       \
-        if (writelookup2[(uint32_t)((s) + (a)) >> 12] == -1 || (((s) + (a)) & 7))                                                \
-                writememql((s) + (a), v);                                                                                        \
-        else                                                                                                                     \
-                *(uint64_t *)(writelookup2[(uint32_t)((s) + (a)) >> 12] + (uint32_t)((s) + (a))) = v
+#define writememb(s, a, v) writemembl((s) + (a), v)
+#define writememw(s, a, v) writememwl((s) + (a), v)
+#define writememl(s, a, v) writememll((s) + (a), v)
+#define writememq(s, a, v) writememql((s) + (a), v)
 
 int checkio(int port);
 

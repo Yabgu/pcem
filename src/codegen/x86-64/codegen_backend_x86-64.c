@@ -65,52 +65,9 @@ static void build_load_routine(codeblock_t *block, int size, int is_float) {
 
         /*In - ESI = address
           Out - ECX = data, ESI = abrt*/
-        /*MOV ECX, ESI
-          SHR ESI, 12
-          MOV RSI, [readlookup2+ESI*4]
-          CMP ESI, -1
-          JNZ +
-          MOVZX ECX, B[RSI+RCX]
-          XOR ESI,ESI
-          RET
-        * PUSH EAX
-          PUSH EDX
-          PUSH ECX
-          CALL readmembl
-          POP ECX
-          POP EDX
-          POP EAX
-          MOVZX ECX, AL
-          RET
-        */
-        host_x86_MOV32_REG_REG(block, REG_ECX, REG_ESI);
-        host_x86_SHR32_IMM(block, REG_ESI, 12);
-        host_x86_MOV64_REG_IMM(block, REG_RDI, (uint64_t)(uintptr_t)readlookup2);
-        host_x86_MOV64_REG_BASE_INDEX_SHIFT(block, REG_RSI, REG_RDI, REG_RSI, 3);
-        if (size != 1) {
-                host_x86_TEST32_REG_IMM(block, REG_ECX, size - 1);
-                misaligned_offset = host_x86_JNZ_short(block);
-        }
-        host_x86_CMP64_REG_IMM(block, REG_RSI, (uint32_t)-1);
-        branch_offset = host_x86_JZ_short(block);
-        if (size == 1 && !is_float)
-                host_x86_MOVZX_BASE_INDEX_32_8(block, REG_ECX, REG_RSI, REG_RCX);
-        else if (size == 2 && !is_float)
-                host_x86_MOVZX_BASE_INDEX_32_16(block, REG_ECX, REG_RSI, REG_RCX);
-        else if (size == 4 && !is_float)
-                host_x86_MOV32_REG_BASE_INDEX(block, REG_ECX, REG_RSI, REG_RCX);
-        else if (size == 4 && is_float)
-                host_x86_CVTSS2SD_XREG_BASE_INDEX(block, REG_XMM_TEMP, REG_RSI, REG_RCX);
-        else if (size == 8)
-                host_x86_MOVQ_XREG_BASE_INDEX(block, REG_XMM_TEMP, REG_RSI, REG_RCX);
-        else
-                fatal("build_load_routine: size=%i\n", size);
-        host_x86_XOR32_REG_REG(block, REG_ESI, REG_ESI);
-        host_x86_RET(block);
+        /*Load routine - always calls readmem* slow path*/
 
-        *branch_offset = (uint8_t)((uintptr_t)&block_write_data[block_pos] - (uintptr_t)branch_offset) - 1;
-        if (size != 1)
-                *misaligned_offset = (uint8_t)((uintptr_t)&block_write_data[block_pos] - (uintptr_t)misaligned_offset) - 1;
+        host_x86_MOV32_REG_REG(block, REG_ECX, REG_ESI);
         host_x86_PUSH(block, REG_RAX);
         host_x86_PUSH(block, REG_RDX);
 #if WIN64
@@ -152,52 +109,9 @@ static void build_store_routine(codeblock_t *block, int size, int is_float) {
         /*In - ECX = data, ESI = address
           Out - ESI = abrt
           Corrupts EDI*/
-        /*MOV EDI, ESI
-          SHR ESI, 12
-          MOV ESI, [writelookup2+ESI*4]
-          CMP ESI, -1
-          JNZ +
-          MOV [RSI+RDI], ECX
-          XOR ESI,ESI
-          RET
-        * PUSH EAX
-          PUSH EDX
-          PUSH ECX
-          CALL writemembl
-          POP ECX
-          POP EDX
-          POP EAX
-          MOVZX ECX, AL
-          RET
-        */
-        host_x86_MOV32_REG_REG(block, REG_EDI, REG_ESI);
-        host_x86_SHR32_IMM(block, REG_ESI, 12);
-        host_x86_MOV64_REG_IMM(block, REG_R8, (uint64_t)(uintptr_t)writelookup2);
-        host_x86_MOV64_REG_BASE_INDEX_SHIFT(block, REG_RSI, REG_R8, REG_RSI, 3);
-        if (size != 1) {
-                host_x86_TEST32_REG_IMM(block, REG_EDI, size - 1);
-                misaligned_offset = host_x86_JNZ_short(block);
-        }
-        host_x86_CMP64_REG_IMM(block, REG_RSI, (uint32_t)-1);
-        branch_offset = host_x86_JZ_short(block);
-        if (size == 1 && !is_float)
-                host_x86_MOV8_BASE_INDEX_REG(block, REG_RSI, REG_RDI, REG_ECX);
-        else if (size == 2 && !is_float)
-                host_x86_MOV16_BASE_INDEX_REG(block, REG_RSI, REG_RDI, REG_ECX);
-        else if (size == 4 && !is_float)
-                host_x86_MOV32_BASE_INDEX_REG(block, REG_RSI, REG_RDI, REG_ECX);
-        else if (size == 4 && is_float)
-                host_x86_MOVD_BASE_INDEX_XREG(block, REG_RSI, REG_RDI, REG_XMM_TEMP);
-        else if (size == 8)
-                host_x86_MOVQ_BASE_INDEX_XREG(block, REG_RSI, REG_RDI, REG_XMM_TEMP);
-        else
-                fatal("build_store_routine: size=%i\n", size);
-        host_x86_XOR32_REG_REG(block, REG_ESI, REG_ESI);
-        host_x86_RET(block);
+        /*Store routine - always calls writemem* slow path*/
 
-        *branch_offset = (uint8_t)((uintptr_t)&block_write_data[block_pos] - (uintptr_t)branch_offset) - 1;
-        if (size != 1)
-                *misaligned_offset = (uint8_t)((uintptr_t)&block_write_data[block_pos] - (uintptr_t)misaligned_offset) - 1;
+        host_x86_MOV32_REG_REG(block, REG_EDI, REG_ESI);
         host_x86_PUSH(block, REG_RAX);
         host_x86_PUSH(block, REG_RDX);
 #if WIN64
