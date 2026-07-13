@@ -28,7 +28,6 @@ int cpu_recomp_blocks_latched, cpu_recomp_ins_latched, cpu_recomp_full_ins_latch
 int cpu_block_end = 0;
 
 static inline void fetch_ea_32_long(uint32_t rmdat) {
-        eal_r = eal_w = NULL;
         easeg = cpu_state.ea_seg->base;
         if (cpu_rm == 4) {
                 uint8_t sib = rmdat >> 8;
@@ -70,21 +69,30 @@ static inline void fetch_ea_32_long(uint32_t rmdat) {
                         } else {
                                 cpu_state.eaaddr += getlong();
                         }
-                } else if (cpu_rm == 5) {
-                        cpu_state.eaaddr = getlong();
-                }
+        } else if (cpu_rm == 5) {
+                cpu_state.eaaddr = getlong();
         }
-        if (easeg != 0xFFFFFFFF && ((easeg + cpu_state.eaaddr) & 0xFFF) <= 0xFFC) {
-                uint32_t addr = easeg + cpu_state.eaaddr;
-                if (readlookup2[addr >> 12] != -1)
-                        eal_r = (uint32_t *)(readlookup2[addr >> 12] + addr);
-                if (writelookup2[addr >> 12] != -1)
-                        eal_w = (uint32_t *)(writelookup2[addr >> 12] + addr);
-        }
+}
+{
+        uint32_t addr_full = easeg + cpu_state.eaaddr;
+        int outer = (easeg != 0xFFFFFFFF) & ((addr_full & 0xFFF) <= 0xFFC);
+
+        /* Force addr to 0 when the outer condition is false – safe index */
+        uint32_t addr = addr_full & -(uint32_t)outer;
+        uint32_t page = addr >> 12;
+
+        int has_read = (readlookup2[page] != -1) & outer;
+        int has_write = (writelookup2[page] != -1) & outer;
+
+        uintptr_t rptr = (uintptr_t)(readlookup2[page] + addr);
+        uintptr_t wptr = (uintptr_t)(writelookup2[page] + addr);
+
+        eal_r = (uint32_t *)(rptr & -(uintptr_t)has_read);
+        eal_w = (uint32_t *)(wptr & -(uintptr_t)has_write);
+}
 }
 
 static inline void fetch_ea_16_long(uint32_t rmdat) {
-        eal_r = eal_w = NULL;
         easeg = cpu_state.ea_seg->base;
         if (!cpu_mod && cpu_rm == 6) {
                 cpu_state.eaaddr = getword();
@@ -106,15 +114,25 @@ static inline void fetch_ea_16_long(uint32_t rmdat) {
                         easeg = ss;
                         cpu_state.ea_seg = &cpu_state.seg_ss;
                 }
-                cpu_state.eaaddr &= 0xFFFF;
-        }
-        if (easeg != 0xFFFFFFFF && ((easeg + cpu_state.eaaddr) & 0xFFF) <= 0xFFC) {
-                uint32_t addr = easeg + cpu_state.eaaddr;
-                if (readlookup2[addr >> 12] != -1)
-                        eal_r = (uint32_t *)(readlookup2[addr >> 12] + addr);
-                if (writelookup2[addr >> 12] != -1)
-                        eal_w = (uint32_t *)(writelookup2[addr >> 12] + addr);
-        }
+        cpu_state.eaaddr &= 0xFFFF;
+}
+{
+        uint32_t addr_full = easeg + cpu_state.eaaddr;
+        int outer = (easeg != 0xFFFFFFFF) & ((addr_full & 0xFFF) <= 0xFFC);
+
+        /* Force addr to 0 when the outer condition is false – safe index */
+        uint32_t addr = addr_full & -(uint32_t)outer;
+        uint32_t page = addr >> 12;
+
+        int has_read = (readlookup2[page] != -1) & outer;
+        int has_write = (writelookup2[page] != -1) & outer;
+
+        uintptr_t rptr = (uintptr_t)(readlookup2[page] + addr);
+        uintptr_t wptr = (uintptr_t)(writelookup2[page] + addr);
+
+        eal_r = (uint32_t *)(rptr & -(uintptr_t)has_read);
+        eal_w = (uint32_t *)(wptr & -(uintptr_t)has_write);
+}
 }
 
 #define fetch_ea_16(rmdat)                                                                                                       \
@@ -263,21 +281,16 @@ static inline void exec_interpreter(void) {
                         x86_opcodes[(opcode | cpu_state.op32) & 0x3ff](fetchdat);
                 }
 
-                if (((cs + cpu_state.pc) >> 12) != pccache)
-                        CPU_BLOCK_END();
+                /* Branchless end-of-block evaluation.
+                   Decrement cpu_end_block_after_ins count;
+                   all other conditions contribute directly. */
+                {
+                        int ep = cpu_end_block_after_ins;
+                        cpu_end_block_after_ins -= (ep > 0);
 
-                if (cpu_state.abrt)
-                        CPU_BLOCK_END();
-                if (cpu_state.smi_pending)
-                        CPU_BLOCK_END();
-                if (trap)
-                        CPU_BLOCK_END();
-                if (nmi && nmi_enable && nmi_mask)
-                        CPU_BLOCK_END();
-                if (cpu_end_block_after_ins) {
-                        cpu_end_block_after_ins--;
-                        if (!cpu_end_block_after_ins)
-                                CPU_BLOCK_END();
+                        cpu_block_end |= (((cs + cpu_state.pc) >> 12) != pccache) | cpu_state.abrt |
+                                         cpu_state.smi_pending | trap | (nmi && nmi_enable && nmi_mask) |
+                                         (ep == 1);
                 }
 
                 ins++;
@@ -446,25 +459,19 @@ static void __attribute__((noinline)) exec_recompiler(void) {
                           will prevent any block from spanning more than
                           2 pages. In practice this limit will never be
                           hit, as host block size is only 2kB*/
-                        if (((cs + cpu_state.pc) - start_pc) >= max_block_size)
-                                CPU_BLOCK_END();
-                        if (cpu_state.flags & T_FLAG)
-                                CPU_BLOCK_END();
-                        if (cpu_state.smi_pending)
-                                CPU_BLOCK_END();
-                        if (nmi && nmi_enable && nmi_mask)
-                                CPU_BLOCK_END();
+                        {
+                                int ep = cpu_end_block_after_ins;
+                                cpu_end_block_after_ins -= (ep > 0);
 
-                        if (cpu_end_block_after_ins) {
-                                cpu_end_block_after_ins--;
-                                if (!cpu_end_block_after_ins)
-                                        CPU_BLOCK_END();
-                        }
+                                cpu_block_end |= (((cs + cpu_state.pc) - start_pc) >= max_block_size) |
+                                                 (cpu_state.flags & T_FLAG) | cpu_state.smi_pending |
+                                                 (nmi && nmi_enable && nmi_mask) | (ep == 1);
 
-                        if (cpu_state.abrt) {
-                                if (!(cpu_state.abrt & ABRT_EXPECTED))
-                                        codegen_block_remove();
-                                CPU_BLOCK_END();
+                                if (cpu_state.abrt) {
+                                        if (!(cpu_state.abrt & ABRT_EXPECTED))
+                                                codegen_block_remove();
+                                        cpu_block_end = 1;
+                                }
                         }
 
                         ins++;
@@ -532,25 +539,19 @@ static void __attribute__((noinline)) exec_recompiler(void) {
                           will prevent any block from spanning more than
                           2 pages. In practice this limit will never be
                           hit, as host block size is only 2kB*/
-                        if (((cs + cpu_state.pc) - start_pc) >= max_block_size)
-                                CPU_BLOCK_END();
-                        if (cpu_state.flags & T_FLAG)
-                                CPU_BLOCK_END();
-                        if (cpu_state.smi_pending)
-                                CPU_BLOCK_END();
-                        if (nmi && nmi_enable && nmi_mask)
-                                CPU_BLOCK_END();
+                        {
+                                int ep = cpu_end_block_after_ins;
+                                cpu_end_block_after_ins -= (ep > 0);
 
-                        if (cpu_end_block_after_ins) {
-                                cpu_end_block_after_ins--;
-                                if (!cpu_end_block_after_ins)
-                                        CPU_BLOCK_END();
-                        }
+                                cpu_block_end |= (((cs + cpu_state.pc) - start_pc) >= max_block_size) |
+                                                 (cpu_state.flags & T_FLAG) | cpu_state.smi_pending |
+                                                 (nmi && nmi_enable && nmi_mask) | (ep == 1);
 
-                        if (cpu_state.abrt) {
-                                if (!(cpu_state.abrt & ABRT_EXPECTED))
-                                        codegen_block_remove();
-                                CPU_BLOCK_END();
+                                if (cpu_state.abrt) {
+                                        if (!(cpu_state.abrt & ABRT_EXPECTED))
+                                                codegen_block_remove();
+                                        cpu_block_end = 1;
+                                }
                         }
 
                         ins++;
