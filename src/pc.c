@@ -91,7 +91,6 @@ int config_override = 0;
 int insc = 0;
 float mips, flops;
 extern int mmuflush;
-extern int readlnum, writelnum;
 void fullspeed();
 
 int framecount = 0, fps = 0;
@@ -452,7 +451,7 @@ int framecountx = 0;
 int sndcount = 0;
 int oldat70hz;
 
-int sreadlnum, swritelnum, segareads, segawrites, scycles_lost;
+int segareads, segawrites, scycles_lost;
 
 int serial_fifo_read, serial_fifo_write;
 
@@ -500,8 +499,6 @@ void runpc() {
                 insc = 0;
                 flops = (float)fpucount / 1000000.0f;
                 fpucount = 0;
-                sreadlnum = readlnum;
-                swritelnum = writelnum;
                 segareads = egareads;
                 segawrites = egawrites;
                 scycles_lost = cycles_lost;
@@ -525,7 +522,6 @@ void runpc() {
                 cpu_recomp_removed = 0;
 
                 updatestatus = 1;
-                readlnum = writelnum = 0;
                 egareads = egawrites = 0;
                 cycles_lost = 0;
                 mmuflush = 0;

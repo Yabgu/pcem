@@ -34,7 +34,6 @@ typedef struct mem_mapping_t {
 
 extern uint8_t *ram, *rom;
 extern uint8_t romext[32768];
-extern int readlnum, writelnum;
 extern int memspeed[11];
 extern uint32_t biosmask;
 
@@ -154,32 +153,16 @@ static inline uint32_t get_phys(uint32_t addr) {
                 return addr & rammask;
         }
 
-        if (readlookup2[addr >> 12] != -1)
-                get_phys_phys = ((uintptr_t)readlookup2[addr >> 12] + (addr & ~0xfff)) - (uintptr_t)ram;
-        else {
-                get_phys_phys = (mmutranslatereal(addr, 0) & rammask) & ~0xfff;
-                if (!cpu_state.abrt && mem_addr_is_ram(get_phys_phys))
-                        addreadlookup(get_phys_virt, get_phys_phys);
-        }
+        get_phys_phys = (mmutranslatereal(addr, 0) & rammask) & ~0xfff;
 
         return get_phys_phys | (addr & 0xfff);
-        //        return mmutranslatereal(addr, 0) & rammask;
 }
 
 static inline uint32_t get_phys_noabrt(uint32_t addr) {
-        uint32_t phys_addr;
-
         if (!(cr0 >> 31))
                 return addr & rammask;
 
-        if (readlookup2[addr >> 12] != -1)
-                return ((uintptr_t)readlookup2[addr >> 12] + addr) - (uintptr_t)ram;
-
-        phys_addr = mmutranslate_noabrt(addr, 0) & rammask;
-        if (phys_addr != 0xffffffff && mem_addr_is_ram(phys_addr))
-                addreadlookup(addr, phys_addr);
-
-        return phys_addr;
+        return mmutranslate_noabrt(addr, 0) & rammask;
 }
 
 void mem_invalidate_range(uint32_t start_addr, uint32_t end_addr);

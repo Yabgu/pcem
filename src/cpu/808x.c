@@ -57,26 +57,17 @@ static void FETCHCOMPLETE();
 static uint8_t readmemb(uint32_t a) {
         if (a != (cs + cpu_state.pc))
                 memcycs += 4;
-        if (readlookup2[(a) >> 12] == -1)
-                return readmembl(a);
-        else
-                return *(uint8_t *)(readlookup2[(a) >> 12] + (a));
+        return readmembl(a);
 }
 
 static uint8_t readmembf(uint32_t a) {
-        if (readlookup2[(a) >> 12] == -1)
-                return readmembl(a);
-        else
-                return *(uint8_t *)(readlookup2[(a) >> 12] + (a));
+        return readmembl(a);
 }
 
 static uint16_t readmemw(uint32_t s, uint16_t a) {
         if (a != (cs + cpu_state.pc))
                 memcycs += (8 >> is8086);
-        if ((readlookup2[((s) + (a)) >> 12] == -1 || (s) == 0xFFFFFFFF))
-                return readmemwl(s + a);
-        else
-                return *(uint16_t *)(readlookup2[(s + a) >> 12] + s + a);
+        return readmemwl(s + a);
 }
 
 void refreshread() { /*pclog("Refreshread\n"); */
@@ -97,17 +88,11 @@ void refreshread() { /*pclog("Refreshread\n"); */
 
 static void writememb(uint32_t a, uint8_t v) {
         memcycs += 4;
-        if (writelookup2[(a) >> 12] == -1)
-                writemembl(a, v);
-        else
-                *(uint8_t *)(writelookup2[a >> 12] + a) = v;
+        writemembl(a, v);
 }
 static void writememw(uint32_t s, uint32_t a, uint16_t v) {
         memcycs += (8 >> is8086);
-        if (writelookup2[((s) + (a)) >> 12] == -1 || (s) == 0xFFFFFFFF)
-                writememwl(s + a, v);
-        else
-                *(uint16_t *)(writelookup2[(s + a) >> 12] + s + a) = v;
+        writememwl(s + a, v);
 }
 
 //#define readmemb(a) (((a)<0xA0000)?ram[a]:readmembl(a))
@@ -534,7 +519,6 @@ FILE* dofopen(const char *filepath, const char* filename, const char * mode) {
 }
 
 void dumpregs() {
-        int c, d = 0, e = 0;
 #ifndef RELEASE_BUILD
         FILE *f;
         if (indump)
@@ -646,14 +630,6 @@ void dumpregs() {
                 printf("CR0=%08X CR2=%08X CR3=%08X CR4=%08x\n", cr0, cr2, cr3, cr4);
                 pclog("SMBASE=%08x\n", cpu_state.smbase);
         }
-        printf("Entries in readlookup : %i    writelookup : %i\n", readlnum, writelnum);
-        for (c = 0; c < 1024 * 1024; c++) {
-                if (readlookup2[c] != 0xFFFFFFFF)
-                        d++;
-                if (writelookup2[c] != 0xFFFFFFFF)
-                        e++;
-        }
-        printf("Entries in readlookup : %i    writelookup : %i\n", d, e);
         x87_dumpregs();
         indump = 0;
 }

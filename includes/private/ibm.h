@@ -27,13 +27,6 @@ extern uint8_t *ram;
 
 extern uint32_t rammask;
 
-extern int readlookup[256], readlookupp[256];
-extern uintptr_t *readlookup2;
-extern int readlnext;
-extern int writelookup[256], writelookupp[256];
-extern uintptr_t *writelookup2;
-extern int writelnext;
-
 extern int mmu_perm;
 
 uint8_t readmembl(uint32_t addr);
@@ -49,8 +42,6 @@ uint8_t *getpccache(uint32_t a);
 
 uint32_t mmutranslatereal(uint32_t addr, int rw);
 
-void addreadlookup(uint32_t virt, uint32_t phys);
-void addwritelookup(uint32_t virt, uint32_t phys);
 
 /*IO*/
 uint8_t inb(uint16_t port);
@@ -62,7 +53,6 @@ void outl(uint16_t port, uint32_t val);
 
 FILE *romfopen(char *fn, char *mode);
 extern int mem_size;
-extern int readlnum, writelnum;
 
 /*Processor*/
 extern int ins, output, timetolive;
