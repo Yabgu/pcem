@@ -70,16 +70,10 @@ int checkio(int port);
         }
 
 static inline uint8_t fastreadb(uint32_t a) {
-        uint8_t *t;
-
-        if ((a >> 12) == pccache)
-                return *((uint8_t *)&pccache2[a]);
-        t = getpccache(a);
+        uint8_t *t = getpccache(a);
         if (cpu_state.abrt)
                 return 0;
-        pccache = a >> 12;
-        pccache2 = t;
-        return *((uint8_t *)&pccache2[a]);
+        return t[a];
 }
 
 static inline uint16_t fastreadw(uint32_t a) {
@@ -90,30 +84,20 @@ static inline uint16_t fastreadw(uint32_t a) {
                 val |= (fastreadb(a + 1) << 8);
                 return val;
         }
-        if ((a >> 12) == pccache)
-                return *((uint16_t *)&pccache2[a]);
         t = getpccache(a);
         if (cpu_state.abrt)
                 return 0;
-
-        pccache = a >> 12;
-        pccache2 = t;
-        return *((uint16_t *)&pccache2[a]);
+        return *((uint16_t *)&t[a]);
 }
 
 static inline uint32_t fastreadl(uint32_t a) {
         uint8_t *t;
         uint32_t val;
         if ((a & 0xFFF) < 0xFFD) {
-                if ((a >> 12) != pccache) {
-                        t = getpccache(a);
-                        if (cpu_state.abrt)
-                                return 0;
-                        pccache2 = t;
-                        pccache = a >> 12;
-                        // return *((uint32_t *)&pccache2[a]);
-                }
-                return *((uint32_t *)&pccache2[a]);
+                t = getpccache(a);
+                if (cpu_state.abrt)
+                        return 0;
+                return *((uint32_t *)&t[a]);
         }
         val = fastreadw(a);
         val |= (fastreadw(a + 2) << 16);
@@ -121,12 +105,8 @@ static inline uint32_t fastreadl(uint32_t a) {
 }
 
 static inline void *get_ram_ptr(uint32_t a) {
-        if ((a >> 12) == pccache)
-                return &pccache2[a];
-        else {
-                uint8_t *t = getpccache(a);
-                return &t[a];
-        }
+        uint8_t *t = getpccache(a);
+        return &t[a];
 }
 
 static inline uint8_t getbyte() {

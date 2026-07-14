@@ -272,9 +272,6 @@ void x86_doabrt(int x86_abrt);
 extern int codegen_flat_ds;
 extern int codegen_flat_ss;
 
-extern uint32_t pccache;
-extern uint8_t *pccache2;
-
 void x86illegal();
 
 void x86seg_reset();

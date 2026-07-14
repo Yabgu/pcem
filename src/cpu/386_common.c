@@ -33,9 +33,6 @@ int fpucount = 0;
 
 uint16_t cpu_cur_status = 0;
 
-uint32_t pccache;
-uint8_t *pccache2;
-
 void x86_int(int num) {
         uint32_t addr;
         //        pclog("x86_int %02x %04x:%04x\n", num, CS,pc);
