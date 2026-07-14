@@ -100,7 +100,7 @@ static int opMOV_SP_imm(uint32_t fetchdat) {
 
 static int opMOV_EAX_imm(uint32_t fetchdat) {
         uint32_t templ = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         EAX = templ;
         CLOCK_CYCLES(timing_rr);
@@ -109,7 +109,7 @@ static int opMOV_EAX_imm(uint32_t fetchdat) {
 }
 static int opMOV_EBX_imm(uint32_t fetchdat) {
         uint32_t templ = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         EBX = templ;
         CLOCK_CYCLES(timing_rr);
@@ -118,7 +118,7 @@ static int opMOV_EBX_imm(uint32_t fetchdat) {
 }
 static int opMOV_ECX_imm(uint32_t fetchdat) {
         uint32_t templ = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         ECX = templ;
         CLOCK_CYCLES(timing_rr);
@@ -127,7 +127,7 @@ static int opMOV_ECX_imm(uint32_t fetchdat) {
 }
 static int opMOV_EDX_imm(uint32_t fetchdat) {
         uint32_t templ = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         EDX = templ;
         CLOCK_CYCLES(timing_rr);
@@ -136,7 +136,7 @@ static int opMOV_EDX_imm(uint32_t fetchdat) {
 }
 static int opMOV_ESI_imm(uint32_t fetchdat) {
         uint32_t templ = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         ESI = templ;
         CLOCK_CYCLES(timing_rr);
@@ -145,7 +145,7 @@ static int opMOV_ESI_imm(uint32_t fetchdat) {
 }
 static int opMOV_EDI_imm(uint32_t fetchdat) {
         uint32_t templ = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         EDI = templ;
         CLOCK_CYCLES(timing_rr);
@@ -154,7 +154,7 @@ static int opMOV_EDI_imm(uint32_t fetchdat) {
 }
 static int opMOV_EBP_imm(uint32_t fetchdat) {
         uint32_t templ = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         EBP = templ;
         CLOCK_CYCLES(timing_rr);
@@ -163,7 +163,7 @@ static int opMOV_EBP_imm(uint32_t fetchdat) {
 }
 static int opMOV_ESP_imm(uint32_t fetchdat) {
         uint32_t templ = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         ESP = templ;
         CLOCK_CYCLES(timing_rr);
@@ -178,7 +178,7 @@ static int opMOV_b_imm_a16(uint32_t fetchdat) {
         SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = readmemb(cs, cpu_state.pc);
         cpu_state.pc++;
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         CHECK_WRITE(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr);
         seteab(temp);
@@ -192,7 +192,7 @@ static int opMOV_b_imm_a32(uint32_t fetchdat) {
         ILLEGAL_ON((rmdat & 0x38) != 0);
         SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = getbyte();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         seteab(temp);
         CLOCK_CYCLES(timing_rr);
@@ -206,7 +206,7 @@ static int opMOV_w_imm_a16(uint32_t fetchdat) {
         ILLEGAL_ON((rmdat & 0x38) != 0);
         SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = getword();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         seteaw(temp);
         CLOCK_CYCLES(timing_rr);
@@ -219,7 +219,7 @@ static int opMOV_w_imm_a32(uint32_t fetchdat) {
         ILLEGAL_ON((rmdat & 0x38) != 0);
         SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = getword();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         seteaw(temp);
         CLOCK_CYCLES(timing_rr);
@@ -232,7 +232,7 @@ static int opMOV_l_imm_a16(uint32_t fetchdat) {
         ILLEGAL_ON((rmdat & 0x38) != 0);
         SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         seteal(temp);
         CLOCK_CYCLES(timing_rr);
@@ -245,7 +245,7 @@ static int opMOV_l_imm_a32(uint32_t fetchdat) {
         ILLEGAL_ON((rmdat & 0x38) != 0);
         SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         seteal(temp);
         CLOCK_CYCLES(timing_rr);
@@ -259,7 +259,7 @@ static int opMOV_AL_a16(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr);
         temp = readmemb(cpu_state.ea_seg->base, addr);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         AL = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
@@ -272,7 +272,7 @@ static int opMOV_AL_a32(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr);
         temp = readmemb(cpu_state.ea_seg->base, addr);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         AL = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
@@ -285,7 +285,7 @@ static int opMOV_AX_a16(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr + 1);
         temp = readmemw(cpu_state.ea_seg->base, addr);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         AX = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
@@ -298,7 +298,7 @@ static int opMOV_AX_a32(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr + 1);
         temp = readmemw(cpu_state.ea_seg->base, addr);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         AX = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
@@ -311,7 +311,7 @@ static int opMOV_EAX_a16(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr + 3);
         temp = readmeml(cpu_state.ea_seg->base, addr);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         EAX = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
@@ -324,7 +324,7 @@ static int opMOV_EAX_a32(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         CHECK_READ(cpu_state.ea_seg, addr, addr + 3);
         temp = readmeml(cpu_state.ea_seg->base, addr);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         EAX = temp;
         CLOCK_CYCLES((is486) ? 1 : 4);
@@ -358,7 +358,7 @@ static int opMOV_a16_AX(uint32_t fetchdat) {
 }
 static int opMOV_a32_AX(uint32_t fetchdat) {
         uint32_t addr = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         SEG_CHECK_WRITE(cpu_state.ea_seg);
         writememw(cpu_state.ea_seg->base, addr, AX);
@@ -376,7 +376,7 @@ static int opMOV_a16_EAX(uint32_t fetchdat) {
 }
 static int opMOV_a32_EAX(uint32_t fetchdat) {
         uint32_t addr = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         SEG_CHECK_WRITE(cpu_state.ea_seg);
         writememl(cpu_state.ea_seg->base, addr, EAX);
@@ -425,7 +425,7 @@ static int opXLAT_a16(uint32_t fetchdat) {
 
         SEG_CHECK_READ(cpu_state.ea_seg);
         temp = readmemb(cpu_state.ea_seg->base, addr);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         AL = temp;
         CLOCK_CYCLES(5);
@@ -438,7 +438,7 @@ static int opXLAT_a32(uint32_t fetchdat) {
 
         SEG_CHECK_READ(cpu_state.ea_seg);
         temp = readmemb(cpu_state.ea_seg->base, addr);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         AL = temp;
         CLOCK_CYCLES(5);
@@ -548,7 +548,7 @@ static int opMOV_r_b_a16(uint32_t fetchdat) {
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr);
                 temp = geteab();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setr8(cpu_reg, temp);
                 CLOCK_CYCLES(is486 ? 1 : 4);
@@ -567,7 +567,7 @@ static int opMOV_r_b_a32(uint32_t fetchdat) {
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr);
                 temp = geteab();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setr8(cpu_reg, temp);
                 CLOCK_CYCLES(is486 ? 1 : 4);
@@ -586,7 +586,7 @@ static int opMOV_r_w_a16(uint32_t fetchdat) {
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 1);
                 temp = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.regs[cpu_reg].w = temp;
                 CLOCK_CYCLES((is486) ? 1 : 4);
@@ -605,7 +605,7 @@ static int opMOV_r_w_a32(uint32_t fetchdat) {
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 1);
                 temp = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.regs[cpu_reg].w = temp;
                 CLOCK_CYCLES((is486) ? 1 : 4);
@@ -624,7 +624,7 @@ static int opMOV_r_l_a16(uint32_t fetchdat) {
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3);
                 temp = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.regs[cpu_reg].l = temp;
                 CLOCK_CYCLES(is486 ? 1 : 4);
@@ -643,7 +643,7 @@ static int opMOV_r_l_a32(uint32_t fetchdat) {
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3);
                 temp = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.regs[cpu_reg].l = temp;
                 CLOCK_CYCLES(is486 ? 1 : 4);
@@ -663,7 +663,7 @@ static int opMOV_r_l_a32(uint32_t fetchdat) {
                                 SEG_CHECK_READ(cpu_state.ea_seg);                                                                \
                                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 1);                            \
                                 temp = geteaw();                                                                                 \
-                                if (cpu_state.abrt)                                                                              \
+                                if (unlikely(cpu_state.abrt))                                                                              \
                                         return 1;                                                                                \
                                 cpu_state.regs[cpu_reg].w = temp;                                                                \
                         }                                                                                                        \
@@ -681,7 +681,7 @@ static int opMOV_r_l_a32(uint32_t fetchdat) {
                                 SEG_CHECK_READ(cpu_state.ea_seg);                                                                \
                                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 1);                            \
                                 temp = geteaw();                                                                                 \
-                                if (cpu_state.abrt)                                                                              \
+                                if (unlikely(cpu_state.abrt))                                                                              \
                                         return 1;                                                                                \
                                 cpu_state.regs[cpu_reg].w = temp;                                                                \
                         }                                                                                                        \
@@ -699,7 +699,7 @@ static int opMOV_r_l_a32(uint32_t fetchdat) {
                                 SEG_CHECK_READ(cpu_state.ea_seg);                                                                \
                                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3);                            \
                                 temp = geteal();                                                                                 \
-                                if (cpu_state.abrt)                                                                              \
+                                if (unlikely(cpu_state.abrt))                                                                              \
                                         return 1;                                                                                \
                                 cpu_state.regs[cpu_reg].l = temp;                                                                \
                         }                                                                                                        \
@@ -717,7 +717,7 @@ static int opMOV_r_l_a32(uint32_t fetchdat) {
                                 CHECK_READ(cpu_state.ea_seg, cpu_state.eaaddr, cpu_state.eaaddr + 3);                            \
                                 SEG_CHECK_READ(cpu_state.ea_seg);                                                                \
                                 temp = geteal();                                                                                 \
-                                if (cpu_state.abrt)                                                                              \
+                                if (unlikely(cpu_state.abrt))                                                                              \
                                         return 1;                                                                                \
                                 cpu_state.regs[cpu_reg].l = temp;                                                                \
                         }                                                                                                        \

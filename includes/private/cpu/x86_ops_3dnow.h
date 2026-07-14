@@ -152,7 +152,7 @@ static int opPFRCP(uint32_t fetchdat) {
         } else {
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 src.i = readmeml(easeg, cpu_state.eaaddr);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 CLOCK_CYCLES(2);
         }
@@ -195,7 +195,7 @@ static int opPFRSQRT(uint32_t fetchdat) {
         } else {
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 src.i = readmeml(easeg, cpu_state.eaaddr);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 CLOCK_CYCLES(2);
         }
@@ -261,7 +261,7 @@ static int opPMULHRW(uint32_t fetchdat) {
                 SEG_CHECK_READ(cpu_state.ea_seg);
                 src.l[0] = readmeml(easeg, cpu_state.eaaddr);
                 src.l[1] = readmeml(easeg, cpu_state.eaaddr + 4);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 cpu_state.MM[cpu_reg].w[0] = ((int32_t)(cpu_state.MM[cpu_reg].sw[0] * (int32_t)src.sw[0]) + 0x8000) >> 16;
                 cpu_state.MM[cpu_reg].w[1] = ((int32_t)(cpu_state.MM[cpu_reg].sw[1] * (int32_t)src.sw[1]) + 0x8000) >> 16;
@@ -319,7 +319,7 @@ static int op3DNOW_a16(uint32_t fetchdat) {
 
         fetch_ea_16(fetchdat);
         opcode = fastreadb(cs + cpu_state.pc);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.pc++;
 
@@ -332,7 +332,7 @@ static int op3DNOW_a32(uint32_t fetchdat) {
 
         fetch_ea_32(fetchdat);
         opcode = fastreadb(cs + cpu_state.pc);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.pc++;
 

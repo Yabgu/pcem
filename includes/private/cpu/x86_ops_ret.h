@@ -12,7 +12,7 @@
                 cpu_state.pc = readmemw(ss, SP);                                                                                 \
                 loadcs(readmemw(ss, SP + 2));                                                                                    \
         }                                                                                                                        \
-        if (cpu_state.abrt)                                                                                                      \
+        if (unlikely(cpu_state.abrt))                                                                                                      \
                 return 1;                                                                                                        \
         if (stack32)                                                                                                             \
                 ESP += 4 + stack_offset;                                                                                         \
@@ -32,7 +32,7 @@
                 cpu_state.pc = readmeml(ss, SP);                                                                                 \
                 loadcs(readmeml(ss, SP + 4) & 0xffff);                                                                           \
         }                                                                                                                        \
-        if (cpu_state.abrt)                                                                                                      \
+        if (unlikely(cpu_state.abrt))                                                                                                      \
                 return 1;                                                                                                        \
         if (stack32)                                                                                                             \
                 ESP += 8 + stack_offset;                                                                                         \
@@ -136,7 +136,7 @@ static int opIRET(uint32_t fetchdat) {
                         new_pc = readmemw(ss, SP);
                         new_cs = readmemw(ss, ((SP + 2) & 0xffff));
                         new_flags = readmemw(ss, ((SP + 4) & 0xffff));
-                        if (cpu_state.abrt)
+                        if (unlikely(cpu_state.abrt))
                                 return 1;
 
                         if ((new_flags & T_FLAG) || ((new_flags & I_FLAG) && (cpu_state.eflags & VIP_FLAG))) {

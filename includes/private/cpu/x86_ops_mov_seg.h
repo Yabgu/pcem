@@ -165,7 +165,7 @@ static int opMOV_seg_w_a16(uint32_t fetchdat) {
         if (cpu_mod != 3)
                 SEG_CHECK_READ(cpu_state.ea_seg);
         new_seg = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         switch (rmdat & 0x38) {
@@ -177,7 +177,7 @@ static int opMOV_seg_w_a16(uint32_t fetchdat) {
                 break;
         case 0x10: /*SS*/
                 loadseg(new_seg, &cpu_state.seg_ss);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.oldpc = cpu_state.pc;
                 cpu_state.op32 = use32;
@@ -185,7 +185,7 @@ static int opMOV_seg_w_a16(uint32_t fetchdat) {
                 cpu_state.ea_seg = &cpu_state.seg_ds;
                 fetchdat = fastreadl(cs + cpu_state.pc);
                 cpu_state.pc++;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
                 return 1;
@@ -208,7 +208,7 @@ static int opMOV_seg_w_a32(uint32_t fetchdat) {
         if (cpu_mod != 3)
                 SEG_CHECK_READ(cpu_state.ea_seg);
         new_seg = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         switch (rmdat & 0x38) {
@@ -220,7 +220,7 @@ static int opMOV_seg_w_a32(uint32_t fetchdat) {
                 break;
         case 0x10: /*SS*/
                 loadseg(new_seg, &cpu_state.seg_ss);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.oldpc = cpu_state.pc;
                 cpu_state.op32 = use32;
@@ -228,7 +228,7 @@ static int opMOV_seg_w_a32(uint32_t fetchdat) {
                 cpu_state.ea_seg = &cpu_state.seg_ds;
                 fetchdat = fastreadl(cs + cpu_state.pc);
                 cpu_state.pc++;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
                 return 1;
@@ -253,10 +253,10 @@ static int opLDS_w_a16(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         addr = readmemw(easeg, cpu_state.eaaddr);
         seg = readmemw(easeg, cpu_state.eaaddr + 2);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         loadseg(seg, &cpu_state.seg_ds);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].w = addr;
 
@@ -272,10 +272,10 @@ static int opLDS_w_a32(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         addr = readmemw(easeg, cpu_state.eaaddr);
         seg = readmemw(easeg, cpu_state.eaaddr + 2);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         loadseg(seg, &cpu_state.seg_ds);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].w = addr;
 
@@ -292,10 +292,10 @@ static int opLDS_l_a16(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         addr = readmeml(easeg, cpu_state.eaaddr);
         seg = readmemw(easeg, cpu_state.eaaddr + 4);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         loadseg(seg, &cpu_state.seg_ds);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].l = addr;
 
@@ -312,10 +312,10 @@ static int opLDS_l_a32(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         addr = readmeml(easeg, cpu_state.eaaddr);
         seg = readmemw(easeg, cpu_state.eaaddr + 4);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         loadseg(seg, &cpu_state.seg_ds);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].l = addr;
 
@@ -332,10 +332,10 @@ static int opLSS_w_a16(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         addr = readmemw(easeg, cpu_state.eaaddr);
         seg = readmemw(easeg, cpu_state.eaaddr + 2);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         loadseg(seg, &cpu_state.seg_ss);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].w = addr;
 
@@ -351,10 +351,10 @@ static int opLSS_w_a32(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         addr = readmemw(easeg, cpu_state.eaaddr);
         seg = readmemw(easeg, cpu_state.eaaddr + 2);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         loadseg(seg, &cpu_state.seg_ss);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].w = addr;
 
@@ -371,10 +371,10 @@ static int opLSS_l_a16(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         addr = readmeml(easeg, cpu_state.eaaddr);
         seg = readmemw(easeg, cpu_state.eaaddr + 4);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         loadseg(seg, &cpu_state.seg_ss);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].l = addr;
 
@@ -391,10 +391,10 @@ static int opLSS_l_a32(uint32_t fetchdat) {
         SEG_CHECK_READ(cpu_state.ea_seg);
         addr = readmeml(easeg, cpu_state.eaaddr);
         seg = readmemw(easeg, cpu_state.eaaddr + 4);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         loadseg(seg, &cpu_state.seg_ss);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].l = addr;
 
@@ -412,10 +412,10 @@ static int opLSS_l_a32(uint32_t fetchdat) {
                 ILLEGAL_ON(cpu_mod == 3);                                                                                        \
                 addr = readmemw(easeg, cpu_state.eaaddr);                                                                        \
                 seg = readmemw(easeg, cpu_state.eaaddr + 2);                                                                     \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 loadseg(seg, &sel);                                                                                              \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 cpu_state.regs[cpu_reg].w = addr;                                                                                \
                                                                                                                                  \
@@ -432,10 +432,10 @@ static int opLSS_l_a32(uint32_t fetchdat) {
                 ILLEGAL_ON(cpu_mod == 3);                                                                                        \
                 addr = readmemw(easeg, cpu_state.eaaddr);                                                                        \
                 seg = readmemw(easeg, cpu_state.eaaddr + 2);                                                                     \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 loadseg(seg, &sel);                                                                                              \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 cpu_state.regs[cpu_reg].w = addr;                                                                                \
                                                                                                                                  \
@@ -453,10 +453,10 @@ static int opLSS_l_a32(uint32_t fetchdat) {
                 ILLEGAL_ON(cpu_mod == 3);                                                                                        \
                 addr = readmeml(easeg, cpu_state.eaaddr);                                                                        \
                 seg = readmemw(easeg, cpu_state.eaaddr + 4);                                                                     \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 loadseg(seg, &sel);                                                                                              \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 cpu_state.regs[cpu_reg].l = addr;                                                                                \
                                                                                                                                  \
@@ -474,10 +474,10 @@ static int opLSS_l_a32(uint32_t fetchdat) {
                 ILLEGAL_ON(cpu_mod == 3);                                                                                        \
                 addr = readmeml(easeg, cpu_state.eaaddr);                                                                        \
                 seg = readmemw(easeg, cpu_state.eaaddr + 4);                                                                     \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 loadseg(seg, &sel);                                                                                              \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 cpu_state.regs[cpu_reg].l = addr;                                                                                \
                                                                                                                                  \

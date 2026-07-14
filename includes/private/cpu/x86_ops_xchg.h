@@ -7,10 +7,10 @@ static int opXCHG_b_a16(uint32_t fetchdat) {
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = geteab();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         seteab(getr8(cpu_reg));
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         setr8(cpu_reg, temp);
         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 5);
@@ -24,10 +24,10 @@ static int opXCHG_b_a32(uint32_t fetchdat) {
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = geteab();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         seteab(getr8(cpu_reg));
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         setr8(cpu_reg, temp);
         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 5);
@@ -42,10 +42,10 @@ static int opXCHG_w_a16(uint32_t fetchdat) {
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         seteaw(cpu_state.regs[cpu_reg].w);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].w = temp;
         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 5);
@@ -59,10 +59,10 @@ static int opXCHG_w_a32(uint32_t fetchdat) {
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         seteaw(cpu_state.regs[cpu_reg].w);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].w = temp;
         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 5);
@@ -77,10 +77,10 @@ static int opXCHG_l_a16(uint32_t fetchdat) {
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = geteal();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         seteal(cpu_state.regs[cpu_reg].l);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].l = temp;
         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 5);
@@ -94,10 +94,10 @@ static int opXCHG_l_a32(uint32_t fetchdat) {
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = geteal();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         seteal(cpu_state.regs[cpu_reg].l);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.regs[cpu_reg].l = temp;
         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 5);

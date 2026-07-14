@@ -8,7 +8,7 @@ static int opFILDiw_a16(uint32_t fetchdat) {
         if (fplog)
                 pclog("FILDw %08X:%08X\n", easeg, cpu_state.eaaddr);
         temp = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f\n", (double)temp);
@@ -24,7 +24,7 @@ static int opFILDiw_a32(uint32_t fetchdat) {
         if (fplog)
                 pclog("FILDw %08X:%08X\n", easeg, cpu_state.eaaddr);
         temp = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f\n", (double)temp);
@@ -73,7 +73,7 @@ static int opFISTPiw_a16(uint32_t fetchdat) {
         /*                        if (temp64 > 32767 || temp64 < -32768)
                                    fatal("FISTw overflow %i\n", temp64);*/
         seteaw((int16_t)temp64);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fist_16);
@@ -90,7 +90,7 @@ static int opFISTPiw_a32(uint32_t fetchdat) {
         /*                        if (temp64 > 32767 || temp64 < -32768)
                                    fatal("FISTw overflow %i\n", temp64);*/
         seteaw((int16_t)temp64);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fist_16);
@@ -105,7 +105,7 @@ static int opFILDiq_a16(uint32_t fetchdat) {
         if (fplog)
                 pclog("FILDl %08X:%08X\n", easeg, cpu_state.eaaddr);
         temp64 = geteaq();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f  %08X %08X\n", (double)temp64, readmeml(easeg, cpu_state.eaaddr),
@@ -125,7 +125,7 @@ static int opFILDiq_a32(uint32_t fetchdat) {
         if (fplog)
                 pclog("FILDl %08X:%08X\n", easeg, cpu_state.eaaddr);
         temp64 = geteaq();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f  %08X %08X\n", (double)temp64, readmeml(easeg, cpu_state.eaaddr),
@@ -162,7 +162,7 @@ static int FBSTP_a16(uint32_t fetchdat) {
         if (ST(0) < 0.0)
                 tempc |= 0x80;
         writememb(easeg, cpu_state.eaaddr + 9, tempc);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fbstp);
@@ -192,7 +192,7 @@ static int FBSTP_a32(uint32_t fetchdat) {
         if (ST(0) < 0.0)
                 tempc |= 0x80;
         writememb(easeg, cpu_state.eaaddr + 9, tempc);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fbstp);
@@ -211,7 +211,7 @@ static int FISTPiq_a16(uint32_t fetchdat) {
         else
                 temp64 = x87_fround(ST(0));
         seteaq(temp64);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fist_64);
@@ -229,7 +229,7 @@ static int FISTPiq_a32(uint32_t fetchdat) {
         else
                 temp64 = x87_fround(ST(0));
         seteaq(temp64);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fist_64);
@@ -244,7 +244,7 @@ static int opFILDil_a16(uint32_t fetchdat) {
         if (fplog)
                 pclog("FILDs %08X:%08X\n", easeg, cpu_state.eaaddr);
         templ = geteal();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f %08X %i\n", (double)templ, templ, templ);
@@ -260,7 +260,7 @@ static int opFILDil_a32(uint32_t fetchdat) {
         if (fplog)
                 pclog("FILDs %08X:%08X\n", easeg, cpu_state.eaaddr);
         templ = geteal();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f %08X %i\n", (double)templ, templ, templ);
@@ -309,7 +309,7 @@ static int opFISTPil_a16(uint32_t fetchdat) {
         /*                        if (temp64 > 2147483647 || temp64 < -2147483647)
                                    fatal("FISTl out of range! %i\n", temp64);*/
         seteal((int32_t)temp64);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fist_32);
@@ -326,7 +326,7 @@ static int opFISTPil_a32(uint32_t fetchdat) {
         /*                        if (temp64 > 2147483647 || temp64 < -2147483647)
                                    fatal("FISTl out of range! %i\n", temp64);*/
         seteal((int32_t)temp64);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fist_32);
@@ -341,7 +341,7 @@ static int opFLDe_a16(uint32_t fetchdat) {
         if (fplog)
                 pclog("FLDe %08X:%08X\n", easeg, cpu_state.eaaddr);
         t = x87_ld80();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f\n", t);
@@ -357,7 +357,7 @@ static int opFLDe_a32(uint32_t fetchdat) {
         if (fplog)
                 pclog("FLDe %08X:%08X\n", easeg, cpu_state.eaaddr);
         t = x87_ld80();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f\n", t);
@@ -373,7 +373,7 @@ static int opFSTPe_a16(uint32_t fetchdat) {
         if (fplog)
                 pclog("FSTPe %08X:%08X\n", easeg, cpu_state.eaaddr);
         x87_st80(ST(0));
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fst_80);
@@ -386,7 +386,7 @@ static int opFSTPe_a32(uint32_t fetchdat) {
         if (fplog)
                 pclog("FSTPe %08X:%08X\n", easeg, cpu_state.eaaddr);
         x87_st80(ST(0));
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fst_80);
@@ -401,7 +401,7 @@ static int opFLDd_a16(uint32_t fetchdat) {
         if (fplog)
                 pclog("FLDd %08X:%08X\n", easeg, cpu_state.eaaddr);
         t.i = geteaq();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f\n", t.d);
@@ -417,7 +417,7 @@ static int opFLDd_a32(uint32_t fetchdat) {
         if (fplog)
                 pclog("FLDd %08X:%08X\n", easeg, cpu_state.eaaddr);
         t.i = geteaq();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f\n", t.d);
@@ -461,7 +461,7 @@ static int opFSTPd_a16(uint32_t fetchdat) {
                 pclog("FSTd %08X:%08X\n", easeg, cpu_state.eaaddr);
         t.d = ST(0);
         seteaq(t.i);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fst_64);
@@ -477,7 +477,7 @@ static int opFSTPd_a32(uint32_t fetchdat) {
                 pclog("FSTd %08X:%08X\n", easeg, cpu_state.eaaddr);
         t.d = ST(0);
         seteaq(t.i);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fst_64);
@@ -492,7 +492,7 @@ static int opFLDs_a16(uint32_t fetchdat) {
         if (fplog)
                 pclog("FLDs %08X:%08X\n", easeg, cpu_state.eaaddr);
         ts.i = geteal();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f\n", ts.s);
@@ -508,7 +508,7 @@ static int opFLDs_a32(uint32_t fetchdat) {
         if (fplog)
                 pclog("FLDs %08X:%08X\n", easeg, cpu_state.eaaddr);
         ts.i = geteal();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (fplog)
                 pclog("  %f\n", ts.s);
@@ -551,7 +551,7 @@ static int opFSTPs_a16(uint32_t fetchdat) {
                 pclog("FSTs %08X:%08X\n", easeg, cpu_state.eaaddr);
         ts.s = (float)ST(0);
         seteal(ts.i);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fst_32);
@@ -566,7 +566,7 @@ static int opFSTPs_a32(uint32_t fetchdat) {
                 pclog("FSTs %08X:%08X\n", easeg, cpu_state.eaaddr);
         ts.s = (float)ST(0);
         seteal(ts.i);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x87_pop();
         CLOCK_CYCLES(x87_timings.fst_32);

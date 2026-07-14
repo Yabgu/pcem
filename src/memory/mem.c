@@ -93,7 +93,7 @@ uint32_t mmutranslatereal(uint32_t addr, int rw) {
         uint32_t addr2;
         uint32_t temp, temp2, temp3;
 
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 //                        pclog("Translate recursive abort\n");
                 return -1;
         }
@@ -192,7 +192,7 @@ uint32_t mmutranslate_noabrt(uint32_t addr, int rw) {
         uint32_t addr2;
         uint32_t temp, temp2, temp3;
 
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return -1;
 
         addr2 = ((cr3 & ~0xfff) + ((addr >> 20) & 0xffc));

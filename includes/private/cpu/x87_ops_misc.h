@@ -800,7 +800,7 @@ static int opFLDCW_a16(uint32_t fetchdat) {
         if (fplog)
                 pclog("FLDCW %08X:%08X\n", easeg, cpu_state.eaaddr);
         tempw = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.npxc = tempw;
         codegen_set_rounding_mode((cpu_state.npxc >> 10) & 3);
@@ -815,7 +815,7 @@ static int opFLDCW_a32(uint32_t fetchdat) {
         if (fplog)
                 pclog("FLDCW %08X:%08X\n", easeg, cpu_state.eaaddr);
         tempw = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.npxc = tempw;
         codegen_set_rounding_mode((cpu_state.npxc >> 10) & 3);

@@ -13,7 +13,7 @@
                 cycles -= timing_call_rm;                                                                                        \
         }                                                                                                                        \
         optype = 0;                                                                                                              \
-        if (cpu_state.abrt) {                                                                                                    \
+        if (unlikely(cpu_state.abrt)) {                                                                                                    \
                 cgate16 = cgate32 = 0;                                                                                           \
                 return 1;                                                                                                        \
         }                                                                                                                        \
@@ -21,13 +21,13 @@
         if (cgate32) {                                                                                                           \
                 uint32_t old_esp = ESP;                                                                                          \
                 PUSH_L(old_cs);                                                                                                  \
-                if (cpu_state.abrt) {                                                                                            \
+                if (unlikely(cpu_state.abrt)) {                                                                                            \
                         CS = old_cs;                                                                                             \
                         cgate16 = cgate32 = 0;                                                                                   \
                         return 1;                                                                                                \
                 }                                                                                                                \
                 PUSH_L(old_pc);                                                                                                  \
-                if (cpu_state.abrt) {                                                                                            \
+                if (unlikely(cpu_state.abrt)) {                                                                                            \
                         CS = old_cs;                                                                                             \
                         ESP = old_esp;                                                                                           \
                         return 1;                                                                                                \
@@ -35,13 +35,13 @@
         } else {                                                                                                                 \
                 uint32_t old_esp = ESP;                                                                                          \
                 PUSH_W(old_cs);                                                                                                  \
-                if (cpu_state.abrt) {                                                                                            \
+                if (unlikely(cpu_state.abrt)) {                                                                                            \
                         CS = old_cs;                                                                                             \
                         cgate16 = cgate32 = 0;                                                                                   \
                         return 1;                                                                                                \
                 }                                                                                                                \
                 PUSH_W(old_pc);                                                                                                  \
-                if (cpu_state.abrt) {                                                                                            \
+                if (unlikely(cpu_state.abrt)) {                                                                                            \
                         CS = old_cs;                                                                                             \
                         ESP = old_esp;                                                                                           \
                         return 1;                                                                                                \
@@ -61,7 +61,7 @@
                 cycles -= timing_call_rm;                                                                                        \
         }                                                                                                                        \
         optype = 0;                                                                                                              \
-        if (cpu_state.abrt) {                                                                                                    \
+        if (unlikely(cpu_state.abrt)) {                                                                                                    \
                 cgate16 = cgate32 = 0;                                                                                           \
                 return 1;                                                                                                        \
         }                                                                                                                        \
@@ -69,13 +69,13 @@
         if (cgate16) {                                                                                                           \
                 uint32_t old_esp = ESP;                                                                                          \
                 PUSH_W(old_cs);                                                                                                  \
-                if (cpu_state.abrt) {                                                                                            \
+                if (unlikely(cpu_state.abrt)) {                                                                                            \
                         CS = old_cs;                                                                                             \
                         cgate16 = cgate32 = 0;                                                                                   \
                         return 1;                                                                                                \
                 }                                                                                                                \
                 PUSH_W(old_pc);                                                                                                  \
-                if (cpu_state.abrt) {                                                                                            \
+                if (unlikely(cpu_state.abrt)) {                                                                                            \
                         CS = old_cs;                                                                                             \
                         ESP = old_esp;                                                                                           \
                         return 1;                                                                                                \
@@ -83,13 +83,13 @@
         } else {                                                                                                                 \
                 uint32_t old_esp = ESP;                                                                                          \
                 PUSH_L(old_cs);                                                                                                  \
-                if (cpu_state.abrt) {                                                                                            \
+                if (unlikely(cpu_state.abrt)) {                                                                                            \
                         CS = old_cs;                                                                                             \
                         cgate16 = cgate32 = 0;                                                                                   \
                         return 1;                                                                                                \
                 }                                                                                                                \
                 PUSH_L(old_pc);                                                                                                  \
-                if (cpu_state.abrt) {                                                                                            \
+                if (unlikely(cpu_state.abrt)) {                                                                                            \
                         CS = old_cs;                                                                                             \
                         ESP = old_esp;                                                                                           \
                         return 1;                                                                                                \
@@ -104,7 +104,7 @@ static int opCALL_far_w(uint32_t fetchdat) {
 
         new_pc = getwordf();
         new_cs = getword();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         CALL_FAR_w(new_cs, new_pc);
@@ -122,7 +122,7 @@ static int opCALL_far_l(uint32_t fetchdat) {
 
         new_pc = getlong();
         new_cs = getword();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         CALL_FAR_l(new_cs, new_pc);
@@ -148,10 +148,10 @@ static int opFF_w_a16(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
                 temp = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 seteaw(temp + 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setadd16nc(temp, 1);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
@@ -162,10 +162,10 @@ static int opFF_w_a16(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
                 temp = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 seteaw(temp - 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setsub16nc(temp, 1);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
@@ -176,7 +176,7 @@ static int opFF_w_a16(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 PUSH_W(cpu_state.pc);
                 cpu_state.pc = new_pc;
@@ -193,7 +193,7 @@ static int opFF_w_a16(uint32_t fetchdat) {
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = readmemw(easeg, cpu_state.eaaddr);
                 new_cs = readmemw(easeg, (cpu_state.eaaddr + 2));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
 
                 CALL_FAR_w(new_cs, new_pc);
@@ -205,7 +205,7 @@ static int opFF_w_a16(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.pc = new_pc;
                 CPU_BLOCK_END();
@@ -222,11 +222,11 @@ static int opFF_w_a16(uint32_t fetchdat) {
                 old_pc = cpu_state.pc;
                 new_pc = readmemw(easeg, cpu_state.eaaddr);
                 new_cs = readmemw(easeg, cpu_state.eaaddr + 2);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.pc = new_pc;
                 loadcsjmp(new_cs, old_pc);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 CPU_BLOCK_END();
                 PREFETCH_RUN(cycles_old - cycles, 2, rmdat, 2, 0, 0, 0, 0);
@@ -236,7 +236,7 @@ static int opFF_w_a16(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 temp = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 PUSH_W(temp);
                 CLOCK_CYCLES((cpu_mod == 3) ? 2 : 5);
@@ -264,10 +264,10 @@ static int opFF_w_a32(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
                 temp = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 seteaw(temp + 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setadd16nc(temp, 1);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
@@ -278,10 +278,10 @@ static int opFF_w_a32(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
                 temp = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 seteaw(temp - 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setsub16nc(temp, 1);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
@@ -292,7 +292,7 @@ static int opFF_w_a32(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 PUSH_W(cpu_state.pc);
                 cpu_state.pc = new_pc;
@@ -309,7 +309,7 @@ static int opFF_w_a32(uint32_t fetchdat) {
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = readmemw(easeg, cpu_state.eaaddr);
                 new_cs = readmemw(easeg, (cpu_state.eaaddr + 2));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
 
                 CALL_FAR_w(new_cs, new_pc);
@@ -321,7 +321,7 @@ static int opFF_w_a32(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.pc = new_pc;
                 CPU_BLOCK_END();
@@ -338,11 +338,11 @@ static int opFF_w_a32(uint32_t fetchdat) {
                 old_pc = cpu_state.pc;
                 new_pc = readmemw(easeg, cpu_state.eaaddr);
                 new_cs = readmemw(easeg, cpu_state.eaaddr + 2);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.pc = new_pc;
                 loadcsjmp(new_cs, old_pc);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 CPU_BLOCK_END();
                 PREFETCH_RUN(cycles_old - cycles, 2, rmdat, 2, 0, 0, 0, 1);
@@ -352,7 +352,7 @@ static int opFF_w_a32(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 temp = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 PUSH_W(temp);
                 CLOCK_CYCLES((cpu_mod == 3) ? 2 : 5);
@@ -381,10 +381,10 @@ static int opFF_l_a16(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
                 temp = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 seteal(temp + 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setadd32nc(temp, 1);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
@@ -395,10 +395,10 @@ static int opFF_l_a16(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
                 temp = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 seteal(temp - 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setsub32nc(temp, 1);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
@@ -409,7 +409,7 @@ static int opFF_l_a16(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 PUSH_L(cpu_state.pc);
                 cpu_state.pc = new_pc;
@@ -426,7 +426,7 @@ static int opFF_l_a16(uint32_t fetchdat) {
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = readmeml(easeg, cpu_state.eaaddr);
                 new_cs = readmemw(easeg, (cpu_state.eaaddr + 4));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
 
                 CALL_FAR_l(new_cs, new_pc);
@@ -438,7 +438,7 @@ static int opFF_l_a16(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.pc = new_pc;
                 CPU_BLOCK_END();
@@ -455,11 +455,11 @@ static int opFF_l_a16(uint32_t fetchdat) {
                 old_pc = cpu_state.pc;
                 new_pc = readmeml(easeg, cpu_state.eaaddr);
                 new_cs = readmemw(easeg, cpu_state.eaaddr + 4);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.pc = new_pc;
                 loadcsjmp(new_cs, old_pc);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 CPU_BLOCK_END();
                 PREFETCH_RUN(cycles_old - cycles, 2, rmdat, 1, 1, 0, 0, 0);
@@ -469,7 +469,7 @@ static int opFF_l_a16(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 temp = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 PUSH_L(temp);
                 CLOCK_CYCLES((cpu_mod == 3) ? 2 : 5);
@@ -497,10 +497,10 @@ static int opFF_l_a32(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
                 temp = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 seteal(temp + 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setadd32nc(temp, 1);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
@@ -511,10 +511,10 @@ static int opFF_l_a32(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_WRITE(cpu_state.ea_seg);
                 temp = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 seteal(temp - 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setsub32nc(temp, 1);
                 CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
@@ -525,10 +525,10 @@ static int opFF_l_a32(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 PUSH_L(cpu_state.pc);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.pc = new_pc;
                 CPU_BLOCK_END();
@@ -544,7 +544,7 @@ static int opFF_l_a32(uint32_t fetchdat) {
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = readmeml(easeg, cpu_state.eaaddr);
                 new_cs = readmemw(easeg, (cpu_state.eaaddr + 4));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
 
                 CALL_FAR_l(new_cs, new_pc);
@@ -556,7 +556,7 @@ static int opFF_l_a32(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 new_pc = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.pc = new_pc;
                 CPU_BLOCK_END();
@@ -573,11 +573,11 @@ static int opFF_l_a32(uint32_t fetchdat) {
                 old_pc = cpu_state.pc;
                 new_pc = readmeml(easeg, cpu_state.eaaddr);
                 new_cs = readmemw(easeg, cpu_state.eaaddr + 4);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.pc = new_pc;
                 loadcsjmp(new_cs, old_pc);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 CPU_BLOCK_END();
                 PREFETCH_RUN(cycles_old - cycles, 2, rmdat, 1, 1, 0, 0, 1);
@@ -587,7 +587,7 @@ static int opFF_l_a32(uint32_t fetchdat) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 temp = geteal();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 PUSH_L(temp);
                 PREFETCH_RUN((cpu_mod == 3) ? 2 : 5, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, 1, 1);

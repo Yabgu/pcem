@@ -116,7 +116,7 @@ static inline void fetch_ea_16_long(uint32_t rmdat) {
         cpu_rm = rmdat & 7;                                                                                                      \
         if (cpu_mod != 3) {                                                                                                      \
                 fetch_ea_16_long(rmdat);                                                                                         \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
         }
 #define fetch_ea_32(rmdat)                                                                                                       \
@@ -127,7 +127,7 @@ static inline void fetch_ea_16_long(uint32_t rmdat) {
         if (cpu_mod != 3) {                                                                                                      \
                 fetch_ea_32_long(rmdat);                                                                                         \
         }                                                                                                                        \
-        if (cpu_state.abrt)                                                                                                      \
+        if (unlikely(cpu_state.abrt))                                                                                                      \
         return 1
 
 #include "x86_flags.h"
@@ -441,7 +441,7 @@ static void __attribute__((noinline)) exec_recompiler(void) {
                                                  (cpu_state.flags & T_FLAG) | cpu_state.smi_pending |
                                                  (nmi && nmi_enable && nmi_mask) | (ep == 1);
 
-                                if (cpu_state.abrt) {
+                                if (unlikely(cpu_state.abrt)) {
                                         if (!(cpu_state.abrt & ABRT_EXPECTED))
                                                 codegen_block_remove();
                                         cpu_block_end = 1;
@@ -521,7 +521,7 @@ static void __attribute__((noinline)) exec_recompiler(void) {
                                                  (cpu_state.flags & T_FLAG) | cpu_state.smi_pending |
                                                  (nmi && nmi_enable && nmi_mask) | (ep == 1);
 
-                                if (cpu_state.abrt) {
+                                if (unlikely(cpu_state.abrt)) {
                                         if (!(cpu_state.abrt & ABRT_EXPECTED))
                                                 codegen_block_remove();
                                         cpu_block_end = 1;
@@ -566,17 +566,17 @@ void exec386_dynarec(int cycs) {
                         else
                                 exec_recompiler();
 
-                        if (cpu_state.abrt) {
+                        if (unlikely(cpu_state.abrt)) {
                                 flags_rebuild();
                                 tempi = cpu_state.abrt & ABRT_MASK;
                                 cpu_state.abrt = 0;
                                 x86_doabrt(tempi);
-                                if (cpu_state.abrt) {
+                                if (unlikely(cpu_state.abrt)) {
                                         cpu_state.abrt = 0;
                                         cpu_state.pc = cpu_state.oldpc;
                                         pclog("Double fault %i\n", ins);
                                         pmodeint(8, 0);
-                                        if (cpu_state.abrt) {
+                                        if (unlikely(cpu_state.abrt)) {
                                                 cpu_state.abrt = 0;
                                                 softresetx86();
                                                 cpu_set_edx();
