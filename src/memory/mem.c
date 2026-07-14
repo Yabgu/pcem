@@ -66,13 +66,10 @@ int mem_addr_is_ram(uint32_t addr) {
 
 void resetreadlookup() {
         memset(page_lookup, 0, (1 << 20) * sizeof(page_t *));
-        pccache = 0xFFFFFFFF;
 }
 
 void flushmmucache() {
         mmuflush++;
-        pccache = (uint32_t)0xFFFFFFFF;
-        pccache2 = (uint8_t *)0xFFFFFFFF;
         codegen_flush();
 }
 

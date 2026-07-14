@@ -262,7 +262,7 @@ static inline void exec_interpreter(void) {
                         int ep = cpu_end_block_after_ins;
                         cpu_end_block_after_ins -= (ep > 0);
 
-                        cpu_block_end |= (((cs + cpu_state.pc) >> 12) != pccache) | cpu_state.abrt |
+                        cpu_block_end |= cpu_state.abrt |
                                          cpu_state.smi_pending | trap | (nmi && nmi_enable && nmi_mask) |
                                          (ep == 1);
                 }
