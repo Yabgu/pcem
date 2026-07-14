@@ -53,7 +53,7 @@
                                                                                                                                  \
         static int opJ##condition##_l(uint32_t fetchdat) {                                                                       \
                 uint32_t offset = getlong();                                                                                     \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 CLOCK_CYCLES(timing_bnt);                                                                                        \
                 if (cond_##condition) {                                                                                          \
@@ -219,7 +219,7 @@ static int opJMP_r16(uint32_t fetchdat) {
 }
 static int opJMP_r32(uint32_t fetchdat) {
         int32_t offset = (int32_t)getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.pc += offset;
         CPU_BLOCK_END();
@@ -232,7 +232,7 @@ static int opJMP_r32(uint32_t fetchdat) {
 static int opJMP_far_a16(uint32_t fetchdat) {
         uint16_t addr = getwordf();
         uint16_t seg = getword();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         uint32_t old_pc = cpu_state.pc;
         cpu_state.pc = addr;
@@ -245,7 +245,7 @@ static int opJMP_far_a16(uint32_t fetchdat) {
 static int opJMP_far_a32(uint32_t fetchdat) {
         uint32_t addr = getlong();
         uint16_t seg = getword();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         uint32_t old_pc = cpu_state.pc;
         cpu_state.pc = addr;
@@ -269,7 +269,7 @@ static int opCALL_r16(uint32_t fetchdat) {
 }
 static int opCALL_r32(uint32_t fetchdat) {
         int32_t addr = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         PUSH_L(cpu_state.pc);
         cpu_state.pc += addr;
@@ -284,7 +284,7 @@ static int opRET_w(uint32_t fetchdat) {
         uint16_t ret;
 
         ret = POP_W();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.pc = ret;
         CPU_BLOCK_END();
@@ -298,7 +298,7 @@ static int opRET_l(uint32_t fetchdat) {
         uint32_t ret;
 
         ret = POP_L();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.pc = ret;
         CPU_BLOCK_END();
@@ -314,7 +314,7 @@ static int opRET_w_imm(uint32_t fetchdat) {
         uint16_t ret;
 
         ret = POP_W();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (stack32)
                 ESP += offset;
@@ -333,7 +333,7 @@ static int opRET_l_imm(uint32_t fetchdat) {
         uint32_t ret;
 
         ret = POP_L();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (stack32)
                 ESP += offset;

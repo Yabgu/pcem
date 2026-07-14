@@ -16,7 +16,7 @@ int checkio(int port);
 #define check_io_perm(port)                                                                                                      \
         if (!IOPLp || (cpu_state.eflags & VM_FLAG)) {                                                                            \
                 int tempi = checkio(port);                                                                                       \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 if (tempi) {                                                                                                     \
                         if (cpu_state.eflags & VM_FLAG)                                                                          \
@@ -71,7 +71,7 @@ int checkio(int port);
 
 static inline uint8_t fastreadb(uint32_t a) {
         uint8_t *t = getpccache(a);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 0;
         return t[a];
 }
@@ -85,7 +85,7 @@ static inline uint16_t fastreadw(uint32_t a) {
                 return val;
         }
         t = getpccache(a);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 0;
         return *((uint16_t *)&t[a]);
 }
@@ -95,7 +95,7 @@ static inline uint32_t fastreadl(uint32_t a) {
         uint32_t val;
         if ((a & 0xFFF) < 0xFFD) {
                 t = getpccache(a);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 return *((uint32_t *)&t[a]);
         }

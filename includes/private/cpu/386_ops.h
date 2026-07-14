@@ -14,12 +14,12 @@
 static inline void PUSH_W(uint16_t val) {
         if (stack32) {
                 writememw(ss, ESP - 2, val);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 ESP -= 2;
         } else {
                 writememw(ss, (SP - 2) & 0xFFFF, val);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 SP -= 2;
         }
@@ -28,12 +28,12 @@ static inline void PUSH_W(uint16_t val) {
 static inline void PUSH_L(uint32_t val) {
         if (stack32) {
                 writememl(ss, ESP - 4, val);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 ESP -= 4;
         } else {
                 writememl(ss, (SP - 4) & 0xFFFF, val);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 SP -= 4;
         }
@@ -43,12 +43,12 @@ static inline uint16_t POP_W() {
         uint16_t ret;
         if (stack32) {
                 ret = readmemw(ss, ESP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 ESP += 2;
         } else {
                 ret = readmemw(ss, SP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 SP += 2;
         }
@@ -59,12 +59,12 @@ static inline uint32_t POP_L() {
         uint32_t ret;
         if (stack32) {
                 ret = readmeml(ss, ESP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 ESP += 4;
         } else {
                 ret = readmeml(ss, SP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 SP += 4;
         }
@@ -75,12 +75,12 @@ static inline uint16_t POP_W_seg(uint32_t seg) {
         uint16_t ret;
         if (stack32) {
                 ret = readmemw(seg, ESP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 ESP += 2;
         } else {
                 ret = readmemw(seg, SP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 SP += 2;
         }
@@ -91,12 +91,12 @@ static inline uint32_t POP_L_seg(uint32_t seg) {
         uint32_t ret;
         if (stack32) {
                 ret = readmeml(seg, ESP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 ESP += 4;
         } else {
                 ret = readmeml(seg, SP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 SP += 4;
         }

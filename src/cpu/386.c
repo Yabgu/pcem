@@ -106,7 +106,7 @@ static inline void fetch_ea_16_long(uint32_t rmdat) {
         cpu_rm = rmdat & 7;                                                                                                      \
         if (cpu_mod != 3) {                                                                                                      \
                 fetch_ea_16_long(rmdat);                                                                                         \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 0;                                                                                                \
         }
 #define fetch_ea_32(rmdat)                                                                                                       \
@@ -117,7 +117,7 @@ static inline void fetch_ea_16_long(uint32_t rmdat) {
         if (cpu_mod != 3) {                                                                                                      \
                 fetch_ea_32_long(rmdat);                                                                                         \
         }                                                                                                                        \
-        if (cpu_state.abrt)                                                                                                      \
+        if (unlikely(cpu_state.abrt))                                                                                                      \
         return 0
 
 #include "x86_flags.h"
@@ -188,7 +188,7 @@ void exec386(int cycs) {
                                         break;
                         }
 
-                        if (cpu_state.abrt) {
+                        if (unlikely(cpu_state.abrt)) {
                                 flags_rebuild();
                                 //                        pclog("Abort\n");
                                 //                        if (CS == 0x228) pclog("Abort at %04X:%04X - %i %i
@@ -196,12 +196,12 @@ void exec386(int cycs) {
                                 tempi = cpu_state.abrt & ABRT_MASK;
                                 cpu_state.abrt = 0;
                                 x86_doabrt(tempi);
-                                if (cpu_state.abrt) {
+                                if (unlikely(cpu_state.abrt)) {
                                         cpu_state.abrt = 0;
                                         cpu_state.pc = cpu_state.oldpc;
                                         pclog("Double fault %i\n", ins);
                                         pmodeint(8, 0);
-                                        if (cpu_state.abrt) {
+                                        if (unlikely(cpu_state.abrt)) {
                                                 cpu_state.abrt = 0;
                                                 softresetx86();
                                                 cpu_set_edx();

@@ -9,14 +9,14 @@ static int opARPL_a16(uint32_t fetchdat) {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         pclog("ARPL_a16\n");
         temp_seg = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         flags_rebuild();
         if ((temp_seg & 3) < (cpu_state.regs[cpu_reg].w & 3)) {
                 temp_seg = (temp_seg & 0xfffc) | (cpu_state.regs[cpu_reg].w & 3);
                 seteaw(temp_seg);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.flags |= Z_FLAG;
         } else
@@ -35,14 +35,14 @@ static int opARPL_a32(uint32_t fetchdat) {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         pclog("ARPL_a32\n");
         temp_seg = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         flags_rebuild();
         if ((temp_seg & 3) < (cpu_state.regs[cpu_reg].w & 3)) {
                 temp_seg = (temp_seg & 0xfffc) | (cpu_state.regs[cpu_reg].w & 3);
                 seteaw(temp_seg);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 cpu_state.flags |= Z_FLAG;
         } else
@@ -64,7 +64,7 @@ static int opARPL_a32(uint32_t fetchdat) {
                         SEG_CHECK_READ(cpu_state.ea_seg);                                                                        \
                                                                                                                                  \
                 sel = geteaw();                                                                                                  \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                                                                                                                                  \
                 flags_rebuild();                                                                                                 \
@@ -77,7 +77,7 @@ static int opARPL_a32(uint32_t fetchdat) {
                         cpl_override = 1;                                                                                        \
                         desc = readmemw(0, ((sel & 4) ? ldt.base : gdt.base) + (sel & ~7) + 4);                                  \
                         cpl_override = 0;                                                                                        \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                 }                                                                                                                \
                 cpu_state.flags &= ~Z_FLAG;                                                                                      \
@@ -124,7 +124,7 @@ opLAR(w_a16, fetch_ea_16, 0, 0) opLAR(w_a32, fetch_ea_32, 0, 1) opLAR(l_a16, fet
                         SEG_CHECK_READ(cpu_state.ea_seg);                                                                        \
                                                                                                                                  \
                 sel = geteaw();                                                                                                  \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 flags_rebuild();                                                                                                 \
                 cpu_state.flags &= ~Z_FLAG;                                                                                      \
@@ -135,7 +135,7 @@ opLAR(w_a16, fetch_ea_16, 0, 0) opLAR(w_a32, fetch_ea_32, 0, 1) opLAR(l_a16, fet
                         cpl_override = 1;                                                                                        \
                         desc = readmemw(0, ((sel & 4) ? ldt.base : gdt.base) + (sel & ~7) + 4);                                  \
                         cpl_override = 0;                                                                                        \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                 }                                                                                                                \
                 if ((desc & 0x1400) == 0x400)                                                                                    \
@@ -204,7 +204,7 @@ opLAR(w_a16, fetch_ea_16, 0, 0) opLAR(w_a32, fetch_ea_32, 0, 1) opLAR(l_a16, fet
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 sel = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 addr = (sel & ~7) + gdt.base;
                 limit = readmemw(0, addr) + ((readmemb(0, addr + 6) & 0xf) << 16);
@@ -212,7 +212,7 @@ opLAR(w_a16, fetch_ea_16, 0, 0) opLAR(w_a32, fetch_ea_32, 0, 1) opLAR(l_a16, fet
                 access = readmemb(0, addr + 5);
                 access2 = readmemb(0, addr + 6);
                 granularity = readmemb(0, addr + 6) & 0x80;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 ldt.limit = limit;
                 ldt.limit_raw = limit;
@@ -236,7 +236,7 @@ opLAR(w_a16, fetch_ea_16, 0, 0) opLAR(w_a32, fetch_ea_32, 0, 1) opLAR(l_a16, fet
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 sel = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 addr = (sel & ~7) + gdt.base;
                 limit = readmemw(0, addr) + ((readmemb(0, addr + 6) & 0xf) << 16);
@@ -244,11 +244,11 @@ opLAR(w_a16, fetch_ea_16, 0, 0) opLAR(w_a32, fetch_ea_32, 0, 1) opLAR(l_a16, fet
                 access = readmemb(0, addr + 5);
                 access2 = readmemb(0, addr + 6);
                 granularity = readmemb(0, addr + 6) & 0x80;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 access |= 2;
                 writememb(0, addr + 5, access);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 tr.seg = sel;
                 tr.limit = limit;
@@ -267,7 +267,7 @@ opLAR(w_a16, fetch_ea_16, 0, 0) opLAR(w_a32, fetch_ea_32, 0, 1) opLAR(l_a16, fet
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 sel = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 flags_rebuild();
                 cpu_state.flags &= ~Z_FLAG;
@@ -277,7 +277,7 @@ opLAR(w_a16, fetch_ea_16, 0, 0) opLAR(w_a32, fetch_ea_32, 0, 1) opLAR(l_a16, fet
                 valid = (sel & ~7) < ((sel & 4) ? ldt.limit : gdt.limit);
                 desc = readmemw(0, ((sel & 4) ? ldt.base : gdt.base) + (sel & ~7) + 4);
                 cpl_override = 0;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 if (!(desc & 0x1000))
                         valid = 0;
@@ -298,7 +298,7 @@ opLAR(w_a16, fetch_ea_16, 0, 0) opLAR(w_a32, fetch_ea_32, 0, 1) opLAR(l_a16, fet
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 sel = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 flags_rebuild();
                 cpu_state.flags &= ~Z_FLAG;
@@ -308,7 +308,7 @@ opLAR(w_a16, fetch_ea_16, 0, 0) opLAR(w_a32, fetch_ea_32, 0, 1) opLAR(l_a16, fet
                 valid = (sel & ~7) < ((sel & 4) ? ldt.limit : gdt.limit);
                 desc = readmemw(0, ((sel & 4) ? ldt.base : gdt.base) + (sel & ~7) + 4);
                 cpl_override = 0;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 if (!(desc & 0x1000))
                         valid = 0;
@@ -387,7 +387,7 @@ static int op0F01_common(uint32_t fetchdat, int is32, int is286, int ea32) {
                 //                pclog("LGDT %08X:%08X\n", easeg, eaaddr);
                 limit = geteaw();
                 base = readmeml(0, easeg + cpu_state.eaaddr + 2);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 //                pclog("     %08X %04X\n", base, limit);
                 gdt.limit = limit;
@@ -408,7 +408,7 @@ static int op0F01_common(uint32_t fetchdat, int is32, int is286, int ea32) {
                 //                pclog("LIDT %08X:%08X\n", easeg, eaaddr);
                 limit = geteaw();
                 base = readmeml(0, easeg + cpu_state.eaaddr + 2);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 //                pclog("     %08X %04X\n", base, limit);
                 idt.limit = limit;
@@ -440,7 +440,7 @@ static int op0F01_common(uint32_t fetchdat, int is32, int is286, int ea32) {
                 if (cpu_mod != 3)
                         SEG_CHECK_READ(cpu_state.ea_seg);
                 tempw = geteaw();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 if (msw & 1)
                         tempw |= 1;

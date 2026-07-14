@@ -52,17 +52,17 @@ static int opINCDEC_b_a16(uint32_t fetchdat) {
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = geteab();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         if (rmdat & 0x38) {
                 seteab(temp - 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setsub8nc(temp, 1);
         } else {
                 seteab(temp + 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setadd8nc(temp, 1);
         }
@@ -77,17 +77,17 @@ static int opINCDEC_b_a32(uint32_t fetchdat) {
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         temp = geteab();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         if (rmdat & 0x38) {
                 seteab(temp - 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setsub8nc(temp, 1);
         } else {
                 seteab(temp + 1);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 setadd8nc(temp, 1);
         }

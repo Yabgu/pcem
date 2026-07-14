@@ -128,48 +128,48 @@ static int opPUSHA_l(uint32_t fetchdat) {
 static int opPOPA_w(uint32_t fetchdat) {
         if (stack32) {
                 DI = readmemw(ss, ESP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 SI = readmemw(ss, ESP + 2);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 BP = readmemw(ss, ESP + 4);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 BX = readmemw(ss, ESP + 8);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 DX = readmemw(ss, ESP + 10);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 CX = readmemw(ss, ESP + 12);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 AX = readmemw(ss, ESP + 14);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 ESP += 16;
         } else {
                 DI = readmemw(ss, ((SP)&0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 SI = readmemw(ss, ((SP + 2) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 BP = readmemw(ss, ((SP + 4) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 BX = readmemw(ss, ((SP + 8) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 DX = readmemw(ss, ((SP + 10) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 CX = readmemw(ss, ((SP + 12) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 AX = readmemw(ss, ((SP + 14) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 SP += 16;
         }
@@ -180,48 +180,48 @@ static int opPOPA_w(uint32_t fetchdat) {
 static int opPOPA_l(uint32_t fetchdat) {
         if (stack32) {
                 EDI = readmeml(ss, ESP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 ESI = readmeml(ss, ESP + 4);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 EBP = readmeml(ss, ESP + 8);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 EBX = readmeml(ss, ESP + 16);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 EDX = readmeml(ss, ESP + 20);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 ECX = readmeml(ss, ESP + 24);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 EAX = readmeml(ss, ESP + 28);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 ESP += 32;
         } else {
                 EDI = readmeml(ss, ((SP)&0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 ESI = readmeml(ss, ((SP + 4) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 EBP = readmeml(ss, ((SP + 8) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 EBX = readmeml(ss, ((SP + 16) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 EDX = readmeml(ss, ((SP + 20) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 ECX = readmeml(ss, ((SP + 24) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 EAX = readmeml(ss, ((SP + 28) & 0xFFFF));
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 SP += 32;
         }
@@ -239,7 +239,7 @@ static int opPUSH_imm_w(uint32_t fetchdat) {
 }
 static int opPUSH_imm_l(uint32_t fetchdat) {
         uint32_t val = getlong();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         PUSH_L(val);
         CLOCK_CYCLES(2);
@@ -274,14 +274,14 @@ static int opPOPW_a16(uint32_t fetchdat) {
         uint16_t temp;
 
         temp = POP_W();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         fetch_ea_16(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         seteaw(temp);
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 if (stack32)
                         ESP -= 2;
                 else
@@ -299,14 +299,14 @@ static int opPOPW_a32(uint32_t fetchdat) {
         uint16_t temp;
 
         temp = POP_W();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         fetch_ea_32(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         seteaw(temp);
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 if (stack32)
                         ESP -= 2;
                 else
@@ -325,14 +325,14 @@ static int opPOPL_a16(uint32_t fetchdat) {
         uint32_t temp;
 
         temp = POP_L();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         fetch_ea_16(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         seteal(temp);
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 if (stack32)
                         ESP -= 4;
                 else
@@ -350,14 +350,14 @@ static int opPOPL_a32(uint32_t fetchdat) {
         uint32_t temp;
 
         temp = POP_L();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         fetch_ea_32(fetchdat);
         if (cpu_mod != 3)
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         seteal(temp);
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 if (stack32)
                         ESP -= 4;
                 else
@@ -380,7 +380,7 @@ static int opENTER_w(uint32_t fetchdat) {
         int reads = 0, writes = 1, instr_cycles = 0;
 
         PUSH_W(BP);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         frame_ptr = ESP;
 
@@ -390,13 +390,13 @@ static int opENTER_w(uint32_t fetchdat) {
 
                         BP -= 2;
                         tempw = readmemw(ss, BP);
-                        if (cpu_state.abrt) {
+                        if (unlikely(cpu_state.abrt)) {
                                 ESP = tempESP;
                                 EBP = tempEBP;
                                 return 1;
                         }
                         PUSH_W(tempw);
-                        if (cpu_state.abrt) {
+                        if (unlikely(cpu_state.abrt)) {
                                 ESP = tempESP;
                                 EBP = tempEBP;
                                 return 1;
@@ -407,7 +407,7 @@ static int opENTER_w(uint32_t fetchdat) {
                         instr_cycles += (is486) ? 3 : 4;
                 }
                 PUSH_W(frame_ptr);
-                if (cpu_state.abrt) {
+                if (unlikely(cpu_state.abrt)) {
                         ESP = tempESP;
                         EBP = tempEBP;
                         return 1;
@@ -435,7 +435,7 @@ static int opENTER_l(uint32_t fetchdat) {
         int reads = 0, writes = 1, instr_cycles = 0;
 
         PUSH_L(EBP);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         frame_ptr = ESP;
 
@@ -445,13 +445,13 @@ static int opENTER_l(uint32_t fetchdat) {
 
                         EBP -= 4;
                         templ = readmeml(ss, EBP);
-                        if (cpu_state.abrt) {
+                        if (unlikely(cpu_state.abrt)) {
                                 ESP = tempESP;
                                 EBP = tempEBP;
                                 return 1;
                         }
                         PUSH_L(templ);
-                        if (cpu_state.abrt) {
+                        if (unlikely(cpu_state.abrt)) {
                                 ESP = tempESP;
                                 EBP = tempEBP;
                                 return 1;
@@ -462,7 +462,7 @@ static int opENTER_l(uint32_t fetchdat) {
                         instr_cycles += (is486) ? 3 : 4;
                 }
                 PUSH_L(frame_ptr);
-                if (cpu_state.abrt) {
+                if (unlikely(cpu_state.abrt)) {
                         ESP = tempESP;
                         EBP = tempEBP;
                         return 1;
@@ -489,7 +489,7 @@ static int opLEAVE_w(uint32_t fetchdat) {
 
         SP = BP;
         temp = POP_W();
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 ESP = tempESP;
                 return 1;
         }
@@ -505,7 +505,7 @@ static int opLEAVE_l(uint32_t fetchdat) {
 
         ESP = EBP;
         temp = POP_L();
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 ESP = tempESP;
                 return 1;
         }
@@ -535,10 +535,10 @@ static int opLEAVE_l(uint32_t fetchdat) {
                 uint16_t temp_seg;                                                                                               \
                 uint32_t temp_esp = ESP;                                                                                         \
                 temp_seg = POP_W();                                                                                              \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 loadseg(temp_seg, realseg);                                                                                      \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         ESP = temp_esp;                                                                                          \
                 CLOCK_CYCLES(is486 ? 3 : 7);                                                                                     \
                 PREFETCH_RUN(is486 ? 3 : 7, 1, -1, 0, 0, 1, 0, 0);                                                               \
@@ -548,10 +548,10 @@ static int opLEAVE_l(uint32_t fetchdat) {
                 uint32_t temp_seg;                                                                                               \
                 uint32_t temp_esp = ESP;                                                                                         \
                 temp_seg = POP_L();                                                                                              \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 loadseg(temp_seg & 0xffff, realseg);                                                                             \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         ESP = temp_esp;                                                                                          \
                 CLOCK_CYCLES(is486 ? 3 : 7);                                                                                     \
                 PREFETCH_RUN(is486 ? 3 : 7, 1, -1, 0, 0, 1, 0, 0);                                                               \
@@ -574,10 +574,10 @@ static int opPOP_SS_w(uint32_t fetchdat) {
         uint16_t temp_seg;
         uint32_t temp_esp = ESP;
         temp_seg = POP_W();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         loadseg(temp_seg, &cpu_state.seg_ss);
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 ESP = temp_esp;
                 return 1;
         }
@@ -590,7 +590,7 @@ static int opPOP_SS_w(uint32_t fetchdat) {
         cpu_state.ea_seg = &cpu_state.seg_ds;
         fetchdat = fastreadl(cs + cpu_state.pc);
         cpu_state.pc++;
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
 
@@ -600,10 +600,10 @@ static int opPOP_SS_l(uint32_t fetchdat) {
         uint32_t temp_seg;
         uint32_t temp_esp = ESP;
         temp_seg = POP_L();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         loadseg(temp_seg & 0xffff, &cpu_state.seg_ss);
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 ESP = temp_esp;
                 return 1;
         }
@@ -616,7 +616,7 @@ static int opPOP_SS_l(uint32_t fetchdat) {
         cpu_state.ea_seg = &cpu_state.seg_ds;
         fetchdat = fastreadl(cs + cpu_state.pc);
         cpu_state.pc++;
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
 

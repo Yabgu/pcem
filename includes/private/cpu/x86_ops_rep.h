@@ -11,7 +11,7 @@
                         check_io_perm(DX);                                                                                       \
                         temp = inb(DX);                                                                                          \
                         writememb(es, DEST_REG, temp);                                                                           \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                                                                                                                                  \
                         if (cpu_state.flags & D_FLAG)                                                                            \
@@ -43,7 +43,7 @@
                         check_io_perm(DX + 1);                                                                                   \
                         temp = inw(DX);                                                                                          \
                         writememw(es, DEST_REG, temp);                                                                           \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                                                                                                                                  \
                         if (cpu_state.flags & D_FLAG)                                                                            \
@@ -77,7 +77,7 @@
                         check_io_perm(DX + 3);                                                                                   \
                         temp = inl(DX);                                                                                          \
                         writememl(es, DEST_REG, temp);                                                                           \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                                                                                                                                  \
                         if (cpu_state.flags & D_FLAG)                                                                            \
@@ -106,7 +106,7 @@
                         uint8_t temp;                                                                                            \
                         SEG_CHECK_READ(cpu_state.ea_seg);                                                                        \
                         temp = readmemb(cpu_state.ea_seg->base, SRC_REG);                                                        \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         check_io_perm(DX);                                                                                       \
                         outb(DX, temp);                                                                                          \
@@ -135,7 +135,7 @@
                         uint16_t temp;                                                                                           \
                         SEG_CHECK_READ(cpu_state.ea_seg);                                                                        \
                         temp = readmemw(cpu_state.ea_seg->base, SRC_REG);                                                        \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         check_io_perm(DX);                                                                                       \
                         check_io_perm(DX + 1);                                                                                   \
@@ -165,7 +165,7 @@
                         uint32_t temp;                                                                                           \
                         SEG_CHECK_READ(cpu_state.ea_seg);                                                                        \
                         temp = readmeml(cpu_state.ea_seg->base, SRC_REG);                                                        \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         check_io_perm(DX);                                                                                       \
                         check_io_perm(DX + 1);                                                                                   \
@@ -205,10 +205,10 @@
                                                                                                                                  \
                         CHECK_WRITE_REP(&cpu_state.seg_es, DEST_REG, DEST_REG);                                                  \
                         temp = readmemb(cpu_state.ea_seg->base, SRC_REG);                                                        \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         writememb(es, DEST_REG, temp);                                                                           \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                                                                                                                                  \
                         if (cpu_state.flags & D_FLAG) {                                                                          \
@@ -250,10 +250,10 @@
                                                                                                                                  \
                         CHECK_WRITE_REP(&cpu_state.seg_es, DEST_REG, DEST_REG);                                                  \
                         temp = readmemw(cpu_state.ea_seg->base, SRC_REG);                                                        \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         writememw(es, DEST_REG, temp);                                                                           \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                                                                                                                                  \
                         if (cpu_state.flags & D_FLAG) {                                                                          \
@@ -295,10 +295,10 @@
                                                                                                                                  \
                         CHECK_WRITE_REP(&cpu_state.seg_es, DEST_REG, DEST_REG);                                                  \
                         temp = readmeml(cpu_state.ea_seg->base, SRC_REG);                                                        \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         writememl(es, DEST_REG, temp);                                                                           \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                                                                                                                                  \
                         if (cpu_state.flags & D_FLAG) {                                                                          \
@@ -337,7 +337,7 @@
                 while (CNT_REG > 0) {                                                                                            \
                         CHECK_WRITE_REP(&cpu_state.seg_es, DEST_REG, DEST_REG);                                                  \
                         writememb(es, DEST_REG, AL);                                                                             \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         if (cpu_state.flags & D_FLAG)                                                                            \
                                 DEST_REG--;                                                                                      \
@@ -369,7 +369,7 @@
                 while (CNT_REG > 0) {                                                                                            \
                         CHECK_WRITE_REP(&cpu_state.seg_es, DEST_REG, DEST_REG + 1);                                              \
                         writememw(es, DEST_REG, AX);                                                                             \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         if (cpu_state.flags & D_FLAG)                                                                            \
                                 DEST_REG -= 2;                                                                                   \
@@ -401,7 +401,7 @@
                 while (CNT_REG > 0) {                                                                                            \
                         CHECK_WRITE_REP(&cpu_state.seg_es, DEST_REG, DEST_REG + 3);                                              \
                         writememl(es, DEST_REG, EAX);                                                                            \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         if (cpu_state.flags & D_FLAG)                                                                            \
                                 DEST_REG -= 4;                                                                                   \
@@ -433,7 +433,7 @@
                         SEG_CHECK_READ(cpu_state.ea_seg);                                                                        \
                 while (CNT_REG > 0) {                                                                                            \
                         AL = readmemb(cpu_state.ea_seg->base, SRC_REG);                                                          \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         if (cpu_state.flags & D_FLAG)                                                                            \
                                 SRC_REG--;                                                                                       \
@@ -464,7 +464,7 @@
                         SEG_CHECK_READ(cpu_state.ea_seg);                                                                        \
                 while (CNT_REG > 0) {                                                                                            \
                         AX = readmemw(cpu_state.ea_seg->base, SRC_REG);                                                          \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         if (cpu_state.flags & D_FLAG)                                                                            \
                                 SRC_REG -= 2;                                                                                    \
@@ -495,7 +495,7 @@
                         SEG_CHECK_READ(cpu_state.ea_seg);                                                                        \
                 while (CNT_REG > 0) {                                                                                            \
                         EAX = readmeml(cpu_state.ea_seg->base, SRC_REG);                                                         \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                         if (cpu_state.flags & D_FLAG)                                                                            \
                                 SRC_REG -= 4;                                                                                    \
@@ -529,7 +529,7 @@
                         SEG_CHECK_READ(&cpu_state.seg_es);                                                                       \
                         temp = readmemb(cpu_state.ea_seg->base, SRC_REG);                                                        \
                         temp2 = readmemb(es, DEST_REG);                                                                          \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                                                                                                                                  \
                         if (cpu_state.flags & D_FLAG) {                                                                          \
@@ -564,7 +564,7 @@
                         SEG_CHECK_READ(&cpu_state.seg_es);                                                                       \
                         temp = readmemw(cpu_state.ea_seg->base, SRC_REG);                                                        \
                         temp2 = readmemw(es, DEST_REG);                                                                          \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                                                                                                                                  \
                         if (cpu_state.flags & D_FLAG) {                                                                          \
@@ -599,7 +599,7 @@
                         SEG_CHECK_READ(&cpu_state.seg_es);                                                                       \
                         temp = readmeml(cpu_state.ea_seg->base, SRC_REG);                                                        \
                         temp2 = readmeml(es, DEST_REG);                                                                          \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 return 1;                                                                                        \
                                                                                                                                  \
                         if (cpu_state.flags & D_FLAG) {                                                                          \
@@ -635,7 +635,7 @@
                         SEG_CHECK_READ(&cpu_state.seg_es);                                                                       \
                 while ((CNT_REG > 0) && (FV == tempz)) {                                                                         \
                         uint8_t temp = readmemb(es, DEST_REG);                                                                   \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 break;                                                                                           \
                         setsub8(AL, temp);                                                                                       \
                         tempz = (ZF_SET()) ? 1 : 0;                                                                              \
@@ -670,7 +670,7 @@
                         SEG_CHECK_READ(&cpu_state.seg_es);                                                                       \
                 while ((CNT_REG > 0) && (FV == tempz)) {                                                                         \
                         uint16_t temp = readmemw(es, DEST_REG);                                                                  \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 break;                                                                                           \
                         setsub16(AX, temp);                                                                                      \
                         tempz = (ZF_SET()) ? 1 : 0;                                                                              \
@@ -705,7 +705,7 @@
                         SEG_CHECK_READ(&cpu_state.seg_es);                                                                       \
                 while ((CNT_REG > 0) && (FV == tempz)) {                                                                         \
                         uint32_t temp = readmeml(es, DEST_REG);                                                                  \
-                        if (cpu_state.abrt)                                                                                      \
+                        if (unlikely(cpu_state.abrt))                                                                                      \
                                 break;                                                                                           \
                         setsub32(EAX, temp);                                                                                     \
                         tempz = (ZF_SET()) ? 1 : 0;                                                                              \
@@ -740,7 +740,7 @@ REP_OPS_CMPS_SCAS(a32_E, ECX, ESI, EDI, 1)
 
 static int opREPNE(uint32_t fetchdat) {
         fetchdat = fastreadl(cs + cpu_state.pc);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.pc++;
 
@@ -752,7 +752,7 @@ static int opREPNE(uint32_t fetchdat) {
 }
 static int opREPE(uint32_t fetchdat) {
         fetchdat = fastreadl(cs + cpu_state.pc);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         cpu_state.pc++;
 

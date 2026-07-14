@@ -8,7 +8,7 @@ static int opBT_w_r_a16(uint32_t fetchdat) {
         cpu_state.eaaddr += ((cpu_state.regs[cpu_reg].w / 16) * 2);
         eal_r = 0;
         temp = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         flags_rebuild();
         if (temp & (1 << (cpu_state.regs[cpu_reg].w & 15)))
@@ -28,7 +28,7 @@ static int opBT_w_r_a32(uint32_t fetchdat) {
         cpu_state.eaaddr += ((cpu_state.regs[cpu_reg].w / 16) * 2);
         eal_r = 0;
         temp = geteaw();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         flags_rebuild();
         if (temp & (1 << (cpu_state.regs[cpu_reg].w & 15)))
@@ -48,7 +48,7 @@ static int opBT_l_r_a16(uint32_t fetchdat) {
         cpu_state.eaaddr += ((cpu_state.regs[cpu_reg].l / 32) * 4);
         eal_r = 0;
         temp = geteal();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         flags_rebuild();
         if (temp & (1 << (cpu_state.regs[cpu_reg].l & 31)))
@@ -68,7 +68,7 @@ static int opBT_l_r_a32(uint32_t fetchdat) {
         cpu_state.eaaddr += ((cpu_state.regs[cpu_reg].l / 32) * 4);
         eal_r = 0;
         temp = geteal();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         flags_rebuild();
         if (temp & (1 << (cpu_state.regs[cpu_reg].l & 31)))
@@ -92,12 +92,12 @@ static int opBT_l_r_a32(uint32_t fetchdat) {
                 cpu_state.eaaddr += ((cpu_state.regs[cpu_reg].w / 16) * 2);                                                      \
                 eal_r = eal_w = 0;                                                                                               \
                 temp = geteaw();                                                                                                 \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 tempc = (temp & (1 << (cpu_state.regs[cpu_reg].w & 15))) ? 1 : 0;                                                \
                 temp operation(1 << (cpu_state.regs[cpu_reg].w & 15));                                                           \
                 seteaw(temp);                                                                                                    \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 flags_rebuild();                                                                                                 \
                 if (tempc)                                                                                                       \
@@ -119,12 +119,12 @@ static int opBT_l_r_a32(uint32_t fetchdat) {
                 cpu_state.eaaddr += ((cpu_state.regs[cpu_reg].w / 16) * 2);                                                      \
                 eal_r = eal_w = 0;                                                                                               \
                 temp = geteaw();                                                                                                 \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 tempc = (temp & (1 << (cpu_state.regs[cpu_reg].w & 15))) ? 1 : 0;                                                \
                 temp operation(1 << (cpu_state.regs[cpu_reg].w & 15));                                                           \
                 seteaw(temp);                                                                                                    \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 flags_rebuild();                                                                                                 \
                 if (tempc)                                                                                                       \
@@ -146,12 +146,12 @@ static int opBT_l_r_a32(uint32_t fetchdat) {
                 cpu_state.eaaddr += ((cpu_state.regs[cpu_reg].l / 32) * 4);                                                      \
                 eal_r = eal_w = 0;                                                                                               \
                 temp = geteal();                                                                                                 \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 tempc = (temp & (1 << (cpu_state.regs[cpu_reg].l & 31))) ? 1 : 0;                                                \
                 temp operation(1 << (cpu_state.regs[cpu_reg].l & 31));                                                           \
                 seteal(temp);                                                                                                    \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 flags_rebuild();                                                                                                 \
                 if (tempc)                                                                                                       \
@@ -173,12 +173,12 @@ static int opBT_l_r_a32(uint32_t fetchdat) {
                 cpu_state.eaaddr += ((cpu_state.regs[cpu_reg].l / 32) * 4);                                                      \
                 eal_r = eal_w = 0;                                                                                               \
                 temp = geteal();                                                                                                 \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 tempc = (temp & (1 << (cpu_state.regs[cpu_reg].l & 31))) ? 1 : 0;                                                \
                 temp operation(1 << (cpu_state.regs[cpu_reg].l & 31));                                                           \
                 seteal(temp);                                                                                                    \
-                if (cpu_state.abrt)                                                                                              \
+                if (unlikely(cpu_state.abrt))                                                                                              \
                         return 1;                                                                                                \
                 flags_rebuild();                                                                                                 \
                 if (tempc)                                                                                                       \
@@ -203,7 +203,7 @@ opBT(C, ^=) opBT(R, &= ~) opBT(S, |=)
 
         temp = geteaw();
         count = getbyte();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         tempc = temp & (1 << count);
         flags_rebuild();
@@ -233,7 +233,7 @@ opBT(C, ^=) opBT(R, &= ~) opBT(S, |=)
                 break;
         }
         seteaw(temp);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (tempc)
                 cpu_state.flags |= C_FLAG;
@@ -253,7 +253,7 @@ static int opBA_w_a32(uint32_t fetchdat) {
 
         temp = geteaw();
         count = getbyte();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         tempc = temp & (1 << count);
         flags_rebuild();
@@ -283,7 +283,7 @@ static int opBA_w_a32(uint32_t fetchdat) {
                 break;
         }
         seteaw(temp);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (tempc)
                 cpu_state.flags |= C_FLAG;
@@ -304,7 +304,7 @@ static int opBA_l_a16(uint32_t fetchdat) {
 
         temp = geteal();
         count = getbyte();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         tempc = temp & (1 << count);
         flags_rebuild();
@@ -334,7 +334,7 @@ static int opBA_l_a16(uint32_t fetchdat) {
                 break;
         }
         seteal(temp);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (tempc)
                 cpu_state.flags |= C_FLAG;
@@ -354,7 +354,7 @@ static int opBA_l_a32(uint32_t fetchdat) {
 
         temp = geteal();
         count = getbyte();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         tempc = temp & (1 << count);
         flags_rebuild();
@@ -384,7 +384,7 @@ static int opBA_l_a32(uint32_t fetchdat) {
                 break;
         }
         seteal(temp);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
         if (tempc)
                 cpu_state.flags |= C_FLAG;

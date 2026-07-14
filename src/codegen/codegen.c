@@ -532,7 +532,7 @@ void codegen_generate_call(uint8_t opcode, OpFn op, uint32_t fetchdat, uint32_t 
                 }
                 fetchdat = fastreadl(cs + op_pc);
                 codegen_timing_prefix(opcode, fetchdat);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 opcode = fetchdat & 0xff;
                 if (!pc_off)

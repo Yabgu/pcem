@@ -122,17 +122,17 @@ int x86_int_sw_rm(int num) {
         new_pc = readmemw(0, addr);
         new_cs = readmemw(0, addr + 2);
 
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         writememw(ss, ((SP - 2) & 0xFFFF), cpu_state.flags);
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 pclog("abrt5\n");
                 return 1;
         }
         writememw(ss, ((SP - 4) & 0xFFFF), CS);
         writememw(ss, ((SP - 6) & 0xFFFF), cpu_state.pc);
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 pclog("abrt6\n");
                 return 1;
         }
@@ -168,7 +168,7 @@ int checkio(int port) {
         t = readmemw(tr.base, 0x66);
         cpl_override = 0;
         //        pclog("CheckIO 1 %08X  %04x %02x\n",tr.base, eflags, _cs.access);
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 0;
         //        pclog("CheckIO %04X %01X %01X %02X %04X %04X %08X ",CS,CPL,IOPL,port,t,t+(port>>3),tr.base+t+(port>>3));
         if ((t + (port >> 3)) > tr.limit)

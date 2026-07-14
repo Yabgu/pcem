@@ -16,6 +16,9 @@
 #define ABS(x) ((x) > 0 ? (x) : -(x))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
+#define likely(x)   __builtin_expect(!!(x), 1)
+#define unlikely(x) __builtin_expect(!!(x), 0)
+
 #define READFLASH_FDC 0
 #define READFLASH_HDC 4
 #define readflash_set(offset, drive) readflash |= 1 << ((offset) + (drive))

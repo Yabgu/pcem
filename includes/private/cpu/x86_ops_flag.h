@@ -142,7 +142,7 @@ static int opPOPF_286(uint32_t fetchdat) {
         }
 
         tempw = POP_W();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         if (!(msw & 1))
@@ -170,7 +170,7 @@ static int opPOPF(uint32_t fetchdat) {
                         uint32_t old_esp = ESP;
 
                         tempw = POP_W();
-                        if (cpu_state.abrt) {
+                        if (unlikely(cpu_state.abrt)) {
                                 ESP = old_esp;
                                 return 1;
                         }
@@ -191,7 +191,7 @@ static int opPOPF(uint32_t fetchdat) {
                 }
         } else {
                 tempw = POP_W();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
 
                 if (!(CPL) || !(msw & 1))
@@ -219,7 +219,7 @@ static int opPOPFD(uint32_t fetchdat) {
         }
 
         templ = POP_L();
-        if (cpu_state.abrt)
+        if (unlikely(cpu_state.abrt))
                 return 1;
 
         if (!(CPL) || !(msw & 1))

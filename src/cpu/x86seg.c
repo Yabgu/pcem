@@ -322,7 +322,7 @@ int loadseg(uint16_t seg, x86seg *s) {
                 segdat[2] = readmemw(0, addr + 4);
                 segdat[3] = readmemw(0, addr + 6);
                 cpl_override = 0;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 1;
                 dpl = (segdat[2] >> 13) & 3;
                 if (s == &cpu_state.seg_ss) {
@@ -488,7 +488,7 @@ void loadcs(uint16_t seg) {
                 segdat[2] = readmemw(0, addr + 4);
                 segdat[3] = readmemw(0, addr + 6);
                 cpl_override = 0;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 if (optype == JMP)
                         pclog("Code seg - %04X - %04X %04X %04X %04X\n", seg, segdat[0], segdat[1], segdat[2], segdat[3]);
@@ -600,7 +600,7 @@ void loadcsjmp(uint16_t seg, uint32_t old_pc) {
                 segdat[2] = readmemw(0, addr + 4);
                 segdat[3] = readmemw(0, addr + 6);
                 cpl_override = 0;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 if (output)
                         pclog("%04X %04X %04X %04X\n", segdat[0], segdat[1], segdat[2], segdat[3]);
@@ -709,7 +709,7 @@ void loadcsjmp(uint16_t seg, uint32_t old_pc) {
                                 segdat[2] = readmemw(0, addr + 4);
                                 segdat[3] = readmemw(0, addr + 6);
                                 cpl_override = 0;
-                                if (cpu_state.abrt)
+                                if (unlikely(cpu_state.abrt))
                                         return;
 
                                 if (DPL > CPL) {
@@ -805,13 +805,13 @@ void PUSHW(uint16_t v) {
         //        if (output==3) pclog("PUSHW %04X to %08X\n",v,ESP-4);
         if (stack32) {
                 writememw(ss, ESP - 2, v);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 ESP -= 2;
         } else {
                 //                pclog("Write %04X to %08X\n", v, ss+((SP-2)&0xFFFF));
                 writememw(ss, ((SP - 2) & 0xFFFF), v);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 SP -= 2;
         }
@@ -820,12 +820,12 @@ void PUSHL(uint32_t v) {
         //        if (output==3) pclog("PUSHL %08X to %08X\n",v,ESP-4);
         if (stack32) {
                 writememl(ss, ESP - 4, v);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 ESP -= 4;
         } else {
                 writememl(ss, ((SP - 4) & 0xFFFF), v);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 SP -= 4;
         }
@@ -834,12 +834,12 @@ uint16_t POPW() {
         uint16_t tempw;
         if (stack32) {
                 tempw = readmemw(ss, ESP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 ESP += 2;
         } else {
                 tempw = readmemw(ss, SP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 SP += 2;
         }
@@ -849,12 +849,12 @@ uint32_t POPL() {
         uint32_t templ;
         if (stack32) {
                 templ = readmeml(ss, ESP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 ESP += 4;
         } else {
                 templ = readmeml(ss, SP);
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return 0;
                 SP += 4;
         }
@@ -906,7 +906,7 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
                 segdat[2] = readmemw(0, addr + 4);
                 segdat[3] = readmemw(0, addr + 6);
                 cpl_override = 0;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 type = segdat[2] & 0xF00;
                 newpc = segdat[0];
@@ -1031,7 +1031,7 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
                                 segdat[2] = readmemw(0, addr + 4);
                                 segdat[3] = readmemw(0, addr + 6);
                                 cpl_override = 0;
-                                if (cpu_state.abrt)
+                                if (unlikely(cpu_state.abrt))
                                         return;
 
                                 if (output)
@@ -1070,7 +1070,7 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
                                                         newsp = readmemw(0, addr);
                                                 }
                                                 cpl_override = 0;
-                                                if (cpu_state.abrt)
+                                                if (unlikely(cpu_state.abrt))
                                                         return;
                                                 if (output)
                                                         pclog("New stack %04X:%08X\n", newss, newsp);
@@ -1105,7 +1105,7 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
                                                 segdat2[2] = readmemw(0, addr + 4);
                                                 segdat2[3] = readmemw(0, addr + 6);
                                                 cpl_override = 0;
-                                                if (cpu_state.abrt)
+                                                if (unlikely(cpu_state.abrt))
                                                         return;
                                                 if (output)
                                                         pclog("Read stack seg done!\n");
@@ -1170,7 +1170,7 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
                                                 if (type == 0xC00) {
                                                         PUSHL(oldss);
                                                         PUSHL(oldsp2);
-                                                        if (cpu_state.abrt) {
+                                                        if (unlikely(cpu_state.abrt)) {
                                                                 pclog("ABRT PUSHL\n");
                                                                 SS = oldss;
                                                                 ESP = oldsp2;
@@ -1184,7 +1184,7 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
                                                                 while (count) {
                                                                         count--;
                                                                         PUSHL(readmeml(oldssbase, oldsp + (count * 4)));
-                                                                        if (cpu_state.abrt) {
+                                                                        if (unlikely(cpu_state.abrt)) {
                                                                                 pclog("ABRT COPYL\n");
                                                                                 SS = oldss;
                                                                                 ESP = oldsp2;
@@ -1205,7 +1205,7 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
                                                         if (output)
                                                                 pclog("Write SS to %04X:%04X\n", SS, SP);
                                                         PUSHW(oldsp2);
-                                                        if (cpu_state.abrt) {
+                                                        if (unlikely(cpu_state.abrt)) {
                                                                 pclog("ABRT PUSHW\n");
                                                                 SS = oldss;
                                                                 ESP = oldsp2;
@@ -1230,7 +1230,7 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
                                                                         if (output)
                                                                                 pclog("PUSH %04X\n", tempw);
                                                                         PUSHW(tempw);
-                                                                        if (cpu_state.abrt) {
+                                                                        if (unlikely(cpu_state.abrt)) {
                                                                                 pclog("ABRT COPYW\n");
                                                                                 SS = oldss;
                                                                                 ESP = oldsp2;
@@ -1328,7 +1328,7 @@ void pmoderetf(int is32, uint16_t off) {
         if (is32) {
                 newpc = POPL();
                 seg = POPL();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
         } else {
                 if (output)
@@ -1337,7 +1337,7 @@ void pmoderetf(int is32, uint16_t off) {
                 if (output)
                         pclog("CS read from %04X:%04X\n", SS, SP);
                 seg = POPW();
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
         }
         if (output)
@@ -1383,7 +1383,7 @@ void pmoderetf(int is32, uint16_t off) {
         segdat[2] = readmemw(0, addr + 4);
         segdat[3] = readmemw(0, addr + 6);
         cpl_override = 0;
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 ESP = oldsp;
                 return;
         }
@@ -1498,7 +1498,7 @@ void pmoderetf(int is32, uint16_t off) {
                 if (is32) {
                         newsp = POPL();
                         newss = POPL();
-                        if (cpu_state.abrt)
+                        if (unlikely(cpu_state.abrt))
                                 return;
                         //                        pclog("is32 new stack %04X:%04X\n",newss,newsp);
                 } else {
@@ -1508,7 +1508,7 @@ void pmoderetf(int is32, uint16_t off) {
                         if (output)
                                 pclog("SS read from %04X:%04X\n", SS, SP);
                         newss = POPW();
-                        if (cpu_state.abrt)
+                        if (unlikely(cpu_state.abrt))
                                 return;
                         //                        pclog("!is32 new stack %04X:%04X\n",newss,newsp);
                 }
@@ -1544,7 +1544,7 @@ void pmoderetf(int is32, uint16_t off) {
                 segdat2[2] = readmemw(0, addr + 4);
                 segdat2[3] = readmemw(0, addr + 6);
                 cpl_override = 0;
-                if (cpu_state.abrt) {
+                if (unlikely(cpu_state.abrt)) {
                         ESP = oldsp;
                         return;
                 }
@@ -1670,7 +1670,7 @@ void pmodeint(int num, int soft) {
         segdat[2] = readmemw(4, addr);
         segdat[3] = readmemw(6, addr);
         cpl_override = 0;
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 pclog("Abrt reading from %08X\n", addr);
                 return;
         }
@@ -1738,7 +1738,7 @@ void pmodeint(int num, int soft) {
                 segdat2[2] = readmemw(0, addr + 4);
                 segdat2[3] = readmemw(0, addr + 6);
                 cpl_override = 0;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 oaddr = addr;
 
@@ -1805,7 +1805,7 @@ void pmodeint(int num, int soft) {
                                 segdat3[2] = readmemw(0, addr + 4);
                                 segdat3[3] = readmemw(0, addr + 6);
                                 cpl_override = 0;
-                                if (cpu_state.abrt)
+                                if (unlikely(cpu_state.abrt))
                                         return;
                                 if (((newss & 3) != DPL2) || (DPL3 != DPL2)) {
                                         pclog("Int gate loading SS with wrong permissions\n");
@@ -1847,7 +1847,7 @@ void pmodeint(int num, int soft) {
                                                 PUSHL(FS);
                                                 PUSHL(DS);
                                                 PUSHL(ES);
-                                                if (cpu_state.abrt)
+                                                if (unlikely(cpu_state.abrt))
                                                         return;
                                                 loadseg(0, &cpu_state.seg_ds);
                                                 loadseg(0, &cpu_state.seg_es);
@@ -1861,7 +1861,7 @@ void pmodeint(int num, int soft) {
                                         PUSHL(CS);
                                         //                                                if (soft) pclog("Pushl PC %08X\n", pc);
                                         PUSHL(cpu_state.pc);
-                                        if (cpu_state.abrt)
+                                        if (unlikely(cpu_state.abrt))
                                                 return;
                                         //                                                if (output) pclog("32Stack
                                         //                                                %04X:%08X\n",SS,ESP);
@@ -1874,7 +1874,7 @@ void pmodeint(int num, int soft) {
                                         PUSHW(CS);
                                         //                                                if (soft) pclog("Pushw pc %04X\n", pc);
                                         PUSHW(cpu_state.pc);
-                                        if (cpu_state.abrt)
+                                        if (unlikely(cpu_state.abrt))
                                                 return;
                                         //                                                if (output) pclog("16Stack
                                         //                                                %04X:%08X\n",SS,ESP);
@@ -1910,7 +1910,7 @@ void pmodeint(int num, int soft) {
                                 PUSHL(CS);
                                 //                                        if (soft) pclog("Pushlc PC %08X\n", pc);
                                 PUSHL(cpu_state.pc);
-                                if (cpu_state.abrt)
+                                if (unlikely(cpu_state.abrt))
                                         return;
                         } else {
                                 PUSHW(cpu_state.flags);
@@ -1918,7 +1918,7 @@ void pmodeint(int num, int soft) {
                                 PUSHW(CS);
                                 //                                        if (soft) pclog("Pushwc PC %04X\n", pc);
                                 PUSHW(cpu_state.pc);
-                                if (cpu_state.abrt)
+                                if (unlikely(cpu_state.abrt))
                                         return;
                         }
                         new_cpl = CS & 3;
@@ -1985,7 +1985,7 @@ void pmodeint(int num, int soft) {
                 segdat2[2] = readmemw(0, addr + 4);
                 segdat2[3] = readmemw(0, addr + 6);
                 cpl_override = 0;
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
                 if (!(segdat2[2] & 0x8000)) {
                         pclog("Int task gate not present\n");
@@ -2027,13 +2027,13 @@ void pmodeiret(int is32) {
                         newpc = POPL();
                         seg = POPL();
                         tempflags = POPL();
-                        if (cpu_state.abrt)
+                        if (unlikely(cpu_state.abrt))
                                 return;
                 } else {
                         newpc = POPW();
                         seg = POPW();
                         tempflags = POPW();
-                        if (cpu_state.abrt)
+                        if (unlikely(cpu_state.abrt))
                                 return;
                 }
                 cpu_state.pc = newpc;
@@ -2087,7 +2087,7 @@ void pmodeiret(int is32) {
                 newpc = POPL();
                 seg = POPL();
                 tempflags = POPL();
-                if (cpu_state.abrt) {
+                if (unlikely(cpu_state.abrt)) {
                         ESP = oldsp;
                         return;
                 }
@@ -2101,7 +2101,7 @@ void pmodeiret(int is32) {
                         segs[1] = POPL();
                         segs[2] = POPL();
                         segs[3] = POPL();
-                        if (cpu_state.abrt) {
+                        if (unlikely(cpu_state.abrt)) {
                                 ESP = oldsp;
                                 return;
                         }
@@ -2153,7 +2153,7 @@ void pmodeiret(int is32) {
                 newpc = POPW();
                 seg = POPW();
                 tempflags = POPW();
-                if (cpu_state.abrt) {
+                if (unlikely(cpu_state.abrt)) {
                         ESP = oldsp;
                         return;
                 }
@@ -2200,7 +2200,7 @@ void pmodeiret(int is32) {
         segdat[2] = readmemw(0, addr + 4);
         segdat[3] = readmemw(0, addr + 6);
         cpl_override = 0;
-        if (cpu_state.abrt) {
+        if (unlikely(cpu_state.abrt)) {
                 ESP = oldsp;
                 return;
         }
@@ -2270,14 +2270,14 @@ void pmodeiret(int is32) {
                 if (is32) {
                         newsp = POPL();
                         newss = POPL();
-                        if (cpu_state.abrt) {
+                        if (unlikely(cpu_state.abrt)) {
                                 ESP = oldsp;
                                 return;
                         }
                 } else {
                         newsp = POPW();
                         newss = POPW();
-                        if (cpu_state.abrt) {
+                        if (unlikely(cpu_state.abrt)) {
                                 ESP = oldsp;
                                 return;
                         }
@@ -2316,7 +2316,7 @@ void pmodeiret(int is32) {
                 segdat2[2] = readmemw(0, addr + 4);
                 segdat2[3] = readmemw(0, addr + 6);
                 cpl_override = 0;
-                if (cpu_state.abrt) {
+                if (unlikely(cpu_state.abrt)) {
                         ESP = oldsp;
                         return;
                 }
@@ -2430,7 +2430,7 @@ void taskswitch286(uint16_t seg, uint16_t *segdat, int is32) {
                                 tempw = readmemw(ldt.base, (seg & ~7) + 4);
                         else
                                 tempw = readmemw(gdt.base, (seg & ~7) + 4);
-                        if (cpu_state.abrt)
+                        if (unlikely(cpu_state.abrt))
                                 return;
                         tempw |= 0x200;
                         if (tr.seg & 4)
@@ -2438,7 +2438,7 @@ void taskswitch286(uint16_t seg, uint16_t *segdat, int is32) {
                         else
                                 writememw(gdt.base, (seg & ~7) + 4, tempw);
                 }
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
 
                 if (optype == IRET)
@@ -2472,7 +2472,7 @@ void taskswitch286(uint16_t seg, uint16_t *segdat, int is32) {
                                 tempw = readmemw(ldt.base, (tr.seg & ~7) + 4);
                         else
                                 tempw = readmemw(gdt.base, (tr.seg & ~7) + 4);
-                        if (cpu_state.abrt)
+                        if (unlikely(cpu_state.abrt))
                                 return;
                         tempw &= ~0x200;
                         if (tr.seg & 4)
@@ -2480,12 +2480,12 @@ void taskswitch286(uint16_t seg, uint16_t *segdat, int is32) {
                         else
                                 writememw(gdt.base, (tr.seg & ~7) + 4, tempw);
                 }
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
 
                 if (optype == OPTYPE_INT || optype == CALL) {
                         writememl(base, 0, tr.seg);
-                        if (cpu_state.abrt)
+                        if (unlikely(cpu_state.abrt))
                                 return;
                 }
 
@@ -2650,7 +2650,7 @@ void taskswitch286(uint16_t seg, uint16_t *segdat, int is32) {
                                 tempw = readmemw(ldt.base, (seg & ~7) + 4);
                         else
                                 tempw = readmemw(gdt.base, (seg & ~7) + 4);
-                        if (cpu_state.abrt)
+                        if (unlikely(cpu_state.abrt))
                                 return;
                         tempw |= 0x200;
                         if (tr.seg & 4)
@@ -2658,7 +2658,7 @@ void taskswitch286(uint16_t seg, uint16_t *segdat, int is32) {
                         else
                                 writememw(gdt.base, (seg & ~7) + 4, tempw);
                 }
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
 
                 if (optype == IRET)
@@ -2689,7 +2689,7 @@ void taskswitch286(uint16_t seg, uint16_t *segdat, int is32) {
                                 tempw = readmemw(ldt.base, (tr.seg & ~7) + 4);
                         else
                                 tempw = readmemw(gdt.base, (tr.seg & ~7) + 4);
-                        if (cpu_state.abrt)
+                        if (unlikely(cpu_state.abrt))
                                 return;
                         tempw &= ~0x200;
                         if (tr.seg & 4)
@@ -2697,12 +2697,12 @@ void taskswitch286(uint16_t seg, uint16_t *segdat, int is32) {
                         else
                                 writememw(gdt.base, (tr.seg & ~7) + 4, tempw);
                 }
-                if (cpu_state.abrt)
+                if (unlikely(cpu_state.abrt))
                         return;
 
                 if (optype == OPTYPE_INT || optype == CALL) {
                         writememw(base, 0, tr.seg);
-                        if (cpu_state.abrt)
+                        if (unlikely(cpu_state.abrt))
                                 return;
                 }
 
