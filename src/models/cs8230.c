@@ -31,7 +31,6 @@ static void shadow_control(uint32_t addr, uint32_t size, int state) {
                 mem_set_mem_state(addr, size, MEM_READ_EXTERNAL | MEM_WRITE_EXTERNAL);
                 break;
         }
-        flushmmucache_nopc();
 }
 
 static void rethink_shadow_mappings(void) {

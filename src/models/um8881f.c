@@ -18,7 +18,6 @@ void um8881f_write(int func, int addr, uint8_t val, void *priv) {
                                         else
                                                 mem_bios_set_state(0xe0000, 0x10000, 0, 0);
                                 }*/
-                flushmmucache_nopc();
         }
         if (addr == 0x55) {
                 if ((card_16[0x55] ^ val) & 0xc0) {
@@ -30,7 +29,6 @@ void um8881f_write(int func, int addr, uint8_t val, void *priv) {
                                                         case 0xc0: mem_bios_set_state(0xf0000, 0x10000, 1, 0); break;
                                                 }*/
                         //                        shadowbios = val & 0x80;
-                        flushmmucache_nopc();
                 }
         }
         if (addr >= 4)

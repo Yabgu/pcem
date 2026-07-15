@@ -190,8 +190,6 @@ void mem_alloc();
 
 void mem_set_704kb();
 
-void flushmmucache_nopc();
-void flushmmucache_cr3();
 
 void resetreadlookup();
 
