@@ -73,8 +73,6 @@ void scat_shadow_state_update() {
                         mem_set_mem_state((i + 40) << 14, 0x4000, val);
                 }
         }
-
-        flushmmucache();
 }
 
 void scat_set_xms_bound(uint8_t val) {
@@ -788,7 +786,6 @@ void scat_set_global_EMS_state(int state) {
                                 mem_mapping_disable(&scat_4000_EFFF_mapping[i + 12]);
                 }
         }
-        flushmmucache();
 }
 
 void scat_memmap_state_update() {
@@ -1008,7 +1005,6 @@ void scat_write(uint16_t port, uint8_t val, void *priv) {
                                         mem_mapping_set_exec(&scat_ems_mapping[index], ram + virt_addr);
                                 else
                                         mem_mapping_set_exec(&scat_ems_mapping[index], NULL);
-                                flushmmucache();
                         }
                 }
                 break;
@@ -1050,7 +1046,6 @@ void scat_write(uint16_t port, uint8_t val, void *priv) {
                                         //                                        pclog("Unmap page %d(address %06X)\n", index,
                                         //                                        base_addr);
                                 }
-                                flushmmucache();
                         }
 
                         if (scat_ems_reg_2xA & 0x80) {

@@ -503,8 +503,6 @@ void codegen_block_end_recompile(codeblock_t *block) {
         //        pclog("End block %i\n", block_num);
 }
 
-void codegen_flush() { return; }
-
 static int opcode_modrm[256] = {
         1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, /*00*/
         1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, /*10*/

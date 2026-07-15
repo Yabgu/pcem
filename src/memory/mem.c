@@ -52,7 +52,6 @@ uint32_t mem_logical_addr;
 void (*smram_enable)(void);
 void (*smram_disable)(void);
 
-int mmuflush = 0;
 int mmu_perm = 4;
 
 uint32_t rammask;
@@ -68,10 +67,6 @@ void resetreadlookup() {
         memset(page_lookup, 0, (1 << 20) * sizeof(page_t *));
 }
 
-void flushmmucache() {
-        mmuflush++;
-        codegen_flush();
-}
 
 void flushmmucache_nopc() {}
 
@@ -1231,10 +1226,8 @@ void mem_a20_recalc() {
         //        pclog("A20 recalc %i %i\n", state, mem_a20_state);
         if (state && !mem_a20_state) {
                 rammask = (AT && cpu_16bitbus) ? 0xffffff : 0xffffffff;
-                flushmmucache();
         } else if (!state && mem_a20_state) {
                 rammask = (AT && cpu_16bitbus) ? 0xefffff : 0xffefffff;
-                flushmmucache();
         }
         //        pclog("rammask now %08X\n", rammask);
         mem_a20_state = state;

@@ -32,8 +32,6 @@ static void ali1429_recalc() {
                 } else
                         mem_set_mem_state(base, 0x8000, MEM_READ_EXTERNAL | MEM_WRITE_EXTERNAL);
         }
-
-        flushmmucache();
 }
 
 void ali1429_write(uint16_t port, uint8_t val, void *priv) {

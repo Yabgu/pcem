@@ -35,8 +35,6 @@ void sis496_recalcmapping(sis496_t *sis496) {
                 } else
                         mem_set_mem_state(base, 0x8000, MEM_READ_EXTERNAL | MEM_WRITE_EXTERNAL);
         }
-
-        flushmmucache();
 }
 
 void sis496_write(int func, int addr, uint8_t val, void *p) {

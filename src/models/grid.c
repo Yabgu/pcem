@@ -183,8 +183,6 @@ static void grid_io_write(uint16_t port, uint8_t val, void *priv) {
                 if (grid_high_enable & 0x1)
                         break; // XMS is enabled
                 grid_ems_update_mapping(slot);
-
-                flushmmucache();
                 break;
         }
         case GRID_HIGH_ENABLE: {
@@ -203,7 +201,6 @@ static void grid_io_write(uint16_t port, uint8_t val, void *priv) {
                                 grid_ems_update_mapping(i);
                         }
                 }
-                flushmmucache();
                 break;
         }
         default:
@@ -289,7 +286,6 @@ void grid_init() {
         mem_mapping_enable(&grid_high_mapping);
 
         //mem_set_mem_state(GRID_EXTENDED_BASE, (mem_size-640) << 10, MEM_READ_ANY | MEM_WRITE_ANY);
-        flushmmucache();
 }
 
 /*

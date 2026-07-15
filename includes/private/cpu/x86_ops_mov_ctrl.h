@@ -105,8 +105,6 @@ static int opMOV_CRx_r_a16(uint32_t fetchdat) {
         fetch_ea_16(fetchdat);
         switch (cpu_reg) {
         case 0:
-                if ((cpu_state.regs[cpu_rm].l ^ cr0) & 0x80000001)
-                        flushmmucache();
                 cr0 = cpu_state.regs[cpu_rm].l;
                 if (cpu_16bitbus)
                         cr0 |= 0x10;
@@ -128,7 +126,6 @@ static int opMOV_CRx_r_a16(uint32_t fetchdat) {
                 break;
         case 3:
                 cr3 = cpu_state.regs[cpu_rm].l;
-                flushmmucache();
                 break;
         case 4:
                 if (cpu_has_feature(CPU_FEATURE_CR4)) {
@@ -157,8 +154,6 @@ static int opMOV_CRx_r_a32(uint32_t fetchdat) {
         fetch_ea_32(fetchdat);
         switch (cpu_reg) {
         case 0:
-                if ((cpu_state.regs[cpu_rm].l ^ cr0) & 0x80000001)
-                        flushmmucache();
                 cr0 = cpu_state.regs[cpu_rm].l;
                 if (cpu_16bitbus)
                         cr0 |= 0x10;
@@ -180,7 +175,6 @@ static int opMOV_CRx_r_a32(uint32_t fetchdat) {
                 break;
         case 3:
                 cr3 = cpu_state.regs[cpu_rm].l;
-                flushmmucache();
                 break;
         case 4:
                 if (cpu_has_feature(CPU_FEATURE_CR4)) {
