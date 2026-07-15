@@ -521,7 +521,6 @@ static void shadow_control(uint32_t addr, uint32_t size, int state, int ems_enab
                         mem_set_mem_state(addr, size, MEM_READ_INTERNAL | MEM_WRITE_INTERNAL);
                         break;
                 }
-        flushmmucache_nopc();
 }
 
 static void shadow_recalc(void) {

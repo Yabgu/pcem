@@ -28,7 +28,6 @@ static void i430lx_map(uint32_t addr, uint32_t size, int state) {
                 mem_set_mem_state(addr, size, MEM_READ_INTERNAL | MEM_WRITE_INTERNAL);
                 break;
         }
-        flushmmucache_nopc();
 }
 
 void i430lx_write(int func, int addr, uint8_t val, void *priv) {

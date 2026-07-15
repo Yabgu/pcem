@@ -36,7 +36,6 @@ static void shadow_control(uint32_t addr, uint32_t size, int state) {
                 mem_set_mem_state(addr, size, MEM_READ_INTERNAL | MEM_WRITE_INTERNAL);
                 break;
         }
-        flushmmucache_nopc();
 }
 
 void vl82c480_write(uint16_t addr, uint8_t val, void *p) {

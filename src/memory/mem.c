@@ -68,10 +68,6 @@ void resetreadlookup() {
 }
 
 
-void flushmmucache_nopc() {}
-
-void flushmmucache_cr3() {}
-
 void mem_flush_write_page(uint32_t addr, uint32_t virt)
 {
         /* No-op: read/write lookups removed */
@@ -214,9 +210,7 @@ uint32_t mmutranslate_noabrt(uint32_t addr, int rw) {
 }
 
 void mmu_invalidate(uint32_t addr) {
-        flushmmucache_cr3();
 }
-
 
 
 uint8_t *getpccache(uint32_t a) {
@@ -898,7 +892,6 @@ static void mem_mapping_recalc(uint64_t base, uint64_t size) {
                 }
                 mapping = mapping->next;
         }
-        flushmmucache_cr3();
 }
 
 void mem_mapping_add(mem_mapping_t *mapping, uint32_t base, uint32_t size, uint8_t (*read_b)(uint32_t addr, void *p),

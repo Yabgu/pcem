@@ -937,7 +937,6 @@ void scat_write(uint16_t port, uint8_t val, void *priv) {
                         break;
                 case SCAT_RAM_WRITE_PROTECT:
                         scat_reg_valid = 1;
-                        flushmmucache_cr3();
                         break;
                 case SCAT_SHADOW_RAM_ENABLE_1:
                 case SCAT_SHADOW_RAM_ENABLE_2:

@@ -519,8 +519,6 @@ void loadcs(uint16_t seg) {
                         CS = (seg & ~3) | CPL;
                         do_seg_load(&cpu_state.seg_cs, segdat);
                         use32 = (segdat[3] & 0x40) ? 0x300 : 0;
-                        if (CPL == 3 && oldcpl != 3)
-                                flushmmucache_cr3();
                         oldcpl = CPL;
 
 #ifdef CS_ACCESSED
@@ -557,8 +555,6 @@ void loadcs(uint16_t seg) {
                         cpu_state.seg_cs.access = (3 << 5) | 2;
                 else
                         cpu_state.seg_cs.access = (0 << 5) | 2;
-                if (CPL == 3 && oldcpl != 3)
-                        flushmmucache_cr3();
                 oldcpl = CPL;
         }
 }
@@ -637,8 +633,6 @@ void loadcsjmp(uint16_t seg, uint32_t old_pc) {
                         segdat[2] = (segdat[2] & ~(3 << (5 + 8))) | (CPL << (5 + 8));
 
                         do_seg_load(&cpu_state.seg_cs, segdat);
-                        if (CPL == 3 && oldcpl != 3)
-                                flushmmucache_cr3();
                         oldcpl = CPL;
                         /*                        if (segdat[3]&0x40)
                                                 {
@@ -736,8 +730,6 @@ void loadcsjmp(uint16_t seg, uint32_t old_pc) {
                                 case 0x1F00: /*Conforming*/
                                         CS = seg2;
                                         do_seg_load(&cpu_state.seg_cs, segdat);
-                                        if (CPL == 3 && oldcpl != 3)
-                                                flushmmucache_cr3();
                                         oldcpl = CPL;
                                         set_use32(segdat[3] & 0x40);
                                         cpu_state.pc = newpc;
@@ -793,8 +785,6 @@ void loadcsjmp(uint16_t seg, uint32_t old_pc) {
                         cpu_state.seg_cs.access = (3 << 5) | 2;
                 else
                         cpu_state.seg_cs.access = (0 << 5) | 2;
-                if (CPL == 3 && oldcpl != 3)
-                        flushmmucache_cr3();
                 oldcpl = CPL;
                 cycles -= timing_jmp_rm;
         }
@@ -957,8 +947,6 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
                                 seg = (seg & ~3) | CPL;
                         CS = seg;
                         do_seg_load(&cpu_state.seg_cs, segdat);
-                        if (CPL == 3 && oldcpl != 3)
-                                flushmmucache_cr3();
                         oldcpl = CPL;
                         /*                        if (segdat[3]&0x40)
                                                 {
@@ -1148,8 +1136,6 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
 
                                                 CS = seg2;
                                                 do_seg_load(&cpu_state.seg_cs, segdat);
-                                                if (CPL == 3 && oldcpl != 3)
-                                                        flushmmucache_cr3();
                                                 oldcpl = CPL;
                                                 set_use32(segdat[3] & 0x40);
                                                 cpu_state.pc = newpc;
@@ -1258,8 +1244,6 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
                                 case 0x1F00: /*Conforming*/
                                         CS = seg2;
                                         do_seg_load(&cpu_state.seg_cs, segdat);
-                                        if (CPL == 3 && oldcpl != 3)
-                                                flushmmucache_cr3();
                                         oldcpl = CPL;
                                         set_use32(segdat[3] & 0x40);
                                         cpu_state.pc = newpc;
@@ -1309,8 +1293,6 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
                         cpu_state.seg_cs.access = (3 << 5) | 2;
                 else
                         cpu_state.seg_cs.access = (0 << 5) | 2;
-                if (CPL == 3 && oldcpl != 3)
-                        flushmmucache_cr3();
                 oldcpl = CPL;
         }
 }
@@ -1445,8 +1427,6 @@ void pmoderetf(int is32, uint16_t off) {
                 CS = seg;
                 do_seg_load(&cpu_state.seg_cs, segdat);
                 cpu_state.seg_cs.access = (cpu_state.seg_cs.access & ~(3 << 5)) | ((CS & 3) << 5);
-                if (CPL == 3 && oldcpl != 3)
-                        flushmmucache_cr3();
                 oldcpl = CPL;
                 set_use32(segdat[3] & 0x40);
 
@@ -1602,8 +1582,6 @@ void pmoderetf(int is32, uint16_t off) {
                 cpu_state.pc = newpc;
                 CS = seg;
                 do_seg_load(&cpu_state.seg_cs, segdat);
-                if (CPL == 3 && oldcpl != 3)
-                        flushmmucache_cr3();
                 oldcpl = CPL;
                 set_use32(segdat[3] & 0x40);
 
@@ -1931,8 +1909,6 @@ void pmodeint(int num, int soft) {
                 CS = (seg & ~3) | new_cpl;
                 cpu_state.seg_cs.access = (cpu_state.seg_cs.access & ~(3 << 5)) | (new_cpl << 5);
                 //                pclog("New CS = %04X\n",CS);
-                if (CPL == 3 && oldcpl != 3)
-                        flushmmucache_cr3();
                 oldcpl = CPL;
                 if (type > 0x800)
                         cpu_state.pc = segdat[0] | (segdat[3] << 16);
@@ -2125,8 +2101,6 @@ void pmodeiret(int is32) {
                         cpu_state.seg_cs.limit_high = 0xffff;
                         CS = seg;
                         cpu_state.seg_cs.access = (3 << 5) | 2;
-                        if (CPL == 3 && oldcpl != 3)
-                                flushmmucache_cr3();
                         oldcpl = CPL;
 
                         ESP = newsp;
@@ -2248,8 +2222,6 @@ void pmodeiret(int is32) {
                 CS = seg;
                 do_seg_load(&cpu_state.seg_cs, segdat);
                 cpu_state.seg_cs.access = (cpu_state.seg_cs.access & ~(3 << 5)) | ((CS & 3) << 5);
-                if (CPL == 3 && oldcpl != 3)
-                        flushmmucache_cr3();
                 oldcpl = CPL;
                 set_use32(segdat[3] & 0x40);
 
@@ -2369,8 +2341,6 @@ void pmodeiret(int is32) {
                 CS = seg;
                 do_seg_load(&cpu_state.seg_cs, segdat);
                 cpu_state.seg_cs.access = (cpu_state.seg_cs.access & ~(3 << 5)) | ((CS & 3) << 5);
-                if (CPL == 3 && oldcpl != 3)
-                        flushmmucache_cr3();
                 oldcpl = CPL;
                 set_use32(segdat[3] & 0x40);
 
@@ -2598,8 +2568,6 @@ void taskswitch286(uint16_t seg, uint16_t *segdat, int is32) {
                         //                if (output) pclog("new_cs %04X\n",new_cs);
                         CS = new_cs;
                         do_seg_load(&cpu_state.seg_cs, segdat2);
-                        if (CPL == 3 && oldcpl != 3)
-                                flushmmucache_cr3();
                         oldcpl = CPL;
                         set_use32(segdat2[3] & 0x40);
                         cpu_cur_status &= ~CPU_STATUS_V86;
@@ -2805,8 +2773,6 @@ void taskswitch286(uint16_t seg, uint16_t *segdat, int is32) {
                 //                if (output) pclog("new_cs %04X\n",new_cs);
                 CS = new_cs;
                 do_seg_load(&cpu_state.seg_cs, segdat2);
-                if (CPL == 3 && oldcpl != 3)
-                        flushmmucache_cr3();
                 oldcpl = CPL;
                 set_use32(0);
 
@@ -2899,7 +2865,6 @@ void sysexit(void) {
 
         cpu_cur_status &= ~(CPU_STATUS_NOTFLATSS | CPU_STATUS_V86);
         cpu_cur_status |= (CPU_STATUS_USE32 | CPU_STATUS_STACK32 | CPU_STATUS_PMODE);
-        flushmmucache_cr3();
         set_use32(1);
         set_stack32(1);
 
