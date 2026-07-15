@@ -90,7 +90,6 @@ int config_override = 0;
 
 int insc = 0;
 float mips, flops;
-extern int mmuflush;
 void fullspeed();
 
 int framecount = 0, fps = 0;
@@ -524,7 +523,6 @@ void runpc() {
                 updatestatus = 1;
                 egareads = egawrites = 0;
                 cycles_lost = 0;
-                mmuflush = 0;
                 emu_fps = frames;
                 frames = 0;
         }

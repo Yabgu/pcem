@@ -45,8 +45,6 @@ static void laserxt_write(uint16_t port, uint8_t val, void *priv) {
                 } else {
                         mem_mapping_disable(&laserxt_ems_mapping[port >> 14]);
                 }
-
-                flushmmucache();
                 break;
 
         case 0x0209:
@@ -67,8 +65,6 @@ static void laserxt_write(uint16_t port, uint8_t val, void *priv) {
                                      0x4000);
                 mem_mapping_set_addr(&laserxt_ems_mapping[3], 0xCC000 + (((laserxt_ems_baseaddr_index + 1) & 0x0C) << 14),
                                      0x4000);
-
-                flushmmucache();
                 break;
         }
 }

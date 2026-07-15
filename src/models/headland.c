@@ -93,7 +93,6 @@ void headland_set_global_EMS_state(int state) {
                                 mem_mapping_enable(&headland_4000_9FFF_mapping[i]);
                 }
         }
-        flushmmucache();
 }
 
 void headland_memmap_state_update() {
@@ -185,7 +184,6 @@ void headland_write(uint16_t addr, uint8_t val, void *priv) {
                                 mem_mapping_set_exec(&headland_ems_mapping[headland_ems_mar & 0x3F], NULL);
                         mem_mapping_enable(&headland_ems_mapping[headland_ems_mar & 0x3F]);
                         pclog("Map page %d(address %05X) to address %06X\n", index, base_addr, virt_addr);
-                        flushmmucache();
                 }
                 if (headland_ems_mar & 0x80)
                         headland_ems_mar++;
@@ -286,7 +284,6 @@ void headland_writew(uint16_t addr, uint16_t val, void *priv) {
                                         mem_mapping_enable(&headland_4000_9FFF_mapping[index]);
                                 // pclog("Unmap page %d(address %05X)\n", index, base_addr);
                         }
-                        flushmmucache();
                 }
                 if (headland_ems_mar & 0x80)
                         headland_ems_mar++;

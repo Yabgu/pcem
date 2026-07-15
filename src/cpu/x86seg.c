@@ -456,7 +456,6 @@ void loadcs(uint16_t seg) {
                 pclog("Load CS %04X\n", seg);
         if (msw & 1 && !(cpu_state.eflags & VM_FLAG)) {
                 //                intcount++;
-                //                flushmmucache();
                 //                pclog("Load CS %04X\n",seg);
                 if (!(seg & ~3)) {
                         pclog("Trying to load CS with NULL selector! lcs\n");
@@ -874,7 +873,6 @@ void loadcscall(uint16_t seg, uint32_t old_pc) {
         int csout = output;
 
         if (msw & 1 && !(cpu_state.eflags & VM_FLAG)) {
-                // flushmmucache();
                 if (csout)
                         pclog("Protected mode CS load! %04X\n", seg);
                 if (!(seg & ~3)) {
@@ -2048,7 +2046,6 @@ void pmodeiret(int is32) {
         }
 
         //        pclog("IRET %i\n",is32);
-        // flushmmucache();
         //        if (output) pclog("Pmode IRET %04X:%04X ",CS,pc);
 
         if (cpu_state.flags & NT_FLAG) {
@@ -2517,7 +2514,6 @@ void taskswitch286(uint16_t seg, uint16_t *segdat, int is32) {
 
                 cr3 = new_cr3;
                 //                pclog("TS New CR3 %08X\n",cr3);
-                flushmmucache();
 
                 cpu_state.pc = new_pc;
                 //                if (output) pclog("New pc %08X\n",new_pc);
@@ -2989,7 +2985,6 @@ void x86_smi_enter(void) {
 
         if (smram_enable)
                 smram_enable();
-        flushmmucache();
 
         cpu_386_flags_rebuild();
         cpl_override = 1;
@@ -3179,7 +3174,6 @@ void x86_smi_leave(void) {
 
         if (smram_disable)
                 smram_disable();
-        flushmmucache();
 
         oldcpl = CPL;
 

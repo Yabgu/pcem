@@ -812,11 +812,9 @@ static void mem_encoding_write_cached(uint16_t addr, uint8_t val, void *p) {
         if ((ps2.mem_regs[1] & 0x10) && (ps2.mem_regs[2] & 0x21) == 0x20) {
                 mem_mapping_disable(&ram_low_mapping);
                 mem_mapping_enable(&ps2.cache_mapping);
-                flushmmucache();
         } else {
                 mem_mapping_disable(&ps2.cache_mapping);
                 mem_mapping_enable(&ram_low_mapping);
-                flushmmucache();
         }
 }
 

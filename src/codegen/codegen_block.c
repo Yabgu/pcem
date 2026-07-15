@@ -782,8 +782,6 @@ void codegen_block_end_recompile(codeblock_t *block) {
         codegen_ir_compile(ir_data, block);
 }
 
-void codegen_flush() { return; }
-
 void codegen_mark_code_present_multibyte(codeblock_t *block, uint32_t start_pc, int len) {
         if (len) {
                 uint32_t end_pc = start_pc + (len - 1);

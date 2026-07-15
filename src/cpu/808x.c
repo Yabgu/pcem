@@ -716,7 +716,6 @@ void softresetx86() {
                 idt.limit = 0xFFFF;
         }
         x86seg_reset();
-        flushmmucache();
         x86_was_reset = 1;
         FETCHCLEAR();
 }

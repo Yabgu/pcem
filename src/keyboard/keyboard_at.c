@@ -319,7 +319,6 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv) {
                                         mem_a20_recalc();
                                         //                                        pclog("Rammask change to %08X %02X\n", rammask,
                                         //                                        val & 0x02);
-                                        flushmmucache();
                                 }
                                 keyboard_at.output_port = val;
                                 break;
@@ -590,8 +589,7 @@ void keyboard_at_write(uint16_t port, uint8_t val, void *priv) {
                         if (!(keyboard_at.output_port & 0x02)) {
                                 mem_a20_key = 2;
                                 mem_a20_recalc();
-                                //                                pclog("Rammask change to %08X %02X\n", rammask, val & 0x02);
-                                flushmmucache();
+                                //                                pclog("Rammask change to %08X %02X\n", rammask, val & 0x02)
                         }
                         keyboard_at.output_port = 0xcf;
                         break;
