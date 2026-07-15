@@ -351,8 +351,6 @@ static void remove_from_block_list(codeblock_t *block, uint32_t pc) {
                 pages[block->phys >> 12].block = block->next;
                 if (block->next)
                         codeblock[block->next].prev = BLOCK_INVALID;
-                else
-                        mem_flush_write_page(block->phys, 0);
         }
 
         if (!(block->flags & CODEBLOCK_HAS_PAGE2)) {
@@ -375,8 +373,6 @@ static void remove_from_block_list(codeblock_t *block, uint32_t pc) {
                 pages[block->phys_2 >> 12].block_2 = block->next_2;
                 if (block->next_2)
                         codeblock[block->next_2].prev_2 = BLOCK_INVALID;
-                else
-                        mem_flush_write_page(block->phys_2, 0);
         }
 }
 
@@ -515,8 +511,6 @@ void codegen_block_init(uint32_t phys_addr) {
         codeblock_t *block;
         page_t *page = &pages[phys_addr >> 12];
 
-        if (!page->block)
-                mem_flush_write_page(phys_addr, cs + cpu_state.pc);
         block = block_free_list_get();
 #ifndef RELEASE_BUILD
         if (!block)
@@ -552,8 +546,6 @@ ir_data_t *codegen_get_ir_data() { return ir_data; }
 void codegen_block_start_recompile(codeblock_t *block) {
         page_t *page = &pages[block->phys >> 12];
 
-        if (!page->block)
-                mem_flush_write_page(block->phys, cs + cpu_state.pc);
 
         block_num = HASH(block->phys);
         block_current = get_block_nr(block); // block->pnt;
@@ -657,8 +649,6 @@ void codegen_block_generate_end_mask_recompile() {
                         if (((*block->dirty_mask2) & block->page_mask2) && !page_in_evict_list(page_2))
                                 page_add_to_evict_list(page_2);
 
-                        if (!pages[block->phys_2 >> 12].block_2)
-                                mem_flush_write_page(block->phys_2, codegen_endpc);
 
 #ifndef RELEASE_BUILD
                         if (!block->page_mask2)
@@ -730,8 +720,6 @@ void codegen_block_generate_end_mask_mark() {
                         if ((page_2->dirty_mask & block->page_mask2) && !page_in_evict_list(page_2))
                                 page_add_to_evict_list(page_2);
 
-                        if (!pages[block->phys_2 >> 12].block_2)
-                                mem_flush_write_page(block->phys_2, codegen_endpc);
 #ifndef RELEASE_BUILD
                         if (!block->page_mask2)
                                 fatal("!page_mask2\n");

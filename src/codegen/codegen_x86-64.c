@@ -167,8 +167,6 @@ static void remove_from_block_list(codeblock_t *block, uint32_t pc) {
                 pages[block->phys >> 12].block[(block->phys >> 10) & 3] = block->next;
                 if (block->next)
                         block->next->prev = NULL;
-                else
-                        mem_flush_write_page(block->phys, 0);
         }
         if (!block->page_mask2) {
                 if (block->prev_2 || block->next_2)
@@ -186,8 +184,6 @@ static void remove_from_block_list(codeblock_t *block, uint32_t pc) {
                 pages[block->phys_2 >> 12].block_2[(block->phys_2 >> 10) & 3] = block->next_2;
                 if (block->next_2)
                         block->next_2->prev_2 = NULL;
-                else
-                        mem_flush_write_page(block->phys_2, 0);
         }
 }
 
@@ -235,9 +231,7 @@ void codegen_block_init(uint32_t phys_addr) {
         codeblock_t *block;
         page_t *page = &pages[phys_addr >> 12];
 
-        if (!page->block[(phys_addr >> 10) & 3])
-                mem_flush_write_page(phys_addr, cs + cpu_state.pc);
-
+        
         block_current = (block_current + 1) & BLOCK_MASK;
         block = &codeblock[block_current];
 
@@ -274,8 +268,6 @@ void codegen_block_init(uint32_t phys_addr) {
 void codegen_block_start_recompile(codeblock_t *block) {
         page_t *page = &pages[block->phys >> 12];
 
-        if (!page->block[(block->phys >> 10) & 3])
-                mem_flush_write_page(block->phys, cs + cpu_state.pc);
 
         block_num = HASH(block->phys);
         block_current = block->pnt;
@@ -423,9 +415,7 @@ void codegen_block_generate_end_mask() {
                                 block->page_mask2 |= ((uint64_t)1 << start_pc);
                         page_2->code_present_mask[(block->phys_2 >> 10) & 3] |= block->page_mask2;
 
-                        if (!pages[block->phys_2 >> 12].block_2[(block->phys_2 >> 10) & 3])
-                                mem_flush_write_page(block->phys_2, block->endpc);
-
+                        
                         if (!block->page_mask2)
                                 fatal("!page_mask2\n");
                         if (block->next_2) {
