@@ -181,8 +181,6 @@ extern mem_mapping_t ram_mid_mapping;
 void mem_remap_top_256k();
 void mem_remap_top_384k();
 
-void mem_flush_write_page(uint32_t addr, uint32_t virt);
-
 void mem_add_bios();
 
 void mem_init();

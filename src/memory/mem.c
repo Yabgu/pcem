@@ -68,11 +68,6 @@ void resetreadlookup() {
 }
 
 
-void mem_flush_write_page(uint32_t addr, uint32_t virt)
-{
-        /* No-op: read/write lookups removed */
-}
-
 #define mmutranslate_read(addr) mmutranslatereal(addr, 0)
 #define mmutranslate_write(addr) mmutranslatereal(addr, 1)
 
