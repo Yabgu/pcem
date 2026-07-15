@@ -122,52 +122,52 @@ static void ps2_write_cache_ram(uint32_t addr, uint8_t val, void *priv) {
 void ps2_cache_clean() { memset(ps2_cache_valid, 0, sizeof(ps2_cache_valid)); }
 
 static uint8_t ps2_read_shadow_ram(uint32_t addr, void *priv) {
-        addr = (addr & 0x1ffff) + 0xe0000;
+        addr = (addr & 0x1ffff) | 0xe0000;
         return mem_read_ram(addr, priv);
 }
 static uint16_t ps2_read_shadow_ramw(uint32_t addr, void *priv) {
-        addr = (addr & 0x1ffff) + 0xe0000;
+        addr = (addr & 0x1ffff) | 0xe0000;
         return mem_read_ramw(addr, priv);
 }
 static uint32_t ps2_read_shadow_raml(uint32_t addr, void *priv) {
-        addr = (addr & 0x1ffff) + 0xe0000;
+        addr = (addr & 0x1ffff) | 0xe0000;
         return mem_read_raml(addr, priv);
 }
 static void ps2_write_shadow_ram(uint32_t addr, uint8_t val, void *priv) {
-        addr = (addr & 0x1ffff) + 0xe0000;
+        addr = (addr & 0x1ffff) | 0xe0000;
         mem_write_ram(addr, val, priv);
 }
 static void ps2_write_shadow_ramw(uint32_t addr, uint16_t val, void *priv) {
-        addr = (addr & 0x1ffff) + 0xe0000;
+        addr = (addr & 0x1ffff) | 0xe0000;
         mem_write_ramw(addr, val, priv);
 }
 static void ps2_write_shadow_raml(uint32_t addr, uint32_t val, void *priv) {
-        addr = (addr & 0x1ffff) + 0xe0000;
+        addr = (addr & 0x1ffff) | 0xe0000;
         mem_write_raml(addr, val, priv);
 }
 
 static uint8_t ps2_read_split_ram(uint32_t addr, void *priv) {
-        addr = (addr & 0x3ffff) + 0xa0000;
+        addr = (addr & 0x3ffff) | 0xa0000;
         return mem_read_ram(addr, priv);
 }
 static uint16_t ps2_read_split_ramw(uint32_t addr, void *priv) {
-        addr = (addr & 0x3ffff) + 0xa0000;
+        addr = (addr & 0x3ffff) | 0xa0000;
         return mem_read_ramw(addr, priv);
 }
 static uint32_t ps2_read_split_raml(uint32_t addr, void *priv) {
-        addr = (addr & 0x3ffff) + 0xa0000;
+        addr = (addr & 0x3ffff) | 0xa0000;
         return mem_read_raml(addr, priv);
 }
 static void ps2_write_split_ram(uint32_t addr, uint8_t val, void *priv) {
-        addr = (addr & 0x3ffff) + 0xa0000;
+        addr = (addr & 0x3ffff) | 0xa0000;
         mem_write_ram(addr, val, priv);
 }
 static void ps2_write_split_ramw(uint32_t addr, uint16_t val, void *priv) {
-        addr = (addr & 0x3ffff) + 0xa0000;
+        addr = (addr & 0x3ffff) | 0xa0000;
         mem_write_ramw(addr, val, priv);
 }
 static void ps2_write_split_raml(uint32_t addr, uint32_t val, void *priv) {
-        addr = (addr & 0x3ffff) + 0xa0000;
+        addr = (addr & 0x3ffff) | 0xa0000;
         mem_write_raml(addr, val, priv);
 }
 
