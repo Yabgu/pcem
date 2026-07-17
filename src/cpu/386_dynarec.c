@@ -290,7 +290,7 @@ static void __attribute__((noinline)) exec_recompiler(void) {
         codeblock_t *block = &codeblock[codeblock_hash[hash]];
         int valid_block = 0;
 
-        if (!cpu_state.abrt) {
+        if (likely(!cpu_state.abrt)) {
                 page_t *page = &pages[phys_addr >> 12];
 
                 /*Block must match current CS, PC, code segment size,
@@ -463,7 +463,7 @@ static void __attribute__((noinline)) exec_recompiler(void) {
 #if defined(__APPLE__) && defined(__aarch64__)
                 pthread_jit_write_protect_np(1);
 #endif
-        } else if (!cpu_state.abrt) {
+        } else if (likely(!cpu_state.abrt)) {
                 /*Mark block but do not recompile*/
                 uint32_t start_pc = cs + cpu_state.pc;
                 const int max_block_size = (block->flags & CODEBLOCK_BYTE_MASK) ? ((128 - 25) - (start_pc & 0x3f)) : 1000;
