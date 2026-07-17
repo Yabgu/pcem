@@ -90,7 +90,7 @@ uint32_t mmutranslatereal(uint32_t addr, int rw) {
         addr2 = ((cr3 & ~0xfff) + ((addr >> 20) & 0xffc));
         temp = temp2 = mmu_readl(addr2);
         //        if (output == 3) pclog("Do translate %08X %i %08X\n", addr, rw, temp);
-        if (!(temp & 1)) // || (CPL==3 && !(temp&4) && !cpl_override) || (rw && !(temp&2) && (CPL==3 || cr0&WP_FLAG)))
+        if (unlikely(!(temp & 1))) // || (CPL==3 && !(temp&4) && !cpl_override) || (rw && !(temp&2) && (CPL==3 || cr0&WP_FLAG)))
         {
                 //                if (!nopageerrors) pclog("Section not present! %08X  %08X  %02X  %04X:%08X  %i
                 //                %i\n",addr,temp,opcode,CS,pc,CPL,rw);
@@ -113,8 +113,8 @@ uint32_t mmutranslatereal(uint32_t addr, int rw) {
 
         if ((temp & 0x80) && (cr4 & CR4_PSE)) {
                 /*4MB page*/
-                if ((CPL == 3 && !(temp & 4) && !cpl_override) ||
-                    (rw && !(temp & 2) && ((CPL == 3 && !cpl_override) || cr0 & WP_FLAG))) {
+                if (unlikely((CPL == 3 && !(temp & 4) && !cpl_override) ||
+                    (rw && !(temp & 2) && ((CPL == 3 && !cpl_override) || cr0 & WP_FLAG)))) {
                         //                        if (!nopageerrors) pclog("Page not present!  %08X   %08X   %02X %02X  %i  %08X
                         //                        %04X:%08X  %04X:%08X %i  %i %i\n",addr,temp,opcode,opcode2,frame,rmdat32,
                         //                        CS,pc,SS,ESP,ins,CPL,rw);
@@ -140,8 +140,8 @@ uint32_t mmutranslatereal(uint32_t addr, int rw) {
         temp = mmu_readl((temp & ~0xfff) + ((addr >> 10) & 0xffc));
         temp3 = temp & temp2;
         //        if (output == 3) pclog("Do translate %08X %08X\n", temp, temp3);
-        if (!(temp & 1) || (CPL == 3 && !(temp3 & 4) && !cpl_override) ||
-            (rw && !(temp3 & 2) && ((CPL == 3 && !cpl_override) || cr0 & WP_FLAG))) {
+        if (unlikely(!(temp & 1) || (CPL == 3 && !(temp3 & 4) && !cpl_override) ||
+            (rw && !(temp3 & 2) && ((CPL == 3 && !cpl_override) || cr0 & WP_FLAG)))) {
                 //                if (!nopageerrors) pclog("Page not present!  %08X   %08X   %02X %02X  %i  %08X  %04X:%08X
                 //                %04X:%08X %i  %i %i\n",addr,temp,opcode,opcode2,frame,rmdat32, CS,pc,SS,ESP,ins,CPL,rw);
                 //                dumpregs();
@@ -362,7 +362,7 @@ uint32_t readmemll(uint32_t addr) {
 
         mem_logical_addr = addr;
 
-        if (addr & 3) {
+        if (unlikely(addr & 3)) {
                 if (!cpu_cyrix_alignment || (addr & 7) > 4)
                         cycles -= timing_misaligned;
                 if ((addr & 0xFFF) > 0xFFC) {
@@ -376,7 +376,7 @@ uint32_t readmemll(uint32_t addr) {
                 }
         }
 
-        if (cr0 >> 31) {
+        if (unlikely(cr0 >> 31)) {
                 addr = mmutranslate_read(addr);
                 if (addr == 0xFFFFFFFF)
                         return 0xFFFFFFFF;
@@ -385,8 +385,8 @@ uint32_t readmemll(uint32_t addr) {
         addr &= rammask;
 
         map = read_mapping[addr >> 14];
-        if (map) {
-                if (map->read_l)
+        if (likely(map)) {
+                if (likely(map->read_l))
                         return map->read_l(addr, map->p);
 
                 if (map->read_w)
