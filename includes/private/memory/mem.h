@@ -148,7 +148,7 @@ static inline uint32_t get_phys(uint32_t addr) {
 
         get_phys_virt = addr;
 
-        if (!(cr0 >> 31)) {
+        if (!(cr0 & 0x80000000)) {
                 get_phys_phys = (addr & rammask) & ~0xfff;
                 return addr & rammask;
         }
@@ -159,7 +159,7 @@ static inline uint32_t get_phys(uint32_t addr) {
 }
 
 static inline uint32_t get_phys_noabrt(uint32_t addr) {
-        if (!(cr0 >> 31))
+        if (!(cr0 & 0x80000000))
                 return addr & rammask;
 
         return mmutranslate_noabrt(addr, 0) & rammask;
