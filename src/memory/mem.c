@@ -211,7 +211,7 @@ void mmu_invalidate(uint32_t addr) {
 uint8_t *getpccache(uint32_t a) {
         uint32_t a2 = a;
 
-        if (cr0 >> 31) {
+        if (cr0 & 0x80000000) {
                 a = mmutranslate_read(a);
 
                 if (a == 0xFFFFFFFF)
@@ -236,7 +236,7 @@ uint8_t readmembl(uint32_t addr) {
         mem_mapping_t *map;
 
         mem_logical_addr = addr;
-        if (cr0 >> 31) {
+        if (cr0 & 0x80000000) {
                 addr = mmutranslate_read(addr);
                 if (addr == 0xFFFFFFFF)
                         return 0xFF;
@@ -259,7 +259,7 @@ void writemembl(uint32_t addr, uint8_t val) {
                 page_lookup[addr >> 12]->write_b(addr, val, page_lookup[addr >> 12]);
                 return;
         }
-        if (cr0 >> 31) {
+        if (cr0 & 0x80000000) {
                 addr = mmutranslate_write(addr);
                 if (addr == 0xFFFFFFFF)
                         return;
@@ -278,10 +278,9 @@ uint16_t readmemwl(uint32_t addr) {
         mem_logical_addr = addr;
 
         if (addr & 1) {
-                if (!cpu_cyrix_alignment || (addr & 7) == 7)
-                        cycles -= timing_misaligned;
+                //if (!cpu_cyrix_alignment || (addr & 7) == 7) cycles -= timing_misaligned;
                 if ((addr & 0xFFF) > 0xFFE) {
-                        if (cr0 >> 31) {
+                        if (cr0 & 0x80000000) {
                                 if (mmutranslate_read(addr) == 0xffffffff)
                                         return 0xffff;
                                 if (mmutranslate_read(addr + 1) == 0xffffffff)
@@ -290,7 +289,7 @@ uint16_t readmemwl(uint32_t addr) {
                         return readmembl(addr) | (readmembl(addr + 1) << 8);
                 }
         }
-        if (cr0 >> 31) {
+        if (cr0 & 0x80000000) {
                 addr = mmutranslate_read(addr);
                 if (addr == 0xFFFFFFFF)
                         return 0xFFFF;
@@ -317,10 +316,10 @@ void writememwl(uint32_t addr, uint16_t val) {
         mem_logical_addr = addr;
 
         if (addr & 1) {
-                if (!cpu_cyrix_alignment || (addr & 7) == 7)
-                        cycles -= timing_misaligned;
+                //if (!cpu_cyrix_alignment || (addr & 7) == 7) cycles -= timing_misaligned;
+
                 if ((addr & 0xFFF) > 0xFFE) {
-                        if (cr0 >> 31) {
+                        if (cr0 & 0x80000000) {
                                 if (mmutranslate_write(addr) == 0xffffffff)
                                         return;
                                 if (mmutranslate_write(addr + 1) == 0xffffffff)
@@ -336,7 +335,7 @@ void writememwl(uint32_t addr, uint16_t val) {
                 page_lookup[addr >> 12]->write_w(addr, val, page_lookup[addr >> 12]);
                 return;
         }
-        if (cr0 >> 31) {
+        if (cr0 & 0x80000000) {
                 addr = mmutranslate_write(addr);
                 if (addr == 0xFFFFFFFF)
                         return;
@@ -362,11 +361,10 @@ uint32_t readmemll(uint32_t addr) {
 
         mem_logical_addr = addr;
 
-        if (unlikely(addr & 3)) {
-                if (!cpu_cyrix_alignment || (addr & 7) > 4)
-                        cycles -= timing_misaligned;
+        if (addr & 3) {
+                //if (!cpu_cyrix_alignment || (addr & 7) > 4) cycles -= timing_misaligned;
                 if ((addr & 0xFFF) > 0xFFC) {
-                        if (cr0 >> 31) {
+                        if (cr0 & 0x80000000) {
                                 if (mmutranslate_read(addr) == 0xffffffff)
                                         return 0xffffffff;
                                 if (mmutranslate_read(addr + 3) == 0xffffffff)
@@ -376,7 +374,7 @@ uint32_t readmemll(uint32_t addr) {
                 }
         }
 
-        if (unlikely(cr0 >> 31)) {
+        if (cr0 & 0x80000000) {
                 addr = mmutranslate_read(addr);
                 if (addr == 0xFFFFFFFF)
                         return 0xFFFFFFFF;
@@ -407,10 +405,9 @@ void writememll(uint32_t addr, uint32_t val) {
         mem_logical_addr = addr;
 
         if (addr & 3) {
-                if (!cpu_cyrix_alignment || (addr & 7) > 4)
-                        cycles -= timing_misaligned;
+                //if (!cpu_cyrix_alignment || (addr & 7) > 4) cycles -= timing_misaligned;
                 if ((addr & 0xFFF) > 0xFFC) {
-                        if (cr0 >> 31) {
+                        if (cr0 & 0x80000000) {
                                 if (mmutranslate_write(addr) == 0xffffffff)
                                         return;
                                 if (mmutranslate_write(addr + 3) == 0xffffffff)
@@ -425,7 +422,7 @@ void writememll(uint32_t addr, uint32_t val) {
                 page_lookup[addr >> 12]->write_l(addr, val, page_lookup[addr >> 12]);
                 return;
         }
-        if (cr0 >> 31) {
+        if (cr0 & 0x80000000) {
                 addr = mmutranslate_write(addr);
                 if (addr == 0xFFFFFFFF)
                         return;
@@ -458,7 +455,7 @@ uint64_t readmemql(uint32_t addr) {
         if (addr & 7) {
                 cycles -= timing_misaligned;
                 if ((addr & 0xFFF) > 0xFF8) {
-                        if (cr0 >> 31) {
+                        if (cr0 & 0x80000000) {
                                 if (mmutranslate_read(addr) == 0xffffffff)
                                         return 0xffffffff;
                                 if (mmutranslate_read(addr + 7) == 0xffffffff)
@@ -468,7 +465,7 @@ uint64_t readmemql(uint32_t addr) {
                 }
         }
 
-        if (cr0 >> 31) {
+        if (cr0 & 0x80000000) {
                 addr = mmutranslate_read(addr);
                 if (addr == 0xFFFFFFFF)
                         return 0xFFFFFFFF;
@@ -491,7 +488,7 @@ void writememql(uint32_t addr, uint64_t val) {
         if (addr & 7) {
                 cycles -= timing_misaligned;
                 if ((addr & 0xFFF) > 0xFF8) {
-                        if (cr0 >> 31) {
+                        if (cr0 & 0x80000000) {
                                 if (mmutranslate_write(addr) == 0xffffffff)
                                         return;
                                 if (mmutranslate_write(addr + 7) == 0xffffffff)
@@ -507,7 +504,7 @@ void writememql(uint32_t addr, uint64_t val) {
                 page_lookup[addr >> 12]->write_l(addr + 4, val >> 32, page_lookup[addr >> 12]);
                 return;
         }
-        if (cr0 >> 31) {
+        if (cr0 & 0x80000000) {
                 addr = mmutranslate_write(addr);
                 if (addr == 0xFFFFFFFF)
                         return;

@@ -93,7 +93,7 @@ static inline uint16_t fastreadw(uint32_t a) {
 static inline uint32_t fastreadl(uint32_t a) {
         uint8_t *t;
         uint32_t val;
-        if ((a & 0xFFF) < 0xFFD) {
+        if (likely((a & 0xFFF) < 0xFFD)) {
                 t = getpccache(a);
                 if (unlikely(cpu_state.abrt))
                         return 0;
