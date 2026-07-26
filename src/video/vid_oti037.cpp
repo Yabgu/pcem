@@ -169,7 +169,7 @@ void oti037_recalctimings(svga_t *svga) {
 }
 
 void *oti037_common_init(char *bios_fn, int vram_size) {
-        oti037_t *oti037 = malloc(sizeof(oti037_t));
+        oti037_t *oti037 = (oti037_t *)malloc(sizeof(oti037_t));
         memset(oti037, 0, sizeof(oti037_t));
 
         rom_init(&oti037->bios_rom, bios_fn, 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);

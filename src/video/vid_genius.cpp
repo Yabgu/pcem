@@ -1,4 +1,5 @@
 /* MDSI Genius VHR emulation*/
+#include <cstdint>
 #include <stdlib.h>
 #include "ibm.h"
 #include "device.h"
@@ -494,11 +495,11 @@ void genius_poll(void *p) {
 
 void *genius_init() {
         int c;
-        genius_t *genius = malloc(sizeof(genius_t));
+        genius_t *genius = (genius_t *)malloc(sizeof(genius_t));
         memset(genius, 0, sizeof(genius_t));
 
         /* 160k video RAM */
-        genius->vram = malloc(0x28000);
+        genius->vram = (uint8_t*)malloc(0x28000);
 
         timer_add(&genius->timer, genius_poll, genius, 1);
 

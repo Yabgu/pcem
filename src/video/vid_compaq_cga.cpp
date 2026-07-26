@@ -1,4 +1,5 @@
 /*Compaq CGA emulation*/
+#include <cstdint>
 #include <stdlib.h>
 #include "ibm.h"
 #include "device.h"
@@ -315,10 +316,10 @@ void *compaq_cga_init() {
         int display_type;
         int contrast;
         int c;
-        compaq_cga_t *self = malloc(sizeof(compaq_cga_t));
+        compaq_cga_t *self = (compaq_cga_t *)malloc(sizeof(compaq_cga_t));
         memset(self, 0, sizeof(compaq_cga_t));
 
-        self->cga.vram = malloc(0x4000);
+        self->cga.vram = (uint8_t*)malloc(0x4000);
 
         timer_add(&self->cga.timer, compaq_cga_poll, self, 1);
         mem_mapping_add(&self->cga.mapping, 0xb8000, 0x08000, cga_read, NULL, NULL, cga_write, NULL, NULL, NULL,

@@ -24,7 +24,7 @@ FILE *romfopen(const char *fn, char *mode) {
         return 0;
 }
 
-int rom_present(char *fn) {
+int rom_present(const char *fn) {
         FILE *f;
         f = romfopen(fn, "rb");
         if (f) {

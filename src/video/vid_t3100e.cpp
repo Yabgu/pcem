@@ -1,5 +1,6 @@
 /* Emulate the Toshiba 3100e plasma display. This display has a fixed 640x400
  * resolution. */
+#include <cstdint>
 #include <stdlib.h>
 #include "ibm.h"
 #include "device.h"
@@ -576,14 +577,14 @@ void t3100e_recalcattrs(t3100e_t *t3100e) {
 }
 
 void *t3100e_init() {
-        t3100e_t *t3100e = malloc(sizeof(t3100e_t));
+        t3100e_t *t3100e = (t3100e_t *)malloc(sizeof(t3100e_t));
         memset(t3100e, 0, sizeof(t3100e_t));
         cga_init(&t3100e->cga);
 
         t3100e->internal = 1;
 
         /* 32k video RAM */
-        t3100e->vram = malloc(0x8000);
+        t3100e->vram = (uint8_t*)malloc(0x8000);
 
         timer_set_callback(&t3100e->cga.timer, t3100e_poll);
         timer_set_p(&t3100e->cga.timer, t3100e);

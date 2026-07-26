@@ -1,4 +1,5 @@
 /*Hercules emulation*/
+#include <cstdint>
 #include <stdlib.h>
 #include "ibm.h"
 #include "device.h"
@@ -302,10 +303,10 @@ void hercules_poll(void *p) {
 void *hercules_init() {
         int display_type;
         int c;
-        hercules_t *hercules = malloc(sizeof(hercules_t));
+        hercules_t *hercules = (hercules_t *)malloc(sizeof(hercules_t));
         memset(hercules, 0, sizeof(hercules_t));
 
-        hercules->vram = malloc(0x10000);
+        hercules->vram = (uint8_t*)malloc(0x10000);
 
         timer_add(&hercules->timer, hercules_poll, hercules, 1);
         mem_mapping_add(&hercules->mapping, 0xb0000, 0x08000, hercules_read, NULL, NULL, hercules_write, NULL, NULL, NULL,

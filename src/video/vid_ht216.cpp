@@ -1117,7 +1117,7 @@ static uint8_t ht216_read_linear(uint32_t addr, void *p) {
 }
 
 void *ht216_init() {
-        ht216_t *ht216 = malloc(sizeof(ht216_t));
+        ht216_t *ht216 = (ht216_t *)malloc(sizeof(ht216_t));
         svga_t *svga = &ht216->svga;
         memset(ht216, 0, sizeof(ht216_t));
 
@@ -1145,9 +1145,7 @@ void *ht216_init() {
 }
 
 static void *ht216_pb410a_init() {
-        ht216_t *ht216 = ht216_init();
-
-        return ht216;
+        return ht216_init();
 }
 
 void ht216_close(void *p) {

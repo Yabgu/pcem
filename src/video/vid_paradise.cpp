@@ -257,7 +257,7 @@ static uint16_t paradise_readw(uint32_t addr, void *p) {
 }
 
 void *paradise_pvga1a_init() {
-        paradise_t *paradise = malloc(sizeof(paradise_t));
+        paradise_t *paradise = (paradise_t *)malloc(sizeof(paradise_t));
         svga_t *svga = &paradise->svga;
         memset(paradise, 0, sizeof(paradise_t));
 
@@ -285,7 +285,7 @@ void *paradise_pvga1a_init() {
 }
 
 void *paradise_wd90c11_init() {
-        paradise_t *paradise = malloc(sizeof(paradise_t));
+        paradise_t *paradise = (paradise_t *)malloc(sizeof(paradise_t));
         svga_t *svga = &paradise->svga;
         memset(paradise, 0, sizeof(paradise_t));
 
@@ -315,7 +315,7 @@ void *paradise_wd90c11_init() {
 }
 
 static void *paradise_pvga1a_pc2086_init() {
-        paradise_t *paradise = paradise_pvga1a_init();
+        paradise_t *paradise = (paradise_t *)paradise_pvga1a_init();
 
         if (paradise)
                 rom_init(&paradise->bios_rom, "pc2086/40186.ic171", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
@@ -323,7 +323,7 @@ static void *paradise_pvga1a_pc2086_init() {
         return paradise;
 }
 static void *paradise_pvga1a_pc3086_init() {
-        paradise_t *paradise = paradise_pvga1a_init();
+        paradise_t *paradise = (paradise_t *)paradise_pvga1a_init();
 
         if (paradise)
                 rom_init(&paradise->bios_rom, "pc3086/c000.bin", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
@@ -332,7 +332,7 @@ static void *paradise_pvga1a_pc3086_init() {
 }
 
 static void *paradise_wd90c11_megapc_init() {
-        paradise_t *paradise = paradise_wd90c11_init();
+        paradise_t *paradise = (paradise_t *)paradise_wd90c11_init();
 
         if (paradise)
                 rom_init_interleaved(&paradise->bios_rom, "megapc/41651-bios lo.u18", "megapc/211253-bios hi.u19", 0xc0000,
@@ -342,7 +342,7 @@ static void *paradise_wd90c11_megapc_init() {
 }
 
 static void *paradise_pvga1a_oli_go481_init() {
-        paradise_t *paradise = paradise_pvga1a_init();
+        paradise_t *paradise = (paradise_t *)paradise_pvga1a_init();
 
         if (paradise)
                 rom_init_interleaved(&paradise->bios_rom, "oli_go481_lo.bin", "oli_go481_hi.bin", 0xc0000, 0x8000, 0x7fff, 0,

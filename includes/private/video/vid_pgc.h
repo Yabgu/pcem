@@ -16,7 +16,7 @@ typedef struct pgc_commandlist_t {
 int pgc_commandlist_append(pgc_commandlist_t *list, uint8_t v);
 
 typedef struct pgc_command_t {
-        char ascii[6];
+        char ascii[8]; // TODO: It was 6 now i put 8 for adding null end
         uint8_t hex;
         void (*handler)(struct pgc_core_t *pgc);
         int (*parser)(struct pgc_core_t *pgc, pgc_commandlist_t *cl, int p);

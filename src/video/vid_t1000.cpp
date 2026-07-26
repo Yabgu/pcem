@@ -1,5 +1,6 @@
 /* Emulate the Toshiba 1000 plasma display. This display has a fixed 640x200
  * resolution. */
+#include <cstdint>
 #include <stdlib.h>
 #include "ibm.h"
 #include "device.h"
@@ -558,14 +559,14 @@ static void t1000_recalcattrs(t1000_t *t1000) {
 }
 
 static void *t1000_init() {
-        t1000_t *t1000 = malloc(sizeof(t1000_t));
+        t1000_t *t1000 = (t1000_t *)malloc(sizeof(t1000_t));
         memset(t1000, 0, sizeof(t1000_t));
         cga_init(&t1000->cga);
 
         t1000->internal = 1;
 
         /* 16k video RAM */
-        t1000->vram = malloc(0x4000);
+        t1000->vram = (uint8_t*)malloc(0x4000);
 
         timer_set_callback(&t1000->cga.timer, t1000_poll);
         timer_set_p(&t1000->cga.timer, t1000);

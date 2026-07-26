@@ -5908,7 +5908,7 @@ static void mystique_pci_write(int func, int addr, uint8_t val, void *p) {
 
 void *mga_init_common(char *bios_fn, int type) {
         int c;
-        mystique_t *mystique = malloc(sizeof(mystique_t));
+        mystique_t *mystique = (mystique_t *)malloc(sizeof(mystique_t));
         memset(mystique, 0, sizeof(mystique_t));
 
         rom_init(&mystique->bios_rom, bios_fn, 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
@@ -5983,7 +5983,7 @@ void *mga_init_common(char *bios_fn, int type) {
 }
 
 void *millennium_init() {
-        mystique_t *mystique = mga_init_common("matroxisstormr2.BIN", MGA_2064W);
+        mystique_t *mystique = (mystique_t *)mga_init_common("matroxisstormr2.BIN", MGA_2064W);
 
         tvp3026_init(&mystique->tvp3026);
         tvp3026_set_cursor_enable(&mystique->tvp3026, &mystique->svga, 1);

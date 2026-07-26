@@ -60,7 +60,7 @@ static void fifo_write(im1024_t *im1024, unsigned char val) {
 
                 PGCLOG(("fifo_resize: %d to %d\n", im1024->fifo_len, 2 * im1024->fifo_len));
 
-                buf = realloc(im1024->fifo, 2 * im1024->fifo_len);
+                buf = (unsigned char *)realloc(im1024->fifo, 2 * im1024->fifo_len);
                 if (!buf)
                         return;
                 /* Move the [0..wrptr] range to the newly-allocated area [len..len+wrptr] */
@@ -372,8 +372,8 @@ static void hndl_poly(pgc_core_t *pgc) {
         int parsing = 1;
         int as = 256;
 
-        x = malloc(as * sizeof(int32_t));
-        y = malloc(as * sizeof(int32_t));
+        x = (int32_t *)malloc(as * sizeof(int32_t));
+        y = (int32_t *)malloc(as * sizeof(int32_t));
 
         if (!x || !y) {
                 PGCLOG(("hndl_poly: malloc failed\n"));
@@ -387,8 +387,8 @@ static void hndl_poly(pgc_core_t *pgc) {
                 if (count + realcount >= as) {
                         int32_t *nx, *ny;
 
-                        nx = realloc(x, 2 * as * sizeof(int32_t));
-                        ny = realloc(y, 2 * as * sizeof(int32_t));
+                        nx = (int32_t *)realloc(x, 2 * as * sizeof(int32_t));
+                        ny = (int32_t *)realloc(y, 2 * as * sizeof(int32_t));
                         if (!x || !y) {
                                 PGCLOG(("hndl_poly: realloc failed\n"));
                                 break;

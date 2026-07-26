@@ -1080,7 +1080,7 @@ static void gus_get_buffer(int32_t *buffer, int len, void *p) {
 void *gus_init() {
         int c;
         double out = 1.0;
-        gus_t *gus = malloc(sizeof(gus_t));
+        gus_t *gus = (gus_t *)malloc(sizeof(gus_t));
         memset(gus, 0, sizeof(gus_t));
 
         gus->ram = (uint8_t*)malloc(1 << 20);

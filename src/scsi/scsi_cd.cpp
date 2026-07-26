@@ -626,7 +626,7 @@ static void ide_padstr8(uint8_t *buf, int buf_size, const char *src) {
 }
 
 static void *scsi_cd_init(scsi_bus_t *bus, int id) {
-        scsi_cd_data_t *data = malloc(sizeof(scsi_cd_data_t));
+        scsi_cd_data_t *data = (scsi_cd_data_t *)malloc(sizeof(scsi_cd_data_t));
         memset(data, 0, sizeof(scsi_cd_data_t));
 
         data->bus = bus;
@@ -646,7 +646,7 @@ static void *scsi_cd_init(scsi_bus_t *bus, int id) {
 }
 
 static void *scsi_cd_atapi_init(scsi_bus_t *bus, int id, atapi_device_t *atapi_dev) {
-        scsi_cd_data_t *data = scsi_cd_init(bus, id);
+        scsi_cd_data_t *data = (scsi_cd_data_t *)scsi_cd_init(bus, id);
 
         data->is_atapi = 1;
         data->atapi_dev = atapi_dev;

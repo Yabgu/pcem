@@ -82,9 +82,9 @@ uint64_t mvhd_to_be64(uint64_t val) {
         return ret;
 }
 
-bool mvhd_is_conectix_str(const void *buffer) {
-        auto slen = strlen((const char*)MVHD_CONECTIX_COOKIE);
-        return strncmp((const char*)buffer, MVHD_CONECTIX_COOKIE, slen) == 0;
+bool mvhd_is_conectix_str(const char *buffer) {
+        auto slen = strlen(MVHD_CONECTIX_COOKIE);
+        return strncmp(buffer, MVHD_CONECTIX_COOKIE, slen) == 0;
 }
 
 void mvhd_generate_uuid(uint8_t *uuid) {

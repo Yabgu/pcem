@@ -55,7 +55,7 @@ static void scsi_hd_callback(void *p) {
 }
 
 static void *scsi_hd_init(scsi_bus_t *bus, int id) {
-        scsi_hd_data *data = malloc(sizeof(scsi_hd_data));
+        scsi_hd_data *data = (scsi_hd_data *)malloc(sizeof(scsi_hd_data));
         memset(data, 0, sizeof(scsi_hd_data));
 
         hdd_load(&data->hdd, id, ide_fn[id]);

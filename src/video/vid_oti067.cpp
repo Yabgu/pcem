@@ -150,7 +150,7 @@ void oti067_recalctimings(svga_t *svga) {
 }
 
 void *oti067_common_init(char *bios_fn, int vram_size) {
-        oti067_t *oti067 = malloc(sizeof(oti067_t));
+        oti067_t *oti067 = (oti067_t *)malloc(sizeof(oti067_t));
         memset(oti067, 0, sizeof(oti067_t));
 
         rom_init(&oti067->bios_rom, bios_fn, 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
@@ -190,7 +190,7 @@ void *oti067_init() {
 }
 
 void *oti067_acer386_init() {
-        oti067_t *oti067 = oti067_common_init("acer386/oti067.bin", 512);
+        oti067_t *oti067 = (oti067_t *)oti067_common_init("acer386/oti067.bin", 512);
 
         acer386sx_set_oti067(oti067);
 
@@ -198,7 +198,7 @@ void *oti067_acer386_init() {
 }
 
 void *oti067_ama932j_init() {
-        oti067_t *oti067 = oti067_common_init("ama932j/oti067.bin", 512);
+        oti067_t *oti067 = (oti067_t *)oti067_common_init("ama932j/oti067.bin", 512);
 
         oti067->dipswitch_val |= 0x20;
         return oti067;

@@ -6,6 +6,7 @@
 
   The Technical Reference Manual lists the video waitstate time as between 12
   and 46 cycles. PCem currently always uses the lower number.*/
+#include <cstdint>
 #include <stdlib.h>
 #include "ibm.h"
 #include "device.h"
@@ -433,10 +434,10 @@ static void pc1512_poll(void *p) {
 
 static void *pc1512_init() {
         int display_type;
-        pc1512_t *pc1512 = malloc(sizeof(pc1512_t));
+        pc1512_t *pc1512 = (pc1512_t *)malloc(sizeof(pc1512_t));
         memset(pc1512, 0, sizeof(pc1512_t));
 
-        pc1512->vram = malloc(0x10000);
+        pc1512->vram = (uint8_t*)malloc(0x10000);
 
         pc1512->cgacol = 7;
         pc1512->cgamode = 0x12;

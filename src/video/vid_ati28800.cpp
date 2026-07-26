@@ -329,7 +329,7 @@ void ati28800k_recalctimings(svga_t *svga) {
 }
 
 void *ati28800_init() {
-        ati28800_t *ati28800 = malloc(sizeof(ati28800_t));
+        ati28800_t *ati28800 = (ati28800_t *)malloc(sizeof(ati28800_t));
         memset(ati28800, 0, sizeof(ati28800_t));
 
         rom_init(&ati28800->bios_rom, "bios.bin", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
@@ -349,7 +349,7 @@ void *ati28800_init() {
 }
 
 void *ati28800k_init() {
-        ati28800_t *ati28800 = malloc(sizeof(ati28800_t));
+        ati28800_t *ati28800 = (ati28800_t *)malloc(sizeof(ati28800_t));
         memset(ati28800, 0, sizeof(ati28800_t));
 
         ati28800->port_03dd_val = 0;

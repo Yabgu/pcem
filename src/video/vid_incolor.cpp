@@ -1,5 +1,6 @@
 /*Hercules InColor emulation*/
 
+#include <cstdint>
 #include <stdlib.h>
 #include "ibm.h"
 #include "device.h"
@@ -886,10 +887,10 @@ void incolor_poll(void *p) {
 
 void *incolor_init() {
         int c;
-        incolor_t *incolor = malloc(sizeof(incolor_t));
+        incolor_t *incolor = (incolor_t *)malloc(sizeof(incolor_t));
         memset(incolor, 0, sizeof(incolor_t));
 
-        incolor->vram = malloc(0x40000); /* 4 planes of 64k */
+        incolor->vram = (uint8_t*)malloc(0x40000); /* 4 planes of 64k */
 
         timer_add(&incolor->timer, incolor_poll, incolor, 1);
         mem_mapping_add(&incolor->mapping, 0xb0000, 0x08000, incolor_read, NULL, NULL, incolor_write, NULL, NULL, NULL,

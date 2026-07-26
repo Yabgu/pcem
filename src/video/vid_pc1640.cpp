@@ -91,7 +91,7 @@ void pc1640_recalctimings(pc1640_t *pc1640) {
 }
 
 void *pc1640_init() {
-        pc1640_t *pc1640 = malloc(sizeof(pc1640_t));
+        pc1640_t *pc1640 = (pc1640_t *)malloc(sizeof(pc1640_t));
         cga_t *cga = &pc1640->cga;
         ega_t *ega = &pc1640->ega;
         memset(pc1640, 0, sizeof(pc1640_t));

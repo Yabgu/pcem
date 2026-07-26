@@ -121,7 +121,7 @@ uint8_t ps1_m2121_svga_in(uint16_t addr, void *p) {
 }
 
 void *ps1_m2121_svga_init() {
-        ps1_m2121_svga_t *ps1 = malloc(sizeof(ps1_m2121_svga_t));
+        ps1_m2121_svga_t *ps1 = (ps1_m2121_svga_t *)malloc(sizeof(ps1_m2121_svga_t));
         memset(ps1, 0, sizeof(ps1_m2121_svga_t));
 
         svga_init(&ps1->svga, ps1, 1 << 19, /*512kb*/
