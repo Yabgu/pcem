@@ -115,7 +115,7 @@ static int compile_shader(GLenum shader_type, const char *prepend, const char *p
         const char *source[3];
         char version[50];
         int ver = 0;
-        char *version_loc = strstr(program, "#version");
+        const char *version_loc = strstr(program, "#version");
         if (version_loc)
                 ver = (int)strtol(version_loc + 8, (char **)&program, 10);
         else {
@@ -1124,7 +1124,7 @@ void gl3_present(SDL_Window *window, SDL_Rect video_rect, SDL_Rect window_rect, 
 
         Uint32 ticks = SDL_GetTicks();
 
-        GLfloat orig_output_size[] = {window_rect.w, window_rect.h};
+        GLfloat orig_output_size[] = {(GLfloat)window_rect.w, (GLfloat)window_rect.h};
 
         if (active_shader->srgb)
                 glEnable(GL_FRAMEBUFFER_SRGB);
