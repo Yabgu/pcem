@@ -40,7 +40,7 @@ struct {
 static uint8_t key_queue[16];
 static int key_queue_start = 0, key_queue_end = 0;
 
-void keyboard_pcjr_poll() {
+void keyboard_pcjr_poll(void*) {
         timer_advance_u64(&keyboard_pcjr.send_delay_timer, (220 * TIMER_USEC));
 
         if (key_queue_start != key_queue_end && !keyboard_pcjr.serial_pos && !keyboard_pcjr.latched) {
@@ -195,5 +195,5 @@ void keyboard_pcjr_init() {
         keyboard_send = keyboard_pcjr_adddata;
         keyboard_poll = keyboard_pcjr_poll;
 
-        timer_add(&keyboard_pcjr.send_delay_timer, (void *)keyboard_pcjr_poll, NULL, 1);
+        timer_add(&keyboard_pcjr.send_delay_timer, keyboard_pcjr_poll, NULL, 1);
 }

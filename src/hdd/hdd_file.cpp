@@ -40,7 +40,7 @@ void hdd_load_ext(hdd_file_t *hdd, const char *fn, int spt, int hpc, int tracks,
 
                         /* Check if the file we opened is a VHD */
                         if (mvhd_file_is_vhd((FILE *)hdd->f)) {
-                                int err;
+                                MVHDError err;
                                 fclose((FILE *)hdd->f);
                                 MVHDMeta *vhdm = mvhd_open(fn, (bool)read_only, &err);
                                 if (vhdm == NULL) {

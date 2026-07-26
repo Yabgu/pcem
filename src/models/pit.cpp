@@ -592,9 +592,9 @@ void pit_init() {
         pit.pit_nr[2].nr = 2;
         pit.pit_nr[0].pit = pit.pit_nr[1].pit = pit.pit_nr[2].pit = &pit;
 
-        timer_add(&pit.timer[0], pit_timer_over, (void *)&pit.pit_nr[0], 0);
-        timer_add(&pit.timer[1], pit_timer_over, (void *)&pit.pit_nr[1], 0);
-        timer_add(&pit.timer[2], pit_timer_over, (void *)&pit.pit_nr[2], 0);
+        timer_add(&pit.timer[0], pit_timer_over, &pit.pit_nr[0], 0);
+        timer_add(&pit.timer[1], pit_timer_over, &pit.pit_nr[1], 0);
+        timer_add(&pit.timer[2], pit_timer_over, &pit.pit_nr[2], 0);
 
         pit_set_out_func(&pit, 0, pit_irq0_timer);
         pit_set_out_func(&pit, 1, pit_null_timer);

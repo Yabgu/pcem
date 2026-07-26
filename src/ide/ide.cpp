@@ -98,7 +98,7 @@ IDE *ext_ide;
  */
 static IDE_HDD_EMU hddemu[] = {
         { ROM_GRID1520, "Conner Peripherals 20MB - CP3024", 615, 4, 17 }, // type 2, 20MB
-        { ROM_GRID1520, "Conner Peripherals 40MB - CP3044", 980, 5, 17 }, // type 17, 
+        { ROM_GRID1520, "Conner Peripherals 40MB - CP3044", 980, 5, 17 }, // type 17,
         { ROM_GRID1520, "Conner Peripherals 104MB - CP3104", 776, 8, 33 }  // extended type 224 104MB
 };
 
@@ -1128,9 +1128,9 @@ abort_cmd:
         ide_irq_raise(ide);
 }
 
-void ide_callback_pri() { callbackide(0); }
+void ide_callback_pri(void*) { callbackide(0); }
 
-void ide_callback_sec() { callbackide(1); }
+void ide_callback_sec(void*) { callbackide(1); }
 
 void ide_write_pri(uint16_t addr, uint8_t val, void *priv) { writeide(0, addr, val); }
 void ide_write_pri_w(uint16_t addr, uint16_t val, void *priv) { writeidew(0, val); }
@@ -1174,8 +1174,8 @@ static void *ide_init() {
         ide_pri_enable();
         ide_sec_enable();
 
-        timer_add(&ide_timer[0], (void *)ide_callback_pri, NULL, 0);
-        timer_add(&ide_timer[1], (void *)ide_callback_sec, NULL, 0);
+        timer_add(&ide_timer[0], ide_callback_pri, NULL, 0);
+        timer_add(&ide_timer[1], ide_callback_sec, NULL, 0);
 
         return (void *)-1;
 }

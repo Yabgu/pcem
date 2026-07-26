@@ -43,7 +43,7 @@ struct {
 static uint8_t key_queue[16];
 static int key_queue_start = 0, key_queue_end = 0;
 
-void keyboard_xt_poll() {
+void keyboard_xt_poll(void*) {
         timer_advance_u64(&keyboard_xt.send_delay_timer, (1000 * TIMER_USEC));
         if (!(keyboard_xt.pb & 0x40) && romset != ROM_TANDY)
                 return;
@@ -238,7 +238,7 @@ void keyboard_xt_init() {
         keyboard_xt.tandy = 0;
         keyboard_xt.pb2_turbo = (romset == ROM_GENXT || romset == ROM_DTKXT || romset == ROM_AMIXT || romset == ROM_PXXT) ? 1 : 0;
 
-        timer_add(&keyboard_xt.send_delay_timer, (void *)keyboard_xt_poll, NULL, 1);
+        timer_add(&keyboard_xt.send_delay_timer, keyboard_xt_poll, NULL, 1);
 }
 
 void keyboard_tandy_init() {
@@ -249,5 +249,5 @@ void keyboard_tandy_init() {
         keyboard_poll = keyboard_xt_poll;
         keyboard_xt.tandy = (romset != ROM_TANDY) ? 1 : 0;
 
-        timer_add(&keyboard_xt.send_delay_timer, (void *)keyboard_xt_poll, NULL, 1);
+        timer_add(&keyboard_xt.send_delay_timer, keyboard_xt_poll, NULL, 1);
 }

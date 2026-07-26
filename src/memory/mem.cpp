@@ -1082,7 +1082,7 @@ void mem_set_704kb() {
 }
 
 void mem_init() {
-        page_lookup = malloc((1 << 20) * sizeof(page_t *));
+        page_lookup = (page_t*)malloc((1 << 20) * sizeof(page_t *));
 
         memset(ff_array, 0xff, sizeof(ff_array));
 

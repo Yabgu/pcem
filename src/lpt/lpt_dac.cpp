@@ -58,19 +58,19 @@ static void dac_get_buffer(int32_t *buffer, int len, void *p) {
 }
 
 static void *dac_init() {
-        lpt_dac_t *lpt_dac = malloc(sizeof(lpt_dac_t));
+        lpt_dac_t *lpt_dac = (lpt_dac_t *)malloc(sizeof(lpt_dac_t));
         memset(lpt_dac, 0, sizeof(lpt_dac_t));
 
         sound_add_handler(dac_get_buffer, lpt_dac);
 
-        return lpt_dac;
+        return (void *)lpt_dac;
 }
 static void *dac_stereo_init() {
-        lpt_dac_t *lpt_dac = dac_init();
+        lpt_dac_t *lpt_dac = (lpt_dac_t *)dac_init();
 
         lpt_dac->is_stereo = 1;
 
-        return lpt_dac;
+        return (void *)lpt_dac;
 }
 static void dac_close(void *p) {
         lpt_dac_t *lpt_dac = (lpt_dac_t *)p;

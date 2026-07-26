@@ -130,4 +130,7 @@ uint32_t mvhd_crc32(const void *data, size_t n_bytes);
  * 'err' will be set to non-zero on error
  */
 uint32_t mvhd_file_mod_timestamp(const char *path, int *err);
+
+const char *mvhd_strerr(MVHDError err);
+
 #endif

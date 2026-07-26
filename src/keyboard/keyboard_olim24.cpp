@@ -42,7 +42,7 @@ static int key_queue_start = 0, key_queue_end = 0;
 
 static uint8_t mouse_scancodes[7];
 
-void keyboard_olim24_poll() {
+void keyboard_olim24_poll(void*) {
         timer_advance_u64(&keyboard_olim24.send_delay_timer, (1000 * TIMER_USEC));
         // pclog("poll %i\n", keyboard_olim24.wantirq);
         if (keyboard_olim24.wantirq) {
@@ -314,5 +314,5 @@ void keyboard_olim24_init() {
         keyboard_send = keyboard_olim24_adddata;
         keyboard_poll = keyboard_olim24_poll;
 
-        timer_add(&keyboard_olim24.send_delay_timer, (void *)keyboard_olim24_poll, NULL, 1);
+        timer_add(&keyboard_olim24.send_delay_timer, keyboard_olim24_poll, NULL, 1);
 }
