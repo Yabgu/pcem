@@ -167,7 +167,7 @@ static inline void exec_interpreter(void) {
 
                 fetchdat = fastreadl(cs + cpu_state.pc);
 
-                if (!cpu_state.abrt) {
+                if (likely(!cpu_state.abrt)) {
                         uint8_t opcode = fetchdat & 0xFF;
                         fetchdat >>= 8;
                         trap = cpu_state.flags & T_FLAG;
@@ -201,7 +201,7 @@ static inline void exec_interpreter(void) {
                 insc++;
         }
 
-        if (trap) {
+        if (unlikely(trap)) {
                 trap = 0;
                 cpu_state.oldpc = cpu_state.pc;
                 x86_int(1);

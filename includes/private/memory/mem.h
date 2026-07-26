@@ -191,8 +191,6 @@ void mem_set_704kb();
 
 void resetreadlookup();
 
-void mmu_invalidate(uint32_t addr);
-
 int loadbios();
 
 extern int purgeable_page_count;

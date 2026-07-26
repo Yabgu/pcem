@@ -47,7 +47,6 @@ static uint32_t oldds;
 uint32_t oldss;
 
 static int nextcyc = 0;
-static int memcycs;
 
 static int cycdiff;
 static void FETCHCOMPLETE();
@@ -55,8 +54,6 @@ static void FETCHCOMPLETE();
 #define IRQTEST ((cpu_state.flags & I_FLAG) && (pic.pend & ~pic.mask) && !noint)
 
 static uint8_t readmemb(uint32_t a) {
-        if (a != (cs + cpu_state.pc))
-                memcycs += 4;
         return readmembl(a);
 }
 
@@ -65,14 +62,11 @@ static uint8_t readmembf(uint32_t a) {
 }
 
 static uint16_t readmemw(uint32_t s, uint16_t a) {
-        if (a != (cs + cpu_state.pc))
-                memcycs += (8 >> is8086);
         return readmemwl(s + a);
 }
 
 void refreshread() { /*pclog("Refreshread\n"); */
         FETCHCOMPLETE();
-        memcycs += 4;
 }
 
 #undef fetchea
@@ -87,11 +81,9 @@ void refreshread() { /*pclog("Refreshread\n"); */
         }
 
 static void writememb(uint32_t a, uint8_t v) {
-        memcycs += 4;
         writemembl(a, v);
 }
 static void writememw(uint32_t s, uint32_t a, uint16_t v) {
-        memcycs += (8 >> is8086);
         writememwl(s + a, v);
 }
 
@@ -212,31 +204,6 @@ static void FETCHCOMPLETE() {
 }
 
 static inline void FETCHCLEAR() {
-        /*        int c;
-                fetchcycles=0;
-                prefetchpc=pc;
-                if (is8086 && (prefetchpc&1)) cycles-=4;
-                for (c=0;c<((is8086)?6:4);c++)
-                {
-                        prefetchqueue[c]=readmembf(cs+prefetchpc);
-                        if (!is8086 || !(prefetchpc&1)) cycles-=4;
-                        prefetchpc++;
-                }
-                prefetchw=(is8086)?6:4;*/
-        //        fetchcycles=0;
-        prefetchpc = cpu_state.pc;
-        prefetchw = 0;
-        memcycs = cycdiff - cycles;
-        fetchclocks = 0;
-        //        memcycs=cycles;
-        /*        prefetchqueue[0]=readmembf(cs+prefetchpc);
-                prefetchpc++;
-                prefetchw=1;
-                if (is8086 && prefetchpc&1)
-                {
-                        prefetchqueue[1]=readmembf(cs+prefetchpc);
-                        prefetchpc++;
-                }*/
 }
 
 static uint16_t getword() {
@@ -959,7 +926,6 @@ startrep:
                         c--;
                         cycles -= 17;
                         clockhardware();
-                        FETCHADD(17 - memcycs);
                 }
                 if (IRQTEST && c > 0)
                         cpu_state.pc = ipc;
@@ -969,7 +935,6 @@ startrep:
                 break;
         case 0xA5: /*REP MOVSW*/
                 while (c > 0 && !IRQTEST) {
-                        memcycs = 0;
                         tempw = readmemw(ds, SI);
                         writememw(es, DI, tempw);
                         if (cpu_state.flags & D_FLAG) {
@@ -982,7 +947,6 @@ startrep:
                         c--;
                         cycles -= 17;
                         clockhardware();
-                        FETCHADD(17 - memcycs);
                 }
                 if (IRQTEST && c > 0)
                         cpu_state.pc = ipc;
@@ -996,7 +960,6 @@ startrep:
                 else
                         cpu_state.flags &= ~Z_FLAG;
                 while ((c > 0) && (fv == ((cpu_state.flags & Z_FLAG) ? 1 : 0)) && !IRQTEST) {
-                        memcycs = 0;
                         temp = readmemb(ds + SI);
                         temp2 = readmemb(es + DI);
                         //                        printf("CMPSB %c %c %i %05X %05X
@@ -1012,7 +975,6 @@ startrep:
                         cycles -= 30;
                         setsub8(temp, temp2);
                         clockhardware();
-                        FETCHADD(30 - memcycs);
                 }
                 if (IRQTEST && c > 0 && (fv == ((cpu_state.flags & Z_FLAG) ? 1 : 0)))
                         cpu_state.pc = ipc;
@@ -1025,7 +987,6 @@ startrep:
                 else
                         cpu_state.flags &= ~Z_FLAG;
                 while ((c > 0) && (fv == ((cpu_state.flags & Z_FLAG) ? 1 : 0)) && !IRQTEST) {
-                        memcycs = 0;
                         tempw = readmemw(ds, SI);
                         tempw2 = readmemw(es, DI);
                         if (cpu_state.flags & D_FLAG) {
@@ -1039,7 +1000,6 @@ startrep:
                         cycles -= 30;
                         setsub16(tempw, tempw2);
                         clockhardware();
-                        FETCHADD(30 - memcycs);
                 }
                 if (IRQTEST && c > 0 && (fv == ((cpu_state.flags & Z_FLAG) ? 1 : 0)))
                         cpu_state.pc = ipc;
@@ -1049,7 +1009,6 @@ startrep:
                 break;
         case 0xAA: /*REP STOSB*/
                 while (c > 0 && !IRQTEST) {
-                        memcycs = 0;
                         writememb(es + DI, AL);
                         if (cpu_state.flags & D_FLAG)
                                 DI--;
@@ -1058,7 +1017,6 @@ startrep:
                         c--;
                         cycles -= 10;
                         clockhardware();
-                        FETCHADD(10 - memcycs);
                 }
                 if (IRQTEST && c > 0)
                         cpu_state.pc = ipc;
@@ -1067,7 +1025,6 @@ startrep:
                 break;
         case 0xAB: /*REP STOSW*/
                 while (c > 0 && !IRQTEST) {
-                        memcycs = 0;
                         writememw(es, DI, AX);
                         if (cpu_state.flags & D_FLAG)
                                 DI -= 2;
@@ -1076,7 +1033,6 @@ startrep:
                         c--;
                         cycles -= 10;
                         clockhardware();
-                        FETCHADD(10 - memcycs);
                 }
                 if (IRQTEST && c > 0)
                         cpu_state.pc = ipc;
@@ -3902,13 +3858,6 @@ void execx86(int cycs) {
                         ss = oldss;
                         cpu_state.ssegs = 0;
                 }
-
-                //                output = 3;
-                // if (instime) printf("%i %i %i %i\n",cycdiff,cycles,memcycs,fetchclocks);
-                FETCHADD(((cycdiff - cycles) - memcycs) - fetchclocks);
-                if ((cycdiff - cycles) < memcycs)
-                        cycles -= (memcycs - (cycdiff - cycles));
-                memcycs = 0;
 
                 insc++;
                 //                output=(CS==0xEB9);

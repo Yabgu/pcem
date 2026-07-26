@@ -204,9 +204,6 @@ uint32_t mmutranslate_noabrt(uint32_t addr, int rw) {
         return (temp & ~0xFFF) + (addr & 0xFFF);
 }
 
-void mmu_invalidate(uint32_t addr) {
-}
-
 
 uint8_t *getpccache(uint32_t a) {
         uint32_t a2 = a;
@@ -219,7 +216,7 @@ uint8_t *getpccache(uint32_t a) {
         }
         a &= rammask;
 
-        if (_mem_exec[a >> 14]) {
+        if (likely(_mem_exec[a >> 14])) {
                 return &_mem_exec[a >> 14][(uintptr_t)(a & 0x3000) - (uintptr_t)(a2 & ~0xFFF)];
         }
 

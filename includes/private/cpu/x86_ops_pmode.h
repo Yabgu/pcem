@@ -449,7 +449,6 @@ static int op0F01_common(uint32_t fetchdat, int is32, int is286, int ea32) {
                                 break;
                         }
                         SEG_CHECK_READ(cpu_state.ea_seg);
-                        mmu_invalidate(ds + cpu_state.eaaddr);
                         CLOCK_CYCLES(12);
                         break;
                 }

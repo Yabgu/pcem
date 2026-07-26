@@ -222,8 +222,6 @@ void sigma_out(uint16_t addr, uint8_t val, void *p) {
                         //		pclog("Sigma: Reset NMI\n");
                         return;
                 case 0x2DD: /* Page in RAM at 0xC1800 */
-                        if (sigma->rom_paged != 0)
-                                mmu_invalidate(0xC0000);
                         sigma->rom_paged = 0;
                         //		pclog("Sigma: page RAM at C1800\n");
                         return;
@@ -273,8 +271,6 @@ uint8_t sigma_in(uint16_t addr, void *p) {
         case 0x2DD: /* Page in ROM at 0xC1800 */
                     //		pclog("Sigma: page ROM at C1800\n");
                 result = (sigma->rom_paged ? 0x80 : 0);
-                if (sigma->rom_paged != 0x80)
-                        mmu_invalidate(0xC0000);
                 sigma->rom_paged = 0x80;
                 break;
 
