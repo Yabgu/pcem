@@ -15,6 +15,7 @@
 #include <sys/stat.h>
 #include "minivhd/libxml2_encoding.h"
 #include "minivhd/minivhd_internal.h"
+#include "minivhd/minivhd_create.h"
 #include "minivhd/minivhd_util.h"
 #include "minivhd/minivhd.h"
 
@@ -100,7 +101,7 @@ void mvhd_generate_uuid(uint8_t *uuid) {
         uuid[8] |= 0x80; /* Variant 1 */
 }
 
-uint32_t vhd_calc_timestamp(void) {
+uint32_t vhd_calc_timestamp() {
         time_t start_time;
         time_t curr_time;
         double vhd_time;
