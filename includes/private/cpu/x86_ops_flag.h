@@ -4,7 +4,6 @@ static int opCMC(uint32_t fetchdat) {
         flags_rebuild();
         cpu_state.flags ^= C_FLAG;
         CLOCK_CYCLES(2);
-        PREFETCH_RUN(2, 1, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 
@@ -12,13 +11,11 @@ static int opCLC(uint32_t fetchdat) {
         flags_rebuild();
         cpu_state.flags &= ~C_FLAG;
         CLOCK_CYCLES(2);
-        PREFETCH_RUN(2, 1, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 static int opCLD(uint32_t fetchdat) {
         cpu_state.flags &= ~D_FLAG;
         CLOCK_CYCLES(2);
-        PREFETCH_RUN(2, 1, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 static int opCLI(uint32_t fetchdat) {
@@ -33,7 +30,6 @@ static int opCLI(uint32_t fetchdat) {
                 cpu_state.flags &= ~I_FLAG;
 
         CLOCK_CYCLES(3);
-        PREFETCH_RUN(3, 1, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 
@@ -41,13 +37,11 @@ static int opSTC(uint32_t fetchdat) {
         flags_rebuild();
         cpu_state.flags |= C_FLAG;
         CLOCK_CYCLES(2);
-        PREFETCH_RUN(2, 1, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 static int opSTD(uint32_t fetchdat) {
         cpu_state.flags |= D_FLAG;
         CLOCK_CYCLES(2);
-        PREFETCH_RUN(2, 1, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 static int opSTI(uint32_t fetchdat) {
@@ -70,7 +64,6 @@ static int opSTI(uint32_t fetchdat) {
         cpu_end_block_after_ins = 2;
 
         CLOCK_CYCLES(2);
-        PREFETCH_RUN(2, 1, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 
@@ -78,7 +71,6 @@ static int opSAHF(uint32_t fetchdat) {
         flags_rebuild();
         cpu_state.flags = (cpu_state.flags & 0xff00) | (AH & 0xd5) | 2;
         CLOCK_CYCLES(3);
-        PREFETCH_RUN(3, 1, -1, 0, 0, 0, 0, 0);
 
         codegen_flags_changed = 0;
 
@@ -88,7 +80,6 @@ static int opLAHF(uint32_t fetchdat) {
         flags_rebuild();
         AH = cpu_state.flags & 0xff;
         CLOCK_CYCLES(3);
-        PREFETCH_RUN(3, 1, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 
@@ -111,7 +102,6 @@ static int opPUSHF(uint32_t fetchdat) {
                 PUSH_W(cpu_state.flags);
         }
         CLOCK_CYCLES(4);
-        PREFETCH_RUN(4, 1, -1, 0, 0, 1, 0, 0);
         return cpu_state.abrt;
 }
 static int opPUSHFD(uint32_t fetchdat) {
@@ -129,7 +119,6 @@ static int opPUSHFD(uint32_t fetchdat) {
         flags_rebuild();
         PUSH_L(cpu_state.flags | (tempw << 16));
         CLOCK_CYCLES(4);
-        PREFETCH_RUN(4, 1, -1, 0, 0, 0, 1, 0);
         return cpu_state.abrt;
 }
 
@@ -156,7 +145,6 @@ static int opPOPF_286(uint32_t fetchdat) {
         flags_extract();
 
         CLOCK_CYCLES(5);
-        PREFETCH_RUN(5, 1, -1, 1, 0, 0, 0, 0);
 
         codegen_flags_changed = 0;
 
@@ -204,7 +192,6 @@ static int opPOPF(uint32_t fetchdat) {
         flags_extract();
 
         CLOCK_CYCLES(5);
-        PREFETCH_RUN(5, 1, -1, 1, 0, 0, 0, 0);
 
         codegen_flags_changed = 0;
 
@@ -243,7 +230,6 @@ static int opPOPFD(uint32_t fetchdat) {
         flags_extract();
 
         CLOCK_CYCLES(5);
-        PREFETCH_RUN(5, 1, -1, 0, 1, 0, 0, 0);
 
         codegen_flags_changed = 0;
 

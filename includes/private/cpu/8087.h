@@ -14,7 +14,6 @@
 #define SEG_CHECK_READ(seg)
 #define SEG_CHECK_WRITE(seg)
 #define CHECK_WRITE(seg, addr_lo, addr_hi)
-#define PREFETCH_RUN(timing, bytes, rmdat, a, b, c, d, e)
 
 static uint32_t readmeml(uint32_t seg, uint32_t addr) { return readmemw(seg, addr) | (readmemw(seg, addr + 2) << 16); }
 static uint64_t readmemq(uint32_t seg, uint32_t addr) {

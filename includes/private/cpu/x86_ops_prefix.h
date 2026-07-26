@@ -10,7 +10,6 @@
                 cpu_state.ea_seg = &seg;                                                                                         \
                 cpu_state.ssegs = 1;                                                                                             \
                 CLOCK_CYCLES(4);                                                                                                 \
-                PREFETCH_PREFIX();                                                                                               \
                                                                                                                                  \
                 if (opcode_table[fetchdat & 0xff])                                                                               \
                         return opcode_table[fetchdat & 0xff](fetchdat >> 8);                                                     \
@@ -26,7 +25,6 @@
                 cpu_state.ea_seg = &seg;                                                                                         \
                 cpu_state.ssegs = 1;                                                                                             \
                 CLOCK_CYCLES(4);                                                                                                 \
-                PREFETCH_PREFIX();                                                                                               \
                                                                                                                                  \
                 if (opcode_table[(fetchdat & 0xff) | 0x100])                                                                     \
                         return opcode_table[(fetchdat & 0xff) | 0x100](fetchdat >> 8);                                           \
@@ -42,7 +40,6 @@
                 cpu_state.ea_seg = &seg;                                                                                         \
                 cpu_state.ssegs = 1;                                                                                             \
                 CLOCK_CYCLES(4);                                                                                                 \
-                PREFETCH_PREFIX();                                                                                               \
                                                                                                                                  \
                 if (opcode_table[(fetchdat & 0xff) | 0x200])                                                                     \
                         return opcode_table[(fetchdat & 0xff) | 0x200](fetchdat >> 8);                                           \
@@ -58,7 +55,6 @@
                 cpu_state.ea_seg = &seg;                                                                                         \
                 cpu_state.ssegs = 1;                                                                                             \
                 CLOCK_CYCLES(4);                                                                                                 \
-                PREFETCH_PREFIX();                                                                                               \
                                                                                                                                  \
                 if (opcode_table[(fetchdat & 0xff) | 0x300])                                                                     \
                         return opcode_table[(fetchdat & 0xff) | 0x300](fetchdat >> 8);                                           \
@@ -92,7 +88,6 @@ op_seg(CS, cpu_state.seg_cs, x86_opcodes, x86_opcodes) op_seg(DS, cpu_state.seg_
 
         cpu_state.op32 = ((use32 & 0x100) ^ 0x100) | (cpu_state.op32 & 0x200);
         CLOCK_CYCLES(2);
-        PREFETCH_PREFIX();
         return x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
 }
 static int op_67(uint32_t fetchdat) /*Address size select*/
@@ -104,7 +99,6 @@ static int op_67(uint32_t fetchdat) /*Address size select*/
 
         cpu_state.op32 = ((use32 & 0x200) ^ 0x200) | (cpu_state.op32 & 0x100);
         CLOCK_CYCLES(2);
-        PREFETCH_PREFIX();
         return x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
 }
 
@@ -117,7 +111,6 @@ static int op_66_REPE(uint32_t fetchdat) /*Data size select*/
 
         cpu_state.op32 = ((use32 & 0x100) ^ 0x100) | (cpu_state.op32 & 0x200);
         CLOCK_CYCLES(2);
-        PREFETCH_PREFIX();
         if (x86_opcodes_REPE[(fetchdat & 0xff) | cpu_state.op32])
                 return x86_opcodes_REPE[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
         return x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
@@ -131,7 +124,6 @@ static int op_67_REPE(uint32_t fetchdat) /*Address size select*/
 
         cpu_state.op32 = ((use32 & 0x200) ^ 0x200) | (cpu_state.op32 & 0x100);
         CLOCK_CYCLES(2);
-        PREFETCH_PREFIX();
         if (x86_opcodes_REPE[(fetchdat & 0xff) | cpu_state.op32])
                 return x86_opcodes_REPE[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
         return x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
@@ -145,7 +137,6 @@ static int op_66_REPNE(uint32_t fetchdat) /*Data size select*/
 
         cpu_state.op32 = ((use32 & 0x100) ^ 0x100) | (cpu_state.op32 & 0x200);
         CLOCK_CYCLES(2);
-        PREFETCH_PREFIX();
         if (x86_opcodes_REPNE[(fetchdat & 0xff) | cpu_state.op32])
                 return x86_opcodes_REPNE[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
         return x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
@@ -159,7 +150,6 @@ static int op_67_REPNE(uint32_t fetchdat) /*Address size select*/
 
         cpu_state.op32 = ((use32 & 0x200) ^ 0x200) | (cpu_state.op32 & 0x100);
         CLOCK_CYCLES(2);
-        PREFETCH_PREFIX();
         if (x86_opcodes_REPNE[(fetchdat & 0xff) | cpu_state.op32])
                 return x86_opcodes_REPNE[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
         return x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);

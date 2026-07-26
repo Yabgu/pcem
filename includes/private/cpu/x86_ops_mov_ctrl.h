@@ -31,7 +31,6 @@ static int opMOV_r_CRx_a16(uint32_t fetchdat) {
                 break;
         }
         CLOCK_CYCLES(6);
-        PREFETCH_RUN(6, 2, rmdat, 0, 0, 0, 0, 0);
         return 0;
 }
 static int opMOV_r_CRx_a32(uint32_t fetchdat) {
@@ -65,7 +64,6 @@ static int opMOV_r_CRx_a32(uint32_t fetchdat) {
                 break;
         }
         CLOCK_CYCLES(6);
-        PREFETCH_RUN(6, 2, rmdat, 0, 0, 0, 0, 1);
         return 0;
 }
 
@@ -78,7 +76,6 @@ static int opMOV_r_DRx_a16(uint32_t fetchdat) {
         fetch_ea_16(fetchdat);
         cpu_state.regs[cpu_rm].l = dr[cpu_reg];
         CLOCK_CYCLES(6);
-        PREFETCH_RUN(6, 2, rmdat, 0, 0, 0, 0, 0);
         return 0;
 }
 static int opMOV_r_DRx_a32(uint32_t fetchdat) {
@@ -90,7 +87,6 @@ static int opMOV_r_DRx_a32(uint32_t fetchdat) {
         fetch_ea_32(fetchdat);
         cpu_state.regs[cpu_rm].l = dr[cpu_reg];
         CLOCK_CYCLES(6);
-        PREFETCH_RUN(6, 2, rmdat, 0, 0, 0, 0, 1);
         return 0;
 }
 
@@ -140,7 +136,6 @@ static int opMOV_CRx_r_a16(uint32_t fetchdat) {
                 break;
         }
         CLOCK_CYCLES(10);
-        PREFETCH_RUN(10, 2, rmdat, 0, 0, 0, 0, 0);
         return 0;
 }
 static int opMOV_CRx_r_a32(uint32_t fetchdat) {
@@ -189,7 +184,6 @@ static int opMOV_CRx_r_a32(uint32_t fetchdat) {
                 break;
         }
         CLOCK_CYCLES(10);
-        PREFETCH_RUN(10, 2, rmdat, 0, 0, 0, 0, 1);
         return 0;
 }
 
@@ -202,7 +196,6 @@ static int opMOV_DRx_r_a16(uint32_t fetchdat) {
         fetch_ea_16(fetchdat);
         dr[cpu_reg] = cpu_state.regs[cpu_rm].l;
         CLOCK_CYCLES(6);
-        PREFETCH_RUN(6, 2, rmdat, 0, 0, 0, 0, 0);
         return 0;
 }
 static int opMOV_DRx_r_a32(uint32_t fetchdat) {
@@ -214,7 +207,6 @@ static int opMOV_DRx_r_a32(uint32_t fetchdat) {
         fetch_ea_16(fetchdat);
         dr[cpu_reg] = cpu_state.regs[cpu_rm].l;
         CLOCK_CYCLES(6);
-        PREFETCH_RUN(6, 2, rmdat, 0, 0, 0, 0, 1);
         return 0;
 }
 
@@ -227,7 +219,6 @@ static int opMOV_r_TRx_a16(uint32_t fetchdat) {
         fetch_ea_16(fetchdat);
         cpu_state.regs[cpu_rm].l = 0;
         CLOCK_CYCLES(6);
-        PREFETCH_RUN(6, 2, rmdat, 0, 0, 0, 0, 0);
         return 0;
 }
 static int opMOV_r_TRx_a32(uint32_t fetchdat) {
@@ -239,7 +230,6 @@ static int opMOV_r_TRx_a32(uint32_t fetchdat) {
         fetch_ea_32(fetchdat);
         cpu_state.regs[cpu_rm].l = 0;
         CLOCK_CYCLES(6);
-        PREFETCH_RUN(6, 2, rmdat, 0, 0, 0, 0, 1);
         return 0;
 }
 
@@ -251,7 +241,6 @@ static int opMOV_TRx_r_a16(uint32_t fetchdat) {
         }
         fetch_ea_16(fetchdat);
         CLOCK_CYCLES(6);
-        PREFETCH_RUN(6, 2, rmdat, 0, 0, 0, 0, 0);
         return 0;
 }
 static int opMOV_TRx_r_a32(uint32_t fetchdat) {
@@ -262,7 +251,6 @@ static int opMOV_TRx_r_a32(uint32_t fetchdat) {
         }
         fetch_ea_16(fetchdat);
         CLOCK_CYCLES(6);
-        PREFETCH_RUN(6, 2, rmdat, 0, 0, 0, 0, 1);
         return 0;
 }
 

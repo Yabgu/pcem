@@ -520,6 +520,7 @@ FILE* dofopen(const char *filepath, const char* filename, const char * mode) {
 
 void dumpregs() {
 #ifndef RELEASE_BUILD
+        int c;
         FILE *f;
         if (indump)
                 return;

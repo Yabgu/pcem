@@ -220,11 +220,6 @@ uint8_t *getpccache(uint32_t a) {
         a &= rammask;
 
         if (_mem_exec[a >> 14]) {
-                if (read_mapping[a >> 14]->flags & MEM_MAPPING_ROM)
-                        cpu_prefetch_cycles = cpu_rom_prefetch_cycles;
-                else
-                        cpu_prefetch_cycles = cpu_mem_prefetch_cycles;
-
                 return &_mem_exec[a >> 14][(uintptr_t)(a & 0x3000) - (uintptr_t)(a2 & ~0xFFF)];
         }
 

@@ -27,7 +27,6 @@ static int opMOV_w_seg_a16(uint32_t fetchdat) {
         }
 
         CLOCK_CYCLES((cpu_mod == 3) ? 2 : 3);
-        PREFETCH_RUN((cpu_mod == 3) ? 2 : 3, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, 0, 0);
         return cpu_state.abrt;
 }
 static int opMOV_w_seg_a32(uint32_t fetchdat) {
@@ -57,7 +56,6 @@ static int opMOV_w_seg_a32(uint32_t fetchdat) {
         }
 
         CLOCK_CYCLES((cpu_mod == 3) ? 2 : 3);
-        PREFETCH_RUN((cpu_mod == 3) ? 2 : 3, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, 0, 1);
         return cpu_state.abrt;
 }
 
@@ -106,7 +104,6 @@ static int opMOV_l_seg_a16(uint32_t fetchdat) {
         }
 
         CLOCK_CYCLES((cpu_mod == 3) ? 2 : 3);
-        PREFETCH_RUN((cpu_mod == 3) ? 2 : 3, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, 0, 0);
         return cpu_state.abrt;
 }
 static int opMOV_l_seg_a32(uint32_t fetchdat) {
@@ -154,7 +151,6 @@ static int opMOV_l_seg_a32(uint32_t fetchdat) {
         }
 
         CLOCK_CYCLES((cpu_mod == 3) ? 2 : 3);
-        PREFETCH_RUN((cpu_mod == 3) ? 2 : 3, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, 0, 1);
         return cpu_state.abrt;
 }
 
@@ -198,7 +194,6 @@ static int opMOV_seg_w_a16(uint32_t fetchdat) {
         }
 
         CLOCK_CYCLES((cpu_mod == 3) ? 2 : 5);
-        PREFETCH_RUN((cpu_mod == 3) ? 2 : 5, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, 0, 0);
         return cpu_state.abrt;
 }
 static int opMOV_seg_w_a32(uint32_t fetchdat) {
@@ -241,7 +236,6 @@ static int opMOV_seg_w_a32(uint32_t fetchdat) {
         }
 
         CLOCK_CYCLES((cpu_mod == 3) ? 2 : 5);
-        PREFETCH_RUN((cpu_mod == 3) ? 2 : 5, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, 0, 1);
         return cpu_state.abrt;
 }
 
@@ -261,7 +255,6 @@ static int opLDS_w_a16(uint32_t fetchdat) {
         cpu_state.regs[cpu_reg].w = addr;
 
         CLOCK_CYCLES(7);
-        PREFETCH_RUN(7, 2, rmdat, 2, 0, 0, 0, 0);
         return 0;
 }
 static int opLDS_w_a32(uint32_t fetchdat) {
@@ -280,7 +273,6 @@ static int opLDS_w_a32(uint32_t fetchdat) {
         cpu_state.regs[cpu_reg].w = addr;
 
         CLOCK_CYCLES(7);
-        PREFETCH_RUN(7, 2, rmdat, 2, 0, 0, 0, 1);
         return 0;
 }
 static int opLDS_l_a16(uint32_t fetchdat) {
@@ -300,7 +292,6 @@ static int opLDS_l_a16(uint32_t fetchdat) {
         cpu_state.regs[cpu_reg].l = addr;
 
         CLOCK_CYCLES(7);
-        PREFETCH_RUN(7, 2, rmdat, 1, 1, 0, 0, 0);
         return 0;
 }
 static int opLDS_l_a32(uint32_t fetchdat) {
@@ -320,7 +311,6 @@ static int opLDS_l_a32(uint32_t fetchdat) {
         cpu_state.regs[cpu_reg].l = addr;
 
         CLOCK_CYCLES(7);
-        PREFETCH_RUN(7, 2, rmdat, 1, 1, 0, 0, 1);
         return 0;
 }
 
@@ -340,7 +330,6 @@ static int opLSS_w_a16(uint32_t fetchdat) {
         cpu_state.regs[cpu_reg].w = addr;
 
         CLOCK_CYCLES(7);
-        PREFETCH_RUN(7, 2, rmdat, 2, 0, 0, 0, 0);
         return 1;
 }
 static int opLSS_w_a32(uint32_t fetchdat) {
@@ -359,7 +348,6 @@ static int opLSS_w_a32(uint32_t fetchdat) {
         cpu_state.regs[cpu_reg].w = addr;
 
         CLOCK_CYCLES(7);
-        PREFETCH_RUN(7, 2, rmdat, 2, 0, 0, 0, 1);
         return 1;
 }
 static int opLSS_l_a16(uint32_t fetchdat) {
@@ -379,7 +367,6 @@ static int opLSS_l_a16(uint32_t fetchdat) {
         cpu_state.regs[cpu_reg].l = addr;
 
         CLOCK_CYCLES(7);
-        PREFETCH_RUN(7, 2, rmdat, 2, 0, 0, 0, 0);
         return 1;
 }
 static int opLSS_l_a32(uint32_t fetchdat) {
@@ -399,7 +386,6 @@ static int opLSS_l_a32(uint32_t fetchdat) {
         cpu_state.regs[cpu_reg].l = addr;
 
         CLOCK_CYCLES(7);
-        PREFETCH_RUN(7, 2, rmdat, 2, 0, 0, 0, 1);
         return 1;
 }
 
@@ -420,7 +406,6 @@ static int opLSS_l_a32(uint32_t fetchdat) {
                 cpu_state.regs[cpu_reg].w = addr;                                                                                \
                                                                                                                                  \
                 CLOCK_CYCLES(7);                                                                                                 \
-                PREFETCH_RUN(7, 2, rmdat, 2, 0, 0, 0, 0);                                                                        \
                 return 0;                                                                                                        \
         }                                                                                                                        \
                                                                                                                                  \
@@ -440,7 +425,6 @@ static int opLSS_l_a32(uint32_t fetchdat) {
                 cpu_state.regs[cpu_reg].w = addr;                                                                                \
                                                                                                                                  \
                 CLOCK_CYCLES(7);                                                                                                 \
-                PREFETCH_RUN(7, 2, rmdat, 2, 0, 0, 0, 1);                                                                        \
                 return 0;                                                                                                        \
         }                                                                                                                        \
                                                                                                                                  \
@@ -461,7 +445,6 @@ static int opLSS_l_a32(uint32_t fetchdat) {
                 cpu_state.regs[cpu_reg].l = addr;                                                                                \
                                                                                                                                  \
                 CLOCK_CYCLES(7);                                                                                                 \
-                PREFETCH_RUN(7, 2, rmdat, 1, 1, 0, 0, 0);                                                                        \
                 return 0;                                                                                                        \
         }                                                                                                                        \
                                                                                                                                  \
@@ -482,7 +465,6 @@ static int opLSS_l_a32(uint32_t fetchdat) {
                 cpu_state.regs[cpu_reg].l = addr;                                                                                \
                                                                                                                                  \
                 CLOCK_CYCLES(7);                                                                                                 \
-                PREFETCH_RUN(7, 2, rmdat, 1, 1, 0, 0, 1);                                                                        \
                 return 0;                                                                                                        \
         }
 

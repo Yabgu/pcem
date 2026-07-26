@@ -297,13 +297,11 @@ static int op_nofpu_a32(uint32_t fetchdat) {
 static int FPU_ILLEGAL_a16(uint32_t fetchdat) {
         fetch_ea_16(fetchdat);
         CLOCK_CYCLES(timing_rr);
-        PREFETCH_RUN(timing_rr, 2, rmdat, 0, 0, 0, 0, 0);
         return 0;
 }
 static int FPU_ILLEGAL_a32(uint32_t fetchdat) {
         fetch_ea_32(fetchdat);
         CLOCK_CYCLES(timing_rr);
-        PREFETCH_RUN(timing_rr, 2, rmdat, 0, 0, 0, 0, 0);
         return 0;
 }
 

@@ -5,7 +5,6 @@
                 setflags(reg, 1);                                                                                                \
                 reg += inc;                                                                                                      \
                 CLOCK_CYCLES(timing_rr);                                                                                         \
-                PREFETCH_RUN(timing_rr, 1, -1, 0, 0, 0, 0, 0);                                                                   \
                 return 0;                                                                                                        \
         }
 
@@ -67,7 +66,6 @@ static int opINCDEC_b_a16(uint32_t fetchdat) {
                 setadd8nc(temp, 1);
         }
         CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
-        PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0, 0);
         return 0;
 }
 static int opINCDEC_b_a32(uint32_t fetchdat) {
@@ -92,7 +90,6 @@ static int opINCDEC_b_a32(uint32_t fetchdat) {
                 setadd8nc(temp, 1);
         }
         CLOCK_CYCLES((cpu_mod == 3) ? timing_rr : timing_mm);
-        PREFETCH_RUN((cpu_mod == 3) ? timing_rr : timing_mm, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0, 1);
         return 0;
 }
 

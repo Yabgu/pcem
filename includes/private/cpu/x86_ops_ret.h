@@ -47,8 +47,6 @@ static int opRETF_a16(uint32_t fetchdat) {
         CPU_BLOCK_END();
         RETF_a16(0);
 
-        PREFETCH_RUN(cycles_old - cycles, 1, -1, 2, 0, 0, 0, 0);
-        PREFETCH_FLUSH();
         return 0;
 }
 static int opRETF_a32(uint32_t fetchdat) {
@@ -58,8 +56,6 @@ static int opRETF_a32(uint32_t fetchdat) {
         CPU_BLOCK_END();
         RETF_a32(0);
 
-        PREFETCH_RUN(cycles_old - cycles, 1, -1, 0, 2, 0, 0, 1);
-        PREFETCH_FLUSH();
         return 0;
 }
 
@@ -71,8 +67,6 @@ static int opRETF_a16_imm(uint32_t fetchdat) {
         CPU_BLOCK_END();
         RETF_a16(offset);
 
-        PREFETCH_RUN(cycles_old - cycles, 3, -1, 2, 0, 0, 0, 0);
-        PREFETCH_FLUSH();
         return 0;
 }
 static int opRETF_a32_imm(uint32_t fetchdat) {
@@ -83,8 +77,6 @@ static int opRETF_a32_imm(uint32_t fetchdat) {
         CPU_BLOCK_END();
         RETF_a32(offset);
 
-        PREFETCH_RUN(cycles_old - cycles, 3, -1, 0, 2, 0, 0, 1);
-        PREFETCH_FLUSH();
         return 0;
 }
 
@@ -120,8 +112,6 @@ static int opIRET_286(uint32_t fetchdat) {
         nmi_enable = 1;
         CPU_BLOCK_END();
 
-        PREFETCH_RUN(cycles_old - cycles, 1, -1, 2, 0, 0, 0, 0);
-        PREFETCH_FLUSH();
         return cpu_state.abrt;
 }
 
@@ -183,8 +173,6 @@ static int opIRET(uint32_t fetchdat) {
         nmi_enable = 1;
         CPU_BLOCK_END();
 
-        PREFETCH_RUN(cycles_old - cycles, 1, -1, 2, 0, 0, 0, 0);
-        PREFETCH_FLUSH();
         return cpu_state.abrt;
 }
 
@@ -222,8 +210,6 @@ static int opIRETD(uint32_t fetchdat) {
         nmi_enable = 1;
         CPU_BLOCK_END();
 
-        PREFETCH_RUN(cycles_old - cycles, 1, -1, 0, 2, 0, 0, 1);
-        PREFETCH_FLUSH();
         return cpu_state.abrt;
 }
 

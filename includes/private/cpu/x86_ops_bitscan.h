@@ -32,7 +32,6 @@ static int opBSF_w_a16(uint32_t fetchdat) {
 
         CLOCK_CYCLES((is486) ? 6 : 10);
         instr_cycles += ((is486) ? 6 : 10);
-        PREFETCH_RUN(instr_cycles, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, 0, 0, 0);
         return 0;
 }
 static int opBSF_w_a32(uint32_t fetchdat) {
@@ -50,7 +49,6 @@ static int opBSF_w_a32(uint32_t fetchdat) {
 
         CLOCK_CYCLES((is486) ? 6 : 10);
         instr_cycles += ((is486) ? 6 : 10);
-        PREFETCH_RUN(instr_cycles, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, 0, 0, 1);
         return 0;
 }
 static int opBSF_l_a16(uint32_t fetchdat) {
@@ -68,7 +66,6 @@ static int opBSF_l_a16(uint32_t fetchdat) {
 
         CLOCK_CYCLES((is486) ? 6 : 10);
         instr_cycles += ((is486) ? 6 : 10);
-        PREFETCH_RUN(instr_cycles, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, 0, 0);
         return 0;
 }
 static int opBSF_l_a32(uint32_t fetchdat) {
@@ -86,7 +83,6 @@ static int opBSF_l_a32(uint32_t fetchdat) {
 
         CLOCK_CYCLES((is486) ? 6 : 10);
         instr_cycles += ((is486) ? 6 : 10);
-        PREFETCH_RUN(instr_cycles, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, 0, 1);
         return 0;
 }
 
@@ -105,7 +101,6 @@ static int opBSR_w_a16(uint32_t fetchdat) {
 
         CLOCK_CYCLES((is486) ? 6 : 10);
         instr_cycles += ((is486) ? 6 : 10);
-        PREFETCH_RUN(instr_cycles, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, 0, 0, 0);
         return 0;
 }
 static int opBSR_w_a32(uint32_t fetchdat) {
@@ -123,7 +118,6 @@ static int opBSR_w_a32(uint32_t fetchdat) {
 
         CLOCK_CYCLES((is486) ? 6 : 10);
         instr_cycles += ((is486) ? 6 : 10);
-        PREFETCH_RUN(instr_cycles, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, 0, 0, 1);
         return 0;
 }
 static int opBSR_l_a16(uint32_t fetchdat) {
@@ -141,7 +135,6 @@ static int opBSR_l_a16(uint32_t fetchdat) {
 
         CLOCK_CYCLES((is486) ? 6 : 10);
         instr_cycles += ((is486) ? 6 : 10);
-        PREFETCH_RUN(instr_cycles, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, 0, 0);
         return 0;
 }
 static int opBSR_l_a32(uint32_t fetchdat) {
@@ -159,7 +152,6 @@ static int opBSR_l_a32(uint32_t fetchdat) {
 
         CLOCK_CYCLES((is486) ? 6 : 10);
         instr_cycles += ((is486) ? 6 : 10);
-        PREFETCH_RUN(instr_cycles, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, 0, 1);
         return 0;
 }
 
