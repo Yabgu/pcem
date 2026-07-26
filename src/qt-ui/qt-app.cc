@@ -27,7 +27,7 @@
 
 extern "C" {
 int wx_load_config(void *);
-int wx_start(void *);
+int wx_start(void *hwnd);
 int wx_stop(void *);
 void wx_show(void *);
 void wx_handle_command(void *, int, int);
