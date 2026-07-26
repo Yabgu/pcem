@@ -110,7 +110,7 @@ void gameport_timer_over(void *p) {
 }
 
 void *gameport_init_common() {
-        gameport_t *gameport = malloc(sizeof(gameport_t));
+        gameport_t *gameport = (gameport_t *)malloc(sizeof(gameport_t));
 
         memset(gameport, 0, sizeof(gameport_t));
 
@@ -148,7 +148,7 @@ void gameport_update_joystick_type() {
 }
 
 void *gameport_init() {
-        gameport_t *gameport = gameport_init_common();
+        gameport_t *gameport = (gameport_t *)gameport_init_common();
 
         io_sethandler(0x0200, 0x0008, gameport_read, NULL, NULL, gameport_write, NULL, NULL, gameport);
 
@@ -156,7 +156,7 @@ void *gameport_init() {
 }
 
 void *gameport_201_init() {
-        gameport_t *gameport = gameport_init_common();
+        gameport_t *gameport = (gameport_t *)gameport_init_common();
 
         io_sethandler(0x0201, 0x0001, gameport_read, NULL, NULL, gameport_write, NULL, NULL, gameport);
 

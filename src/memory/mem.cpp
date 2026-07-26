@@ -1082,7 +1082,7 @@ void mem_set_704kb() {
 }
 
 void mem_init() {
-        page_lookup = (page_t*)malloc((1 << 20) * sizeof(page_t *));
+        page_lookup = (page_t **)malloc((1 << 20) * sizeof(page_t *));
 
         memset(ff_array, 0xff, sizeof(ff_array));
 
@@ -1094,18 +1094,18 @@ void mem_alloc() {
         int c;
 
         free(ram);
-        ram = malloc(mem_size * 1024);
+        ram = (uint8_t *)malloc(mem_size * 1024);
         memset(ram, 0, mem_size * 1024);
 
         free(byte_dirty_mask);
-        byte_dirty_mask = malloc((mem_size * 1024) / 8);
+        byte_dirty_mask = (uint64_t *)malloc((mem_size * 1024) / 8);
         memset(byte_dirty_mask, 0, (mem_size * 1024) / 8);
         free(byte_code_present_mask);
-        byte_code_present_mask = malloc((mem_size * 1024) / 8);
+        byte_code_present_mask = (uint64_t *)malloc((mem_size * 1024) / 8);
         memset(byte_code_present_mask, 0, (mem_size * 1024) / 8);
 
         free(pages);
-        pages = malloc((((mem_size + 384) * 1024) >> 12) * sizeof(page_t));
+        pages = (page_t *)malloc((((mem_size + 384) * 1024) >> 12) * sizeof(page_t));
         memset(pages, 0, (((mem_size + 384) * 1024) >> 12) * sizeof(page_t));
         for (c = 0; c < (((mem_size + 384) * 1024) >> 12); c++) {
                 pages[c].mem = &ram[c << 12];

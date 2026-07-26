@@ -747,7 +747,7 @@ static void xebec_set_switches(xebec_t *xebec) {
 }
 
 static void *xebec_init() {
-        xebec_t *xebec = malloc(sizeof(xebec_t));
+        xebec_t *xebec = (xebec_t *)malloc(sizeof(xebec_t));
         memset(xebec, 0, sizeof(xebec_t));
 
         hdd_load(&xebec->drives[0].hdd_file, 0, ide_fn[0]);
@@ -778,7 +778,7 @@ static int xebec_available() { return rom_present("ibm_xebec_62x0822_1985.bin");
 device_t mfm_xebec_device = {"IBM PC Fixed Disk Adapter", 0, xebec_init, xebec_close, xebec_available, NULL, NULL, NULL, NULL};
 
 static void *dtc_5150x_init() {
-        xebec_t *xebec = malloc(sizeof(xebec_t));
+        xebec_t *xebec = (xebec_t *)malloc(sizeof(xebec_t));
         memset(xebec, 0, sizeof(xebec_t));
 
         hdd_load(&xebec->drives[0].hdd_file, 0, ide_fn[0]);

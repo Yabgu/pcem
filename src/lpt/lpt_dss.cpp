@@ -71,7 +71,7 @@ static void dss_callback(void *p) {
 }
 
 static void *dss_init() {
-        dss_t *dss = malloc(sizeof(dss_t));
+        dss_t *dss = (dss_t *)malloc(sizeof(dss_t));
         memset(dss, 0, sizeof(dss_t));
 
         sound_add_handler(dss_get_buffer, dss);

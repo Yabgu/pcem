@@ -503,7 +503,7 @@ void mfm_callback(void *p) {
 }
 
 void *mfm_init() {
-        mfm_t *mfm = malloc(sizeof(mfm_t));
+        mfm_t *mfm = (mfm_t *)malloc(sizeof(mfm_t));
         memset(mfm, 0, sizeof(mfm_t));
 
         hdd_load(&mfm->drives[0].hdd_file, 0, ide_fn[0]);

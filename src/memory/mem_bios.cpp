@@ -64,7 +64,7 @@ int loadbios() {
         biosmask = 0xffff;
 
         if (!rom)
-                rom = malloc(0x40000);
+                rom = (uint8_t *)malloc(0x40000);
         memset(romext, 0x63, 0x4000);
         memset(rom, 0xff, 0x20000);
 

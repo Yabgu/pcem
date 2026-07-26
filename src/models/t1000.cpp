@@ -539,7 +539,7 @@ void xt_t1000_init() {
 
         f = romfopen("t1000/t1000dos.rom", "rb");
         if (f) {
-                t1000.romdrive = malloc(T1000_ROMSIZE);
+                t1000.romdrive = (uint8_t *)malloc(T1000_ROMSIZE);
                 if (t1000.romdrive) {
                         memset(t1000.romdrive, 0xFF, T1000_ROMSIZE);
                         fread(t1000.romdrive, T1000_ROMSIZE, 1, f);

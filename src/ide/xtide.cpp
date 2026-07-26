@@ -71,7 +71,7 @@ static uint8_t xtide_read(uint16_t port, void *p) {
 }
 
 static void *xtide_init() {
-        xtide_t *xtide = malloc(sizeof(xtide_t));
+        xtide_t *xtide = (xtide_t *)malloc(sizeof(xtide_t));
         memset(xtide, 0, sizeof(xtide_t));
 
         rom_init(&xtide->bios_rom, "ide_xt.bin", 0xc8000, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);
@@ -84,7 +84,7 @@ static void *xtide_init() {
 }
 
 static void *xtide_at_init() {
-        xtide_t *xtide = malloc(sizeof(xtide_t));
+        xtide_t *xtide = (xtide_t *)malloc(sizeof(xtide_t));
         memset(xtide, 0, sizeof(xtide_t));
 
         rom_init(&xtide->bios_rom, "ide_at.bin", 0xc8000, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);
@@ -94,7 +94,7 @@ static void *xtide_at_init() {
 }
 
 static void *xtide_ps1_init() {
-        xtide_t *xtide = malloc(sizeof(xtide_t));
+        xtide_t *xtide = (xtide_t *)malloc(sizeof(xtide_t));
         memset(xtide, 0, sizeof(xtide_t));
 
         rom_init(&xtide->bios_rom, "ide_at_1_1_5.bin", 0xc8000, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);
