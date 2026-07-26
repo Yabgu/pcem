@@ -7,13 +7,10 @@
 #include <wx/xrc/xmlres.h>
 #include <string>
 #include "viewer.h"
-extern "C"
-{
 #include "ibm.h"
 #include "mem.h"
 #include "video.h"
 #include "vid_svga.h"
-}
 
 enum ColourDepth
 {

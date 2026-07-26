@@ -13,7 +13,7 @@
 #include "wx-glslp-parser.h"
 #include "wx-shaderconfig.h"
 
-extern "C" {
+
 #include "config.h"
 void saveconfig(char *);
 void resetpchard();
@@ -21,7 +21,7 @@ int deviceconfig_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM l
 void write_shader_config(glslp_t *shader);
 struct glslp_t *current_glsl;
 int confirm();
-}
+
 #define IDC_CONFIG_BASE 1000
 #define ID_APPLY 500
 #define ID_RESET 501

@@ -10,13 +10,11 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-extern "C" {
 void pclog(const char *format, ...);
 #include "config.h"
 #include "device.h"
 #include "gameport.h"
 #include "plat-joystick.h"
-}
 
 #define IDC_CONFIG_BASE 1000
 

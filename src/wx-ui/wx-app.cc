@@ -13,7 +13,6 @@
 #undef BITMAP
 #endif
 
-extern "C" {
 int wx_load_config(void *);
 int wx_start(void *hwnd);
 int wx_stop(void *);
@@ -24,7 +23,6 @@ int start_emulation(void *);
 int resume_emulation();
 int pause_emulation();
 int stop_emulation();
-}
 
 extern int config_override;
 

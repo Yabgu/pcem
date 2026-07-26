@@ -7,11 +7,9 @@
 #include <string>
 #include <vector>
 
-extern "C" {
 void pclog(const char *format, ...);
 void wx_handle_command(void *, int, int);
 extern void *ghwnd;
-}
 
 class ViewerRout
 {

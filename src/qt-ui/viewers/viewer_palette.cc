@@ -4,13 +4,10 @@
 #include <QWidget>
 
 #include "viewer.h"
-extern "C"
-{
 #include "ibm.h"
 #include "mem.h"
 #include "video.h"
 #include "vid_svga.h"
-}
 
 class ViewerPalette: public Viewer
 {

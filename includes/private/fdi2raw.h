@@ -9,10 +9,6 @@
 #include <stdio.h>
 typedef struct fdi FDI;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 extern int fdi2raw_loadtrack(FDI *, uae_u16 *mfmbuf, uae_u16 *tracktiming, int track, int *tracklength, int *indexoffset,
                              int *multirev, int mfm);
 
@@ -27,9 +23,5 @@ extern int fdi2raw_get_type(FDI *);
 extern int fdi2raw_get_bit_rate(FDI *);
 extern int fdi2raw_get_rotation(FDI *);
 extern int fdi2raw_get_write_protect(FDI *);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* _FDI2RAW_H_ */

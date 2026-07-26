@@ -41,9 +41,6 @@ typedef struct flash_t {
 
 extern flash_t flash;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 int sdl_video_init();
 void sdl_video_close();
 int sdl_renderer_init(SDL_Window *window);
@@ -60,9 +57,6 @@ sdl_render_driver *sdl_get_render_driver_by_name_ptr(const char *name);
 
 void color_flash(FLASH_FUNC func, int time_ms, char r, char g, char b, char a);
 
-#ifdef __cplusplus
-}
-#endif
 
 extern sdl_render_driver requested_render_driver;
 extern char current_render_driver_name[50];

@@ -6,10 +6,8 @@
 #include <windows.h>
 #endif
 
-extern "C" {
 int pc_main(int, char **);
 int main(int argc, char **argv);
-}
 
 #if WIN32
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char *, int nShowCmd)

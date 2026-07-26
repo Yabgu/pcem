@@ -13,9 +13,6 @@
 
 typedef int (*WX_CALLBACK)(void *data);
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 int wx_messagebox(void *nothing, const char *message, const char *title, int style);
 void wx_simple_messagebox(const char *title, const char *format, ...);
 
@@ -109,9 +106,6 @@ int confirm();
 
 #ifdef _WIN32
 void wx_winsendmessage(void *window, int msg, INT_PARAM wParam, LONG_PARAM lParam);
-#endif
-#ifdef __cplusplus
-}
 #endif
 
 extern int (*wx_keydown_func)(void *window, void *event, int keycode, int modifiers);

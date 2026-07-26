@@ -1,9 +1,6 @@
 #ifndef _VIEWER_H_
 #define _VIEWER_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef struct viewer_t
 {
@@ -31,7 +28,6 @@ extern viewer_t viewer_vram;
 #define IDM_VIEWER_MAX 1700
 
 #ifdef __cplusplus
-}
 
 #include <QMainWindow>
 

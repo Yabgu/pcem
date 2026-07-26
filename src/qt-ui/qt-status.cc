@@ -6,10 +6,8 @@
 #include <QElapsedTimer>
 #include <QFontMetrics>
 
-extern "C" {
 drive_info_t *get_machine_info(char *s, int *num_drive_info);
 int get_status(char *machine, char *device);
-}
 
 /* Global variables declared extern in qt-common.h */
 int show_machine_on_start = 0;

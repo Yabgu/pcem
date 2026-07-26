@@ -11,7 +11,6 @@
 
 #include "wx/xrc/xmlres.h"
 
-extern "C" {
 #include "config.h"
 #include "plat-midi.h"
 void saveconfig(char *);
@@ -19,7 +18,7 @@ void resetpchard();
 int deviceconfig_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM lParam);
 device_t *config_device;
 int confirm();
-}
+
 #define IDC_CONFIG_BASE 1000
 
 int deviceconfig_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM lParam) {

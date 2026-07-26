@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-extern "C" void pclog(const char *format, ...);
+void pclog(const char *format, ...);
 
 #include "qt-createdisc.h"
 

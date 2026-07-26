@@ -20,8 +20,6 @@
 #include <vector>
 #include "viewer.h"
 #include "viewer_voodoo.h"
-extern "C"
-{
 #include "ibm.h"
 #include "mem.h"
 #include "thread.h"
@@ -30,7 +28,6 @@ extern "C"
 #include "vid_voodoo_common.h"
 #include "vid_voodoo_regs.h"
 #include "vid_voodoo_texture.h"
-}
 
 static std::mutex voodoo_viewer_refcount_mutex;
 

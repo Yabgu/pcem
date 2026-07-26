@@ -1,8 +1,5 @@
 #ifndef _QT_SDL2_H_
 #define _QT_SDL2_H_
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 void leave_fullscreen();
 int getfile(void *hwnd, const char *f, const char *fn);
@@ -10,9 +7,6 @@ int getsfile(void *hwnd, const char *f, const char *fn, const char *dir, const c
 int getfilewithcaption(void *hwnd, const char *f, const char *fn, const char *caption);
 void screenshot_taken(unsigned char *rgb, int width, int height);
 
-#ifdef __cplusplus
-}
-#endif
 
 extern char openfilestring[260];
 

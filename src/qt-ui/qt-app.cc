@@ -25,7 +25,6 @@
 #undef BITMAP
 #endif
 
-extern "C" {
 int wx_load_config(void *);
 int wx_start(void *hwnd);
 int wx_stop(void *);
@@ -36,11 +35,9 @@ int start_emulation(void *);
 int resume_emulation();
 int pause_emulation();
 int stop_emulation();
-}
 
 extern int config_override;
 
-extern "C" {
 extern int rawinputkey[272];
 extern int fps;
 extern int mousecapture;
@@ -51,7 +48,6 @@ void mouse_wheel_update(int);
 int config_open(void *);
 void resetpchard();
 void savenvr();
-}
 
 #ifdef _WIN32
 static HWND sdl_canvas_hwnd = 0;
@@ -228,7 +224,7 @@ void SDLCanvas::keyReleaseEvent(QKeyEvent *event) {
         event->accept();
 }
 
-extern "C" { extern int infocus; }
+extern int infocus;
 
 void SDLCanvas::focusOutEvent(QFocusEvent *event) {
         if (!mousecapture)

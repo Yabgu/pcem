@@ -20,9 +20,7 @@
 #include "wx-common.h"
 #include "wx-status.h"
 
-extern "C" {
 #include "thread.h"
-}
 
 int confirm() {
         if (emulation_state != EMULATION_STOPPED) {

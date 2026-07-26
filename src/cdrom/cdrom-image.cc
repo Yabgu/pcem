@@ -2,10 +2,8 @@
 #include "cdrom-image.h"
 #include "dosbox/cdrom.h"
 
-extern "C" {
 #include "ibm.h"
 #include "ide.h"
-}
 
 char image_path[1024];
 static int image_changed = 0;

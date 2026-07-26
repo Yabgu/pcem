@@ -5,12 +5,10 @@
 #include <wx/xrc/xmlres.h>
 #include <sstream>
 
-extern "C" {
-int get_status(char *, char *);
+int get_status(char *machine, char *device);
 extern int fps;
 extern int updatestatus;
 drive_info_t *get_machine_info(char *, int *);
-}
 
 int show_machine_on_start = 0;
 int confirm_on_stop_emulation = 1;
@@ -216,7 +214,6 @@ void StatusPane::Render(wxDC &dc) {
         }
 }
 
-extern "C" {
 extern int window_remember;
 void wx_handle_command(void *, int, int);
 
@@ -227,7 +224,6 @@ void reset_emulation();
 
 void hdconf_open(void *hwnd);
 void config_open(void *hwnd);
-}
 
 int wx_window_x = 0;
 int wx_window_y = 0;

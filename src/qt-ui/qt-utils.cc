@@ -49,12 +49,11 @@
 #include "qt-dialogbox.h"
 #include "qt-common.h"
 #include "qt-status.h"
-extern "C" {
+
 #include "thread.h"
 extern void pclog(const char *format, ...);
 extern void *ghwnd;
 void wx_handle_command(void *, int, int);
-}
 
 int (*wx_keydown_func)(void *window, void *event, int keycode, int modifiers) = nullptr;
 int (*wx_keyup_func)(void *window, void *event, int keycode, int modifiers) = nullptr;

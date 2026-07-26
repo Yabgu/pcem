@@ -1,8 +1,6 @@
 #ifndef _PLAT_JOYSTICK_H_
 #define _PLAT_JOYSTICK_H_
-#ifdef __cplusplus
-extern "C" {
-#endif
+
 void joystick_init();
 void joystick_close();
 void joystick_poll();
@@ -58,8 +56,5 @@ extern joystick_t joystick_state[MAX_JOYSTICKS];
 
 #define JOYSTICK_PRESENT(n) (joystick_state[n].plat_joystick_nr != 0)
 
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* _PLAT_JOYSTICK_H_ */

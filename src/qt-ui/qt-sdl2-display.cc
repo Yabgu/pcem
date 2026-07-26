@@ -11,7 +11,6 @@
 
 #include <SDL2/SDL.h>
 
-extern "C" {
 #include "video.h"
 #include "qt-sdl2-video.h"
 #include "qt-utils.h"
@@ -19,7 +18,6 @@ extern "C" {
 #include "qt-display.h"
 #include "plat-keyboard.h"
 #include "mouse.h"
-}
 
 #include "qt-app.h"
 
@@ -48,11 +46,9 @@ int rendering = 0;
 
 int mousecapture = 0;
 
-extern "C" {
 extern volatile int pause;
 extern int video_scale;
 extern int take_screenshot;
-}
 
 static MainWindow *mainWindowPtr = NULL;
 
@@ -74,13 +70,12 @@ int trigger_screenshot = 0;
 int trigger_togglewindow = 0;
 int trigger_inputrelease = 0;
 
-extern "C" {
 void device_force_redraw();
 void mouse_wheel_update(int);
 void toggle_fullscreen();
 void qt_mouse_motion(int dx, int dy);
 void qt_mouse_set_buttons(int buttons);
-}
+
 
 #ifdef _WIN32
 static HHOOK ll_keyboard_hook = NULL;

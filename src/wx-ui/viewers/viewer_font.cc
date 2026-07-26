@@ -4,13 +4,10 @@
 #endif
 #include <wx/rawbmp.h>
 #include "viewer.h"
-extern "C"
-{
 #include "ibm.h"
 #include "mem.h"
 #include "video.h"
 #include "vid_svga.h"
-}
 
 class ViewerFont: public Viewer
 {

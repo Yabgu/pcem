@@ -19,9 +19,7 @@
 
 #include "qt-utils.h"
 
-extern "C" {
 #include "qt-common.h"
-}
 
 #ifdef _WIN32
 #include <QAbstractNativeEventFilter>
@@ -126,3 +124,4 @@ private:
 };
 
 #endif /* QT_APP_H_ */
+

@@ -1,9 +1,6 @@
 #ifndef _QT_DISPLAY_H_
 #define _QT_DISPLAY_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 int display_init();
 void display_close();
@@ -11,9 +8,6 @@ void display_start(void *hwnd);
 void display_stop();
 void display_resize(int width, int height);
 
-#ifdef __cplusplus
-}
-#endif
 
 extern int mousecapture;
 
