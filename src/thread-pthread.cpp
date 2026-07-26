@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <pthread.h>
+#include <unistd.h>
 #include "thread.h"
 
 typedef struct event_pthread_t {
@@ -12,7 +13,7 @@ typedef struct event_pthread_t {
 thread_t *thread_create(void (*thread_rout)(void *param), void *param) {
         pthread_t *thread = (pthread_t *)malloc(sizeof(pthread_t));
 
-        pthread_create(thread, NULL, (void *)thread_rout, param);
+        pthread_create(thread, NULL, (void *(*)(void *))thread_rout, param);
 
         return thread;
 }

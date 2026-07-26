@@ -9,6 +9,7 @@
 #include "x87_timings.h"
 
 int fpu_type;
+int cpu_multi;
 uint32_t cpu_features;
 
 static int cpu_turbo_speed, cpu_nonturbo_speed;

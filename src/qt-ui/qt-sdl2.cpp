@@ -680,7 +680,7 @@ void reset_emulation() {
         resume_emulation();
 }
 
-int wx_stop() {
+int wx_stop(void *) {
         pclog("Shutting down...\n");
 
         /* Stop the emulation thread before tearing down state */
