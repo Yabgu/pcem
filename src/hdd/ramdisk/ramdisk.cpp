@@ -126,7 +126,7 @@ int ramdisk_stream_cursor_buf_w(ramdisk_stream_t *stream, uint8_t **buf, size_t 
         return 0;
 }
 
-size_t ramdisk_stream_copy_buf(uint8_t *dst, size_t dst_size, const uint8_t *src, size_t src_size) {
+size_t ramdisk_stream_copy_buf(void *dst, size_t dst_size, const void *src, size_t src_size) {
         size_t len = src_size < dst_size ? src_size : dst_size;
         memcpy(dst, src, len);
         return len;
@@ -191,7 +191,7 @@ int ramdisk_write(ramdisk_t *ramdisk, const char *buf, size_t size) {
         return written;
 }
 
-int ramdisk_read(ramdisk_t *ramdisk, char *buf, size_t size) {
+int ramdisk_read(ramdisk_t *ramdisk, void *buf, size_t size) {
         if (ramdisk->stream->cursor > MAX_STREAM_SIZE - size)
                 size = MAX_STREAM_SIZE - ramdisk->stream->cursor;
 

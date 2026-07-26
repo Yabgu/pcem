@@ -1568,9 +1568,9 @@ void *ne2000_common_init() {
         struct in_addr myaddr;
         int rc;
         unsigned int macint[6];
-        char *macstring;
+        const char *macstring;
 
-        ne2000_t *ne2000 = malloc(sizeof(ne2000_t));
+        ne2000_t *ne2000 = (ne2000_t *)malloc(sizeof(ne2000_t));
         memset(ne2000, 0, sizeof(ne2000_t));
 
         macstring = config_get_string(CFG_MACHINE, NULL, "macaddr", "");
@@ -1757,7 +1757,7 @@ void *ne2000_common_init() {
 }
 
 void *ne2000_init() {
-        ne2000_t *ne2000 = ne2000_common_init();
+        ne2000_t *ne2000 = (ne2000_t *)ne2000_common_init();
         uint16_t addr;
 
         ne2000->type = NE2000_NE2000;
@@ -1774,7 +1774,7 @@ void *ne2000_init() {
 }
 
 void *rtl8029_init() {
-        ne2000_t *ne2000 = ne2000_common_init();
+        ne2000_t *ne2000 = (ne2000_t *)ne2000_common_init();
 
         ne2000->is_pci = 1;
         ne2000->type = NE2000_RTL8029AS;

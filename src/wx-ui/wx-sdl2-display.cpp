@@ -405,7 +405,7 @@ int render() {
                 window_dosetresize = 0;
 #if SDL_VERSION_ATLEAST(2, 0, 5)
                 SDL_GetWindowSize(window, &rect.w, &rect.h);
-                SDL_SetWindowResizable(window, vid_resize == 1);
+                SDL_SetWindowResizable(window, (SDL_bool)(vid_resize == 1));
                 SDL_SetWindowSize(window, rect.w, rect.h);
 #else
                 window_doreset = 1;

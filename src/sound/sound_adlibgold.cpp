@@ -738,7 +738,7 @@ void *adgold_init() {
         int c;
         double out;
         int opl_emu;
-        adgold_t *adgold = malloc(sizeof(adgold_t));
+        adgold_t *adgold = (adgold_t *)malloc(sizeof(adgold_t));
         memset(adgold, 0, sizeof(adgold_t));
 
         adgold->surround_enabled = device_get_config_int("surround");

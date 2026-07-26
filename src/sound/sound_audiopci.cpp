@@ -649,45 +649,45 @@ static void capture_event(es1371_t *es1371, int type, int rw, uint16_t port) {
         //        pclog("Event! %s %04x\n", rw ? "write" : "read", port);
 }
 
-static void capture_write_sscape(uint16_t port, uint8_t val, void *p) { capture_event(p, LEGACY_EVENT_SSCAPE, 1, port); }
-static void capture_write_codec(uint16_t port, uint8_t val, void *p) { capture_event(p, LEGACY_EVENT_CODEC, 1, port); }
-static void capture_write_sb(uint16_t port, uint8_t val, void *p) { capture_event(p, LEGACY_EVENT_SB, 1, port); }
-static void capture_write_adlib(uint16_t port, uint8_t val, void *p) { capture_event(p, LEGACY_EVENT_ADLIB, 1, port); }
-static void capture_write_master_pic(uint16_t port, uint8_t val, void *p) { capture_event(p, LEGACY_EVENT_MASTER_PIC, 1, port); }
-static void capture_write_master_dma(uint16_t port, uint8_t val, void *p) { capture_event(p, LEGACY_EVENT_MASTER_DMA, 1, port); }
-static void capture_write_slave_pic(uint16_t port, uint8_t val, void *p) { capture_event(p, LEGACY_EVENT_SLAVE_PIC, 1, port); }
-static void capture_write_slave_dma(uint16_t port, uint8_t val, void *p) { capture_event(p, LEGACY_EVENT_SLAVE_DMA, 1, port); }
+static void capture_write_sscape(uint16_t port, uint8_t val, void *p) { capture_event((es1371_t *)p, LEGACY_EVENT_SSCAPE, 1, port); }
+static void capture_write_codec(uint16_t port, uint8_t val, void *p) { capture_event((es1371_t *)p, LEGACY_EVENT_CODEC, 1, port); }
+static void capture_write_sb(uint16_t port, uint8_t val, void *p) { capture_event((es1371_t *)p, LEGACY_EVENT_SB, 1, port); }
+static void capture_write_adlib(uint16_t port, uint8_t val, void *p) { capture_event((es1371_t *)p, LEGACY_EVENT_ADLIB, 1, port); }
+static void capture_write_master_pic(uint16_t port, uint8_t val, void *p) { capture_event((es1371_t *)p, LEGACY_EVENT_MASTER_PIC, 1, port); }
+static void capture_write_master_dma(uint16_t port, uint8_t val, void *p) { capture_event((es1371_t *)p, LEGACY_EVENT_MASTER_DMA, 1, port); }
+static void capture_write_slave_pic(uint16_t port, uint8_t val, void *p) { capture_event((es1371_t *)p, LEGACY_EVENT_SLAVE_PIC, 1, port); }
+static void capture_write_slave_dma(uint16_t port, uint8_t val, void *p) { capture_event((es1371_t *)p, LEGACY_EVENT_SLAVE_DMA, 1, port); }
 
 static uint8_t capture_read_sscape(uint16_t port, void *p) {
-        capture_event(p, LEGACY_EVENT_SSCAPE, 0, port);
+        capture_event((es1371_t *)p, LEGACY_EVENT_SSCAPE, 0, port);
         return 0xff;
 }
 static uint8_t capture_read_codec(uint16_t port, void *p) {
-        capture_event(p, LEGACY_EVENT_CODEC, 0, port);
+        capture_event((es1371_t *)p, LEGACY_EVENT_CODEC, 0, port);
         return 0xff;
 }
 static uint8_t capture_read_sb(uint16_t port, void *p) {
-        capture_event(p, LEGACY_EVENT_SB, 0, port);
+        capture_event((es1371_t *)p, LEGACY_EVENT_SB, 0, port);
         return 0xff;
 }
 static uint8_t capture_read_adlib(uint16_t port, void *p) {
-        capture_event(p, LEGACY_EVENT_ADLIB, 0, port);
+        capture_event((es1371_t *)p, LEGACY_EVENT_ADLIB, 0, port);
         return 0xff;
 }
 static uint8_t capture_read_master_pic(uint16_t port, void *p) {
-        capture_event(p, LEGACY_EVENT_MASTER_PIC, 0, port);
+        capture_event((es1371_t *)p, LEGACY_EVENT_MASTER_PIC, 0, port);
         return 0xff;
 }
 static uint8_t capture_read_master_dma(uint16_t port, void *p) {
-        capture_event(p, LEGACY_EVENT_MASTER_DMA, 0, port);
+        capture_event((es1371_t *)p, LEGACY_EVENT_MASTER_DMA, 0, port);
         return 0xff;
 }
 static uint8_t capture_read_slave_pic(uint16_t port, void *p) {
-        capture_event(p, LEGACY_EVENT_SLAVE_PIC, 0, port);
+        capture_event((es1371_t *)p, LEGACY_EVENT_SLAVE_PIC, 0, port);
         return 0xff;
 }
 static uint8_t capture_read_slave_dma(uint16_t port, void *p) {
-        capture_event(p, LEGACY_EVENT_SLAVE_DMA, 0, port);
+        capture_event((es1371_t *)p, LEGACY_EVENT_SLAVE_DMA, 0, port);
         return 0xff;
 }
 
@@ -1220,7 +1220,7 @@ static void generate_es1371_filter() {
 }
 
 static void *es1371_init() {
-        es1371_t *es1371 = malloc(sizeof(es1371_t));
+        es1371_t *es1371 = (es1371_t *)malloc(sizeof(es1371_t));
         memset(es1371, 0, sizeof(es1371_t));
 
         sound_add_handler(es1371_get_buffer, es1371);

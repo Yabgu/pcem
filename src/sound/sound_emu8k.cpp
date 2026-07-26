@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <stdlib.h>
 #include <math.h>
 #include "ibm.h"
@@ -282,7 +283,7 @@ uint32_t rep_count_w = 0;
 #endif // EMU8K_DEBUG_REGISTERS
 
 static inline int16_t EMU8K_READ(emu8k_t *emu8k, uint32_t addr) {
-        const register emu8k_mem_pointers_t addrmem = {{addr}};
+        const emu8k_mem_pointers_t addrmem = {{addr}};
         return emu8k->ram_pointers[addrmem.hb_address][addrmem.lw_address];
 }
 
@@ -2018,7 +2019,7 @@ void emu8k_init(emu8k_t *emu8k, uint16_t emu_addr, int onboard_ram) {
         if (!f)
                 fatal("AWE32.RAW not found\n");
 
-        emu8k->rom = malloc(1024 * 1024);
+        emu8k->rom = (int16_t*)malloc(1024 * 1024);
         fread(emu8k->rom, 1024 * 1024, 1, f);
         fclose(f);
         /*AWE-DUMP creates ROM images offset by 2 bytes, so if we detect this
@@ -2028,7 +2029,7 @@ void emu8k_init(emu8k_t *emu8k, uint16_t emu_addr, int onboard_ram) {
                 emu8k->rom[0x7ffff] = 0;
         }
 
-        emu8k->empty = malloc(2 * BLOCK_SIZE_WORDS);
+        emu8k->empty = (int16_t*)malloc(2 * BLOCK_SIZE_WORDS);
         memset(emu8k->empty, 0, 2 * BLOCK_SIZE_WORDS);
 
         int j = 0;
@@ -2043,7 +2044,7 @@ void emu8k_init(emu8k_t *emu8k, uint16_t emu_addr, int onboard_ram) {
                 /*Clip to 28MB, since that's the max that we can address. */
                 if (onboard_ram > 0x7000)
                         onboard_ram = 0x7000;
-                emu8k->ram = malloc(onboard_ram * 1024);
+                emu8k->ram = (int16_t*)malloc(onboard_ram * 1024);
                 memset(emu8k->ram, 0, onboard_ram * 1024);
                 const int i_end = onboard_ram >> 7;
                 int i = 0;

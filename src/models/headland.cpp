@@ -378,7 +378,7 @@ uint16_t headland_readw(uint16_t addr, void *priv) {
 uint8_t mem_read_headlandb(uint32_t addr, void *priv) {
         uint8_t val = 0xff;
 
-        addr = get_headland_addr(addr, priv);
+        addr = get_headland_addr(addr, (uint16_t *)priv);
         if (addr < (mem_size << 10))
                 val = ram[addr];
 

@@ -1083,7 +1083,7 @@ void *gus_init() {
         gus_t *gus = malloc(sizeof(gus_t));
         memset(gus, 0, sizeof(gus_t));
 
-        gus->ram = malloc(1 << 20);
+        gus->ram = (uint8_t*)malloc(1 << 20);
         memset(gus->ram, 0, 1 << 20);
 
         pclog("gus_init\n");

@@ -2046,7 +2046,7 @@ static int hd_file(void *hdlg, int drive) {
 
                 if (mvhd_file_is_vhd(f)) {
                         fclose(f);
-                        int vhdError = 0;
+                        MVHDError vhdError = MVHD_ERR_UNKNOWN;
                         MVHDMeta *vhd = mvhd_open(openfilestring, false, &vhdError);
                         if (vhd == NULL) {
                                 wx_messagebox(hdlg, mvhd_strerr(vhdError), "PCem error", WX_MB_OK);

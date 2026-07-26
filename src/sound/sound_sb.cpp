@@ -1071,7 +1071,7 @@ void *sb_16_init() {
 int sb_awe32_available() { return rom_present("awe32.raw"); }
 
 void *sb_awe32_init() {
-        sb_t *sb = malloc(sizeof(sb_t));
+        sb_t *sb = (sb_t *)malloc(sizeof(sb_t));
         int onboard_ram = device_get_config_int("onboard_ram");
         memset(sb, 0, sizeof(sb_t));
 

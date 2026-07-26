@@ -77,30 +77,32 @@ static scsi_zip_data *zip_data;
 
 #define CHECK_READY 2
 
-static uint8_t scsi_zip_cmd_flags[0x100] = {[SCSI_TEST_UNIT_READY] = CHECK_READY,
-                                            [SCSI_REQUEST_SENSE] = 0,
-                                            [SCSI_READ_6] = CHECK_READY,
-                                            [SCSI_INQUIRY] = 0,
-                                            [SCSI_MODE_SELECT_6] = 0,
-                                            [SCSI_MODE_SENSE_6] = 0,
-                                            [SCSI_START_STOP_UNIT] = 0,
-                                            [SCSI_PREVENT_ALLOW_MEDIUM_REMOVAL] = CHECK_READY,
-                                            [SCSI_READ_10] = CHECK_READY,
-                                            [SCSI_SEEK_6] = CHECK_READY,
-                                            [SCSI_SEEK_10] = CHECK_READY,
-                                            [SCSI_IOMEGA_SENSE] = 0,
-                                            [SCSI_REZERO_UNIT] = CHECK_READY,
-                                            [SCSI_READ_CAPACITY_10] = CHECK_READY,
-                                            [SCSI_WRITE_6] = CHECK_READY,
-                                            [SCSI_WRITE_10] = CHECK_READY,
-                                            [SCSI_WRITE_AND_VERIFY] = CHECK_READY,
-                                            [SCSI_VERIFY_10] = CHECK_READY,
-                                            [SCSI_FORMAT] = CHECK_READY,
-                                            [SCSI_RESERVE] = 0,
-                                            [SCSI_RELEASE] = 0,
-                                            [SEND_DIAGNOSTIC] = 0
-
-};
+static uint8_t scsi_zip_cmd_flags[0x100];
+static bool _scsi_zip_cmd_init = ([]{
+        scsi_zip_cmd_flags[SCSI_TEST_UNIT_READY] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_REQUEST_SENSE] = 0;
+        scsi_zip_cmd_flags[SCSI_READ_6] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_INQUIRY] = 0;
+        scsi_zip_cmd_flags[SCSI_MODE_SELECT_6] = 0;
+        scsi_zip_cmd_flags[SCSI_MODE_SENSE_6] = 0;
+        scsi_zip_cmd_flags[SCSI_START_STOP_UNIT] = 0;
+        scsi_zip_cmd_flags[SCSI_PREVENT_ALLOW_MEDIUM_REMOVAL] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_READ_10] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_SEEK_6] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_SEEK_10] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_IOMEGA_SENSE] = 0;
+        scsi_zip_cmd_flags[SCSI_REZERO_UNIT] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_READ_CAPACITY_10] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_WRITE_6] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_WRITE_10] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_WRITE_AND_VERIFY] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_VERIFY_10] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_FORMAT] = CHECK_READY;
+        scsi_zip_cmd_flags[SCSI_RESERVE] = 0;
+        scsi_zip_cmd_flags[SCSI_RELEASE] = 0;
+        scsi_zip_cmd_flags[SEND_DIAGNOSTIC] = 0;
+        return true;
+}());
 
 void zip_load(char *fn) {
         if (zip_data) {
@@ -154,7 +156,7 @@ int zip_loaded() {
 }
 
 static void scsi_zip_callback(void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         if (data->cmd_pos == CMD_POS_WAIT) {
                 data->cmd_pos = data->new_cmd_pos;
@@ -163,7 +165,7 @@ static void scsi_zip_callback(void *p) {
 }
 
 static void *scsi_zip_init(scsi_bus_t *bus, int id) {
-        scsi_zip_data *data = malloc(sizeof(scsi_zip_data));
+        scsi_zip_data *data = (scsi_zip_data *)malloc(sizeof(scsi_zip_data));
         memset(data, 0, sizeof(scsi_zip_data));
 
         data->disc_loaded = 0;
@@ -186,7 +188,7 @@ static void *scsi_zip_atapi_init(scsi_bus_t *bus, int id, atapi_device_t *atapi_
 }
 
 static void scsi_zip_close(void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         if (data->disc_loaded)
                 hdd_close(&data->hdd);
@@ -195,14 +197,14 @@ static void scsi_zip_close(void *p) {
 }
 
 static void scsi_zip_reset(void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         timer_disable(&data->callback_timer);
         data->cmd_pos = CMD_POS_IDLE;
 }
 
 static int scsi_add_data(uint8_t val, void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         //        pclog("scsi_add_data : %04x %02x\n", data->data_pos_write, val);
 
@@ -217,7 +219,7 @@ static int scsi_add_data(uint8_t val, void *p) {
 }
 
 static int scsi_get_data(void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
         uint8_t val = data->data_out[data->data_pos_read++];
 
         if (data->data_pos_read > BUFFER_SIZE)
@@ -248,7 +250,7 @@ static void scsi_zip_cmd_error(scsi_zip_data *data, int sensekey, int asc, int a
         } while (0)
 
 static int scsi_zip_command(uint8_t *cdb, void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
         int /*addr, */ len;
         int i = 0, c;
         int desc;
@@ -974,13 +976,13 @@ static int scsi_zip_command(uint8_t *cdb, void *p) {
 }
 
 static uint8_t scsi_zip_read(void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         return data->data_in[data->data_pos_read++];
 }
 
 static void scsi_zip_write(uint8_t val, void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         data->data_out[data->data_pos_write++] = val;
 
@@ -991,18 +993,18 @@ static void scsi_zip_write(uint8_t val, void *p) {
 }
 
 static int scsi_zip_read_complete(void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         return (data->data_pos_read == data->data_pos_write);
 }
 static int scsi_zip_write_complete(void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         return (data->bytes_received == data->bytes_required);
 }
 
 static void scsi_zip_start_command(void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         data->bytes_received = 0;
         data->bytes_required = 0;
@@ -1010,25 +1012,25 @@ static void scsi_zip_start_command(void *p) {
 }
 
 static uint8_t scsi_zip_get_status(void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         return data->status;
 }
 
 static uint8_t scsi_zip_get_sense_key(void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         return data->sense_key;
 }
 
 static int scsi_zip_get_bytes_required(void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         return data->bytes_required - data->bytes_received;
 }
 
 static void scsi_zip_atapi_identify(uint16_t *buffer, void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         memset(buffer, 0, 512);
 
@@ -1053,7 +1055,7 @@ static void scsi_zip_atapi_identify(uint16_t *buffer, void *p) {
 }
 
 static int scsi_zip_atapi_set_feature(uint8_t feature, uint8_t val, void *p) {
-        scsi_zip_data *data = p;
+        scsi_zip_data *data = (scsi_zip_data *)p;
 
         switch (feature) {
         case FEATURE_SET_TRANSFER_MODE:

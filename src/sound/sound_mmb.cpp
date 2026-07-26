@@ -171,7 +171,7 @@ void mmb_init(mmb_t *mmb, uint16_t base, uint16_t size, int freq) {
 }
 
 void *mmb_device_init() {
-        mmb_t *mmb = malloc(sizeof(mmb_t));
+        mmb_t *mmb = (mmb_t *)malloc(sizeof(mmb_t));
         uint16_t base_addr = (device_get_config_int("addr96") << 6) | (device_get_config_int("addr52") << 2);
         memset(mmb, 0, sizeof(mmb_t));
 

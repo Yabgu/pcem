@@ -11,9 +11,9 @@
 #include "minivhd/minivhd_util.h"
 #include "minivhd/minivhd.h"
 
-static FILE *mvhd_open_existing_raw_img(const char *utf8_raw_path, MVHDGeom *geom, int *err);
+static FILE *mvhd_open_existing_raw_img(const char *utf8_raw_path, MVHDGeom *geom, MVHDError *err);
 
-static FILE *mvhd_open_existing_raw_img(const char *utf8_raw_path, MVHDGeom *geom, int *err) {
+static FILE *mvhd_open_existing_raw_img(const char *utf8_raw_path, MVHDGeom *geom, MVHDError *err) {
         FILE *raw_img = mvhd_fopen(utf8_raw_path, "rb", err);
         if (raw_img == NULL) {
                 *err = MVHD_ERR_FILE;
@@ -37,7 +37,7 @@ static FILE *mvhd_open_existing_raw_img(const char *utf8_raw_path, MVHDGeom *geo
         return raw_img;
 }
 
-MVHDMeta *mvhd_convert_to_vhd_fixed(const char *utf8_raw_path, const char *utf8_vhd_path, int *err) {
+MVHDMeta *mvhd_convert_to_vhd_fixed(const char *utf8_raw_path, const char *utf8_vhd_path, MVHDError *err) {
         MVHDGeom geom;
         FILE *raw_img = mvhd_open_existing_raw_img(utf8_raw_path, &geom, err);
         if (raw_img == NULL) {

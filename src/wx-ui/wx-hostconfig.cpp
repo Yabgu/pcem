@@ -70,6 +70,7 @@ int hostconfig_dialog_proc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM
 
         switch (message) {
         case WX_INITDIALOG:
+        {
                 h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO_NETWORK_TYPE"));
                 wx_sendmessage(h, WX_CB_ADDSTRING, 0, (LONG_PARAM) "SLiRP");
                 wx_sendmessage(h, WX_CB_SETCURSEL, 0, 0);
@@ -140,6 +141,7 @@ int hostconfig_dialog_proc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM
 
 #endif
                 return TRUE;
+        }
 
         case WX_COMMAND:
                 if (wParam == wxID_OK) {

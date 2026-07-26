@@ -2115,10 +2115,10 @@ static void aha1542c_eeprom_save(aha154x_t *scsi) {
         fclose(f);
 }
 
-static uint16_t port_sw_mapping[8] = {0x330, 0x334, 0x230, 0x234, 0x130, 0x134, -1, -1};
+static uint16_t port_sw_mapping[8] = {0x330, 0x334, 0x230, 0x234, 0x130, 0x134, 0xFFFF, 0xFFFF};
 
 static void *scsi_aha1542c_init() {
-        aha154x_t *scsi = malloc(sizeof(aha154x_t));
+        aha154x_t *scsi = (aha154x_t *)malloc(sizeof(aha154x_t));
         uint32_t addr;
         int c;
         memset(scsi, 0, sizeof(aha154x_t));
@@ -2161,7 +2161,7 @@ static void *scsi_aha1542c_init() {
 }
 
 static void *scsi_bt545s_init() {
-        aha154x_t *scsi = malloc(sizeof(aha154x_t));
+        aha154x_t *scsi = (aha154x_t *)malloc(sizeof(aha154x_t));
         uint32_t addr;
         memset(scsi, 0, sizeof(aha154x_t));
 

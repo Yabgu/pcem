@@ -99,7 +99,7 @@ bool mvhd_file_is_vhd(FILE *f);
  * \return MVHDMeta pointer. If NULL, check err. err may also be set to MVHD_ERR_TIMESTAMP if
  *         opening a differencing VHD.
  */
-MVHDMeta *mvhd_open(const char *path, bool readonly, int *err);
+MVHDMeta *mvhd_open(const char *path, bool readonly, MVHDError *err);
 
 /**
  * \brief Update the parent modified timestamp in the VHD file

@@ -1000,7 +1000,7 @@ void *azt_common_init(const int type, char *nvr_filename) {
         int loaded_from_eeprom = 0;
         uint16_t addr_setting;
         uint8_t read_eeprom[AZTECH_EEPROM_SIZE];
-        azt2316a_t *azt2316a = malloc(sizeof(azt2316a_t));
+        azt2316a_t *azt2316a = (azt2316a_t *)malloc(sizeof(azt2316a_t));
         memset(azt2316a, 0, sizeof(azt2316a_t));
 
         // load configs from eeprom
@@ -1375,7 +1375,7 @@ void *azt_common_init(const int type, char *nvr_filename) {
           2x6, 2xA, 2xC, 2xE -> DSP chip
 
           2x8, 2x9, 388 and 389 FM chip (9 voices).*/
-        azt2316a->sb = malloc(sizeof(sb_t));
+        azt2316a->sb = (sb_t *)malloc(sizeof(sb_t));
         memset(azt2316a->sb, 0, sizeof(sb_t));
 
         for (i = 0; i < AZTECH_EEPROM_SIZE; i++)
