@@ -3174,7 +3174,7 @@ int voodoo_recomp = 0;
 static inline void *voodoo_get_block(voodoo_t *voodoo, voodoo_params_t *params, voodoo_state_t *state, int odd_even) {
         int c;
         int b = last_block[odd_even];
-        voodoo_x86_data_t *voodoo_x86_data = voodoo->codegen_data;
+        voodoo_x86_data_t *voodoo_x86_data = (voodoo_x86_data_t *)voodoo->codegen_data;
         voodoo_x86_data_t *data;
 
         for (c = 0; c < 8; c++) {

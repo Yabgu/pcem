@@ -275,8 +275,8 @@ extern int codegen_flat_ss;
 void x86illegal();
 
 void x86seg_reset();
-void x86gpf(char *s, uint16_t error);
-void x86gpf_expected(char *s, uint16_t error);
+void x86gpf(const char *s, uint16_t error);
+void x86gpf_expected(const char *s, uint16_t error);
 
 void resetx86();
 void softresetx86();
