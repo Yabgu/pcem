@@ -11,7 +11,7 @@ typedef struct viewer_t
 } viewer_t;
 
 void viewer_reset();
-void viewer_add(char *title, viewer_t *viewer, void *p);
+void viewer_add(const char *title, viewer_t *viewer, void *p);
 void viewer_open(void *hwnd, int id);
 void viewer_remove(void *viewer);
 void viewer_update(viewer_t *viewer, void *p);

@@ -1171,10 +1171,10 @@ void *voodoo_init() {
         type = device_get_config_int("type");
 
         voodoo_set->nr_cards = device_get_config_int("sli") ? 2 : 1;
-        voodoo_set->voodoos[0] = voodoo_card_init();
+        voodoo_set->voodoos[0] = (voodoo_t *)voodoo_card_init();
         voodoo_set->voodoos[0]->set = voodoo_set;
         if (voodoo_set->nr_cards == 2) {
-                voodoo_set->voodoos[1] = voodoo_card_init();
+                voodoo_set->voodoos[1] = (voodoo_t *)voodoo_card_init();
 
                 voodoo_set->voodoos[1]->set = voodoo_set;
 
