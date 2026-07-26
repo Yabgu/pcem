@@ -72,7 +72,7 @@ static void wss_get_buffer(int32_t *buffer, int len, void *p) {
 
 void *wss_init() {
         int opl_emu;
-        wss_t *wss = malloc(sizeof(wss_t));
+        wss_t *wss = (wss_t *)malloc(sizeof(wss_t));
         memset(wss, 0, sizeof(wss_t));
 
         opl_emu = device_get_config_int("opl_emu");

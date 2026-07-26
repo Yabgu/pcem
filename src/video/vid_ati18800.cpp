@@ -193,7 +193,7 @@ static void ega_wonder_800_recalctimings(svga_t *svga) {
 }
 
 void *ati18800_init() {
-        ati18800_t *ati18800 = malloc(sizeof(ati18800_t));
+        ati18800_t *ati18800 = (ati18800_t *)malloc(sizeof(ati18800_t));
         memset(ati18800, 0, sizeof(ati18800_t));
 
         rom_init(&ati18800->bios_rom, "vgaedge16.vbi", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
@@ -214,7 +214,7 @@ void *ati18800_init() {
 void *ega_wonder_800_init() {
         int c;
 
-        ati18800_t *ati18800 = malloc(sizeof(ati18800_t));
+        ati18800_t *ati18800 = (ati18800_t *)malloc(sizeof(ati18800_t));
         memset(ati18800, 0, sizeof(ati18800_t));
 
         rom_init(&ati18800->bios_rom, "ATI EGA Wonder 800+ N1.00.BIN", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);

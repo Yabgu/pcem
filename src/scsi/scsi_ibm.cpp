@@ -1133,7 +1133,7 @@ static void scsi_ibm_reset(void *p) {
 
 static void *scsi_ibm_init() {
         int c;
-        scsi_ibm_t *scsi = malloc(sizeof(scsi_ibm_t));
+        scsi_ibm_t *scsi = (scsi_ibm_t *)malloc(sizeof(scsi_ibm_t));
         memset(scsi, 0, sizeof(scsi_ibm_t));
 
         rom_init_interleaved(&scsi->bios_rom, "92F2244.U68", "92F2245.U69", 0xc8000, 0x8000, 0x7fff, 0x4000,

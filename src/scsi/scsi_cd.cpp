@@ -528,7 +528,7 @@ char *cd_model_from_config(char *config) {
 }
 
 static void scsi_cd_callback(void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         if (data->cmd_pos == CMD_POS_WAIT) {
                 data->wait_time--;
@@ -655,14 +655,14 @@ static void *scsi_cd_atapi_init(scsi_bus_t *bus, int id, atapi_device_t *atapi_d
 }
 
 static void scsi_cd_close(void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         cd_data = NULL;
         free(data);
 }
 
 static void scsi_cd_reset(void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         timer_disable(&data->callback_timer);
         data->cmd_pos = CMD_POS_IDLE;
@@ -822,7 +822,7 @@ uint32_t atapi_get_cd_volume(int channel) {
                                                                     : 0xFF;
 }
 static int scsi_cd_command(uint8_t *cdb, void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
         uint8_t rcdmode = 0;
         int c;
         int len;
@@ -1566,7 +1566,7 @@ static int scsi_cd_command(uint8_t *cdb, void *p) {
 }
 
 static uint8_t scsi_cd_read(void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
         uint8_t temp;
 
         data->data_bytes_read++;
@@ -1579,7 +1579,7 @@ static uint8_t scsi_cd_read(void *p) {
 }
 
 static void scsi_cd_write(uint8_t val, void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         data->data_out[data->data_pos_write++] = val;
 
@@ -1590,18 +1590,18 @@ static void scsi_cd_write(uint8_t val, void *p) {
 }
 
 static int scsi_cd_read_complete(void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         return (data->data_bytes_read == data->bytes_expected);
 }
 static int scsi_cd_write_complete(void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         return (data->bytes_received == data->bytes_required);
 }
 
 static void scsi_cd_start_command(void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         data->bytes_received = 0;
         data->bytes_required = 0;
@@ -1615,25 +1615,25 @@ static void scsi_cd_start_command(void *p) {
 }
 
 static uint8_t scsi_cd_get_status(void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         return data->status;
 }
 
 static uint8_t scsi_cd_get_sense_key(void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         return data->sense_key;
 }
 
 static int scsi_cd_get_bytes_required(void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         return data->bytes_required - data->bytes_received;
 }
 
 static void scsi_cd_atapi_identify(uint16_t *buffer, void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         memset(buffer, 0, 512);
 
@@ -1657,7 +1657,7 @@ static void scsi_cd_atapi_identify(uint16_t *buffer, void *p) {
 }
 
 static int scsi_cd_atapi_set_feature(uint8_t feature, uint8_t val, void *p) {
-        scsi_cd_data_t *data = p;
+        scsi_cd_data_t *data = (scsi_cd_data_t *)p;
 
         switch (feature) {
         case FEATURE_SET_TRANSFER_MODE:

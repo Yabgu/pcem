@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <stdio.h>
 #include <stdlib.h>
 #include "ibm.h"
@@ -201,7 +202,7 @@ void sound_init() {
         initalmain(0, NULL);
         inital();
 
-        outbuffer = malloc(MAXSOUNDBUFLEN * 2 * sizeof(int32_t));
+        outbuffer = (int32_t*)malloc(MAXSOUNDBUFLEN * 2 * sizeof(int32_t));
 
         sound_cd_event = thread_create_event();
         sound_cd_thread_h = thread_create(sound_cd_thread, NULL);

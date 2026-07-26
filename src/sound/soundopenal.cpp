@@ -33,7 +33,7 @@ ALvoid alutInit(ALint *argc, ALbyte **argv) {
 
         // Open device
         // 	Device=alcOpenDevice((ALubyte*)"");
-        Device = alcOpenDevice((void *)"");
+        Device = alcOpenDevice("");
         // Create context(s)
         Context = alcCreateContext(Device, NULL);
         // Set active context

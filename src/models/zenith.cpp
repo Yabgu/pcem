@@ -11,7 +11,7 @@ static uint8_t zenith_scratchpad_read(uint32_t addr, void *p) { return zenith_sc
 static void zenith_scratchpad_write(uint32_t addr, uint8_t val, void *p) { zenith_scratchpad_ram[addr & 0x3fff] = val; }
 
 static void *zenith_scratchpad_init() {
-        zenith_scratchpad_ram = malloc(0x4000);
+        zenith_scratchpad_ram = (uint8_t*)malloc(0x4000);
 
         mem_mapping_disable(&bios_mapping[4]);
         mem_mapping_disable(&bios_mapping[5]);

@@ -663,7 +663,7 @@ static void ncr53c400_dma_callback(void *p) {
 }
 
 static void *scsi_53c400_init(const char *bios_fn) {
-        lcs6821n_t *scsi = malloc(sizeof(lcs6821n_t));
+        lcs6821n_t *scsi = (lcs6821n_t *)malloc(sizeof(lcs6821n_t));
         memset(scsi, 0, sizeof(lcs6821n_t));
 
         rom_init(&scsi->bios_rom, bios_fn, 0xdc000, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);
@@ -691,7 +691,7 @@ static void *scsi_lcs6821n_init() { return scsi_53c400_init("Longshine LCS-6821N
 static void *scsi_rt1000b_init() { return scsi_53c400_init("Rancho_RT1000_RTBios_version_8.10R.bin"); }
 
 static void *scsi_t130b_init() {
-        lcs6821n_t *scsi = malloc(sizeof(lcs6821n_t));
+        lcs6821n_t *scsi = (lcs6821n_t *)malloc(sizeof(lcs6821n_t));
         memset(scsi, 0, sizeof(lcs6821n_t));
 
         rom_init(&scsi->bios_rom, "trantor_t130b_bios_v2.14.bin", 0xdc000, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);

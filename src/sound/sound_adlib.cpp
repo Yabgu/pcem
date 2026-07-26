@@ -54,7 +54,7 @@ void adlib_mca_write(int port, uint8_t val, void *p) {
 }
 
 void *adlib_init() {
-        adlib_t *adlib = malloc(sizeof(adlib_t));
+        adlib_t *adlib = (adlib_t *)malloc(sizeof(adlib_t));
         memset(adlib, 0, sizeof(adlib_t));
 
         pclog("adlib_init\n");
@@ -66,7 +66,7 @@ void *adlib_init() {
 }
 
 void *adlib_mca_init() {
-        adlib_t *adlib = adlib_init();
+        adlib_t *adlib = (adlib_t *)adlib_init();
 
         io_removehandler(0x0388, 0x0002, opl2_read, NULL, NULL, opl2_write, NULL, NULL, &adlib->opl);
         mca_add(adlib_mca_read, adlib_mca_write, NULL, adlib);

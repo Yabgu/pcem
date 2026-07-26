@@ -56,7 +56,7 @@ int ramdisk_write(ramdisk_t *ramdisk, const char *buf, size_t size);
  * @param size Size of the buffer
  * @return 0 on EOF, -1 on error (sets errno), >0 number of bytes read
  */
-int ramdisk_read(ramdisk_t *ramdisk, char *buf, size_t size);
+int ramdisk_read(ramdisk_t *ramdisk, void *buf, size_t size);
 
 /**
  * Seek within the ramdisk. Moves the cursor.

@@ -46,7 +46,7 @@ typedef struct scsi_hd_data {
 } scsi_hd_data;
 
 static void scsi_hd_callback(void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
 
         if (data->cmd_pos == CMD_POS_WAIT) {
                 data->cmd_pos = data->new_cmd_pos;
@@ -73,14 +73,14 @@ static void *scsi_hd_init(scsi_bus_t *bus, int id) {
 }
 
 static void scsi_hd_close(void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
 
         hdd_close(&data->hdd);
         free(data);
 }
 
 static int scsi_add_data(uint8_t val, void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
 
         //        pclog("scsi_add_data : %04x %02x\n", data->data_pos_write, val);
 
@@ -95,7 +95,7 @@ static int scsi_add_data(uint8_t val, void *p) {
 }
 
 static int scsi_get_data(void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
         uint8_t val = data->data_out[data->data_pos_read++];
 
         if (data->data_pos_read > BUFFER_SIZE)
@@ -117,7 +117,7 @@ static void scsi_hd_illegal(scsi_hd_data *data) {
         i++;
 
 static int scsi_hd_command(uint8_t *cdb, void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
         int /*addr, */ len;
         int i = 0;
         int desc;
@@ -712,13 +712,13 @@ static int scsi_hd_command(uint8_t *cdb, void *p) {
 }
 
 static uint8_t scsi_hd_read(void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
 
         return data->data_in[data->data_pos_read++];
 }
 
 static void scsi_hd_write(uint8_t val, void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
 
         data->data_out[data->data_pos_write++] = val;
 
@@ -729,18 +729,18 @@ static void scsi_hd_write(uint8_t val, void *p) {
 }
 
 static int scsi_hd_read_complete(void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
 
         return (data->data_pos_read == data->data_pos_write);
 }
 static int scsi_hd_write_complete(void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
 
         return (data->bytes_received == data->bytes_required);
 }
 
 static void scsi_hd_start_command(void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
 
         data->bytes_received = 0;
         data->bytes_required = 0;
@@ -748,19 +748,19 @@ static void scsi_hd_start_command(void *p) {
 }
 
 static uint8_t scsi_hd_get_status(void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
 
         return data->status;
 }
 
 static uint8_t scsi_hd_get_sense_key(void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
 
         return data->sense_key;
 }
 
 static int scsi_hd_get_bytes_required(void *p) {
-        scsi_hd_data *data = p;
+        scsi_hd_data *data = (scsi_hd_data *)p;
 
         return data->bytes_required - data->bytes_received;
 }
