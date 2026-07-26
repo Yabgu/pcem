@@ -20,7 +20,6 @@ PcemHDC hdc[7];
 extern HDD_CONTROLLER *hdd_controllers[HDDCONTROLLERS_MAX];
 char hdd_controller_name[16];
 
-static device_t null_hdd_device;
 
 static int hdd_controller_current;
 

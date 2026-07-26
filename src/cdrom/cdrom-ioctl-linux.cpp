@@ -9,7 +9,6 @@
 #include "ide.h"
 #include "cdrom-ioctl.h"
 
-static ATAPI ioctl_atapi;
 
 static uint32_t last_block = 0;
 static uint32_t cdrom_capacity = 0;
@@ -381,7 +380,7 @@ static void ioctl_readsector_raw(uint8_t *b, int sector) {
         if (ioctl_fd <= 0)
                 return;
 
-        raw_read_params.msf = malloc(sizeof(struct cdrom_msf));
+        raw_read_params.msf = (struct cdrom_msf *)malloc(sizeof(struct cdrom_msf));
         raw_read_params.msf->cdmsf_frame0 = imsf & 0xff;
         raw_read_params.msf->cdmsf_sec0 = (imsf >> 8) & 0xff;
         raw_read_params.msf->cdmsf_min0 = (imsf >> 16) & 0xff;
@@ -595,6 +594,27 @@ void ioctl_reset() {
         tocvalid = read_toc(ioctl_fd, toc);
 }
 
+static void ioctl_exit(void);
+static ATAPI ioctl_atapi = {ioctl_ready,
+                            ioctl_medium_changed,
+                            ioctl_readtoc,
+                            ioctl_readtoc_session,
+                            ioctl_readtoc_raw,
+                            ioctl_getcurrentsubchannel,
+                            ioctl_readsector,
+                            ioctl_readsector_raw,
+                            ioctl_playaudio,
+                            ioctl_seek,
+                            ioctl_load,
+                            ioctl_eject,
+                            ioctl_pause,
+                            ioctl_resume,
+                            ioctl_size,
+                            ioctl_status,
+                            ioctl_is_track_audio,
+                            ioctl_stop,
+                            ioctl_exit};
+
 void ioctl_set_drive(char d) {
         ioctl_close();
         atapi = &ioctl_atapi;
@@ -615,28 +635,9 @@ void ioctl_close(void) {
         }
 }
 
+
 static void ioctl_exit(void) {
         ioctl_stop();
         ioctl_inited = 0;
         tocvalid = 0;
 }
-
-static ATAPI ioctl_atapi = {ioctl_ready,
-                            ioctl_medium_changed,
-                            ioctl_readtoc,
-                            ioctl_readtoc_session,
-                            ioctl_readtoc_raw,
-                            ioctl_getcurrentsubchannel,
-                            ioctl_readsector,
-                            ioctl_readsector_raw,
-                            ioctl_playaudio,
-                            ioctl_seek,
-                            ioctl_load,
-                            ioctl_eject,
-                            ioctl_pause,
-                            ioctl_resume,
-                            ioctl_size,
-                            ioctl_status,
-                            ioctl_is_track_audio,
-                            ioctl_stop,
-                            ioctl_exit};

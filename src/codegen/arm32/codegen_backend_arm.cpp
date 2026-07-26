@@ -207,7 +207,7 @@ void codegen_backend_init() {
         codegen_gpf_rout = &block_write_data[block_pos];
         host_arm_MOV_IMM(block, REG_R0, 0);
         host_arm_MOV_IMM(block, REG_R1, 0);
-        host_arm_call(block, x86gpf);
+        host_arm_call(block, (void *)(uintptr_t)x86gpf);
 
         codegen_exit_rout = &block_write_data[block_pos];
         host_arm_ADD_IMM(block, REG_HOST_SP, REG_HOST_SP, 0x40);

@@ -675,7 +675,7 @@ static int codegen_FP_ENTER(codeblock_t *block, uop_t *uop) {
 #else
         host_x86_MOV32_REG_IMM(block, REG_EDI, 7);
 #endif
-        host_x86_CALL(block, x86_int);
+        host_x86_CALL(block, (void *)(uintptr_t)x86_int);
         host_x86_JMP(block, codegen_exit_rout);
         *branch_offset = (uint32_t)((uintptr_t)&block_write_data[block_pos] - (uintptr_t)branch_offset) - 4;
 
@@ -693,7 +693,7 @@ static int codegen_MMX_ENTER(codeblock_t *block, uop_t *uop) {
 #else
         host_x86_MOV32_REG_IMM(block, REG_EDI, 7);
 #endif
-        host_x86_CALL(block, x86_int);
+        host_x86_CALL(block, (void *)(uintptr_t)x86_int);
         host_x86_JMP(block, codegen_exit_rout);
         *branch_offset = (uint32_t)((uintptr_t)&block_write_data[block_pos] - (uintptr_t)branch_offset) - 4;
         host_x86_MOV32_ABS_IMM(block, &cpu_state.tag[0], 0x01010101);
@@ -2365,176 +2365,154 @@ static int codegen_XOR_IMM(codeblock_t *block, uop_t *uop) {
         return 0;
 }
 
-const uOpFn uop_handlers[UOP_MAX] = {[UOP_CALL_FUNC & UOP_MASK] = codegen_CALL_FUNC,
-                                     [UOP_CALL_FUNC_RESULT & UOP_MASK] = codegen_CALL_FUNC_RESULT,
-                                     [UOP_CALL_INSTRUCTION_FUNC & UOP_MASK] = codegen_CALL_INSTRUCTION_FUNC,
+uOpFn uop_handlers[UOP_MAX] = {};
 
-                                     [UOP_JMP & UOP_MASK] = codegen_JMP,
-
-                                     [UOP_LOAD_SEG & UOP_MASK] = codegen_LOAD_SEG,
-
-                                     [UOP_LOAD_FUNC_ARG_0 & UOP_MASK] = codegen_LOAD_FUNC_ARG0,
-                                     [UOP_LOAD_FUNC_ARG_1 & UOP_MASK] = codegen_LOAD_FUNC_ARG1,
-                                     [UOP_LOAD_FUNC_ARG_2 & UOP_MASK] = codegen_LOAD_FUNC_ARG2,
-                                     [UOP_LOAD_FUNC_ARG_3 & UOP_MASK] = codegen_LOAD_FUNC_ARG3,
-
-                                     [UOP_LOAD_FUNC_ARG_0_IMM & UOP_MASK] = codegen_LOAD_FUNC_ARG0_IMM,
-                                     [UOP_LOAD_FUNC_ARG_1_IMM & UOP_MASK] = codegen_LOAD_FUNC_ARG1_IMM,
-                                     [UOP_LOAD_FUNC_ARG_2_IMM & UOP_MASK] = codegen_LOAD_FUNC_ARG2_IMM,
-                                     [UOP_LOAD_FUNC_ARG_3_IMM & UOP_MASK] = codegen_LOAD_FUNC_ARG3_IMM,
-
-                                     [UOP_STORE_P_IMM & UOP_MASK] = codegen_STORE_PTR_IMM,
-                                     [UOP_STORE_P_IMM_8 & UOP_MASK] = codegen_STORE_PTR_IMM_8,
-
-                                     [UOP_MEM_LOAD_ABS & UOP_MASK] = codegen_MEM_LOAD_ABS,
-                                     [UOP_MEM_LOAD_REG & UOP_MASK] = codegen_MEM_LOAD_REG,
-                                     [UOP_MEM_LOAD_SINGLE & UOP_MASK] = codegen_MEM_LOAD_SINGLE,
-                                     [UOP_MEM_LOAD_DOUBLE & UOP_MASK] = codegen_MEM_LOAD_DOUBLE,
-
-                                     [UOP_MEM_STORE_ABS & UOP_MASK] = codegen_MEM_STORE_ABS,
-                                     [UOP_MEM_STORE_REG & UOP_MASK] = codegen_MEM_STORE_REG,
-                                     [UOP_MEM_STORE_IMM_8 & UOP_MASK] = codegen_MEM_STORE_IMM_8,
-                                     [UOP_MEM_STORE_IMM_16 & UOP_MASK] = codegen_MEM_STORE_IMM_16,
-                                     [UOP_MEM_STORE_IMM_32 & UOP_MASK] = codegen_MEM_STORE_IMM_32,
-                                     [UOP_MEM_STORE_SINGLE & UOP_MASK] = codegen_MEM_STORE_SINGLE,
-                                     [UOP_MEM_STORE_DOUBLE & UOP_MASK] = codegen_MEM_STORE_DOUBLE,
-
-                                     [UOP_MOV & UOP_MASK] = codegen_MOV,
-                                     [UOP_MOV_PTR & UOP_MASK] = codegen_MOV_PTR,
-                                     [UOP_MOV_IMM & UOP_MASK] = codegen_MOV_IMM,
-                                     [UOP_MOVSX & UOP_MASK] = codegen_MOVSX,
-                                     [UOP_MOVZX & UOP_MASK] = codegen_MOVZX,
-                                     [UOP_MOV_DOUBLE_INT & UOP_MASK] = codegen_MOV_DOUBLE_INT,
-                                     [UOP_MOV_INT_DOUBLE & UOP_MASK] = codegen_MOV_INT_DOUBLE,
-                                     [UOP_MOV_INT_DOUBLE_64 & UOP_MASK] = codegen_MOV_INT_DOUBLE_64,
-                                     [UOP_MOV_REG_PTR & UOP_MASK] = codegen_MOV_REG_PTR,
-                                     [UOP_MOVZX_REG_PTR_8 & UOP_MASK] = codegen_MOVZX_REG_PTR_8,
-                                     [UOP_MOVZX_REG_PTR_16 & UOP_MASK] = codegen_MOVZX_REG_PTR_16,
-
-                                     [UOP_ADD & UOP_MASK] = codegen_ADD,
-                                     [UOP_ADD_IMM & UOP_MASK] = codegen_ADD_IMM,
-                                     [UOP_ADD_LSHIFT & UOP_MASK] = codegen_ADD_LSHIFT,
-                                     [UOP_AND & UOP_MASK] = codegen_AND,
-                                     [UOP_ANDN & UOP_MASK] = codegen_ANDN,
-                                     [UOP_AND_IMM & UOP_MASK] = codegen_AND_IMM,
-                                     [UOP_OR & UOP_MASK] = codegen_OR,
-                                     [UOP_OR_IMM & UOP_MASK] = codegen_OR_IMM,
-                                     [UOP_SUB & UOP_MASK] = codegen_SUB,
-                                     [UOP_SUB_IMM & UOP_MASK] = codegen_SUB_IMM,
-                                     [UOP_XOR & UOP_MASK] = codegen_XOR,
-                                     [UOP_XOR_IMM & UOP_MASK] = codegen_XOR_IMM,
-
-                                     [UOP_SAR & UOP_MASK] = codegen_SAR,
-                                     [UOP_SAR_IMM & UOP_MASK] = codegen_SAR_IMM,
-                                     [UOP_SHL & UOP_MASK] = codegen_SHL,
-                                     [UOP_SHL_IMM & UOP_MASK] = codegen_SHL_IMM,
-                                     [UOP_SHR & UOP_MASK] = codegen_SHR,
-                                     [UOP_SHR_IMM & UOP_MASK] = codegen_SHR_IMM,
-                                     [UOP_ROL & UOP_MASK] = codegen_ROL,
-                                     [UOP_ROL_IMM & UOP_MASK] = codegen_ROL_IMM,
-                                     [UOP_ROR & UOP_MASK] = codegen_ROR,
-                                     [UOP_ROR_IMM & UOP_MASK] = codegen_ROR_IMM,
-
-                                     [UOP_CMP_IMM_JZ & UOP_MASK] = codegen_CMP_IMM_JZ,
-
-                                     [UOP_CMP_JB & UOP_MASK] = codegen_CMP_JB,
-                                     [UOP_CMP_JNBE & UOP_MASK] = codegen_CMP_JNBE,
-
-                                     [UOP_CMP_JNB_DEST & UOP_MASK] = codegen_CMP_JNB_DEST,
-                                     [UOP_CMP_JNBE_DEST & UOP_MASK] = codegen_CMP_JNBE_DEST,
-                                     [UOP_CMP_JNL_DEST & UOP_MASK] = codegen_CMP_JNL_DEST,
-                                     [UOP_CMP_JNLE_DEST & UOP_MASK] = codegen_CMP_JNLE_DEST,
-                                     [UOP_CMP_JNO_DEST & UOP_MASK] = codegen_CMP_JNO_DEST,
-                                     [UOP_CMP_JNZ_DEST & UOP_MASK] = codegen_CMP_JNZ_DEST,
-                                     [UOP_CMP_JB_DEST & UOP_MASK] = codegen_CMP_JB_DEST,
-                                     [UOP_CMP_JBE_DEST & UOP_MASK] = codegen_CMP_JBE_DEST,
-                                     [UOP_CMP_JL_DEST & UOP_MASK] = codegen_CMP_JL_DEST,
-                                     [UOP_CMP_JLE_DEST & UOP_MASK] = codegen_CMP_JLE_DEST,
-                                     [UOP_CMP_JO_DEST & UOP_MASK] = codegen_CMP_JO_DEST,
-                                     [UOP_CMP_JZ_DEST & UOP_MASK] = codegen_CMP_JZ_DEST,
-
-                                     [UOP_CMP_IMM_JNZ_DEST & UOP_MASK] = codegen_CMP_IMM_JNZ_DEST,
-                                     [UOP_CMP_IMM_JZ_DEST & UOP_MASK] = codegen_CMP_IMM_JZ_DEST,
-
-                                     [UOP_TEST_JNS_DEST & UOP_MASK] = codegen_TEST_JNS_DEST,
-                                     [UOP_TEST_JS_DEST & UOP_MASK] = codegen_TEST_JS_DEST,
-
-                                     [UOP_FP_ENTER & UOP_MASK] = codegen_FP_ENTER,
-                                     [UOP_MMX_ENTER & UOP_MASK] = codegen_MMX_ENTER,
-
-                                     [UOP_FADD & UOP_MASK] = codegen_FADD,
-                                     [UOP_FCOM & UOP_MASK] = codegen_FCOM,
-                                     [UOP_FDIV & UOP_MASK] = codegen_FDIV,
-                                     [UOP_FMUL & UOP_MASK] = codegen_FMUL,
-                                     [UOP_FSUB & UOP_MASK] = codegen_FSUB,
-
-                                     [UOP_FABS & UOP_MASK] = codegen_FABS,
-                                     [UOP_FCHS & UOP_MASK] = codegen_FCHS,
-                                     [UOP_FSQRT & UOP_MASK] = codegen_FSQRT,
-                                     [UOP_FTST & UOP_MASK] = codegen_FTST,
-
-                                     [UOP_PACKSSWB & UOP_MASK] = codegen_PACKSSWB,
-                                     [UOP_PACKSSDW & UOP_MASK] = codegen_PACKSSDW,
-                                     [UOP_PACKUSWB & UOP_MASK] = codegen_PACKUSWB,
-
-                                     [UOP_PADDB & UOP_MASK] = codegen_PADDB,
-                                     [UOP_PADDW & UOP_MASK] = codegen_PADDW,
-                                     [UOP_PADDD & UOP_MASK] = codegen_PADDD,
-                                     [UOP_PADDSB & UOP_MASK] = codegen_PADDSB,
-                                     [UOP_PADDSW & UOP_MASK] = codegen_PADDSW,
-                                     [UOP_PADDUSB & UOP_MASK] = codegen_PADDUSB,
-                                     [UOP_PADDUSW & UOP_MASK] = codegen_PADDUSW,
-
-                                     [UOP_PCMPEQB & UOP_MASK] = codegen_PCMPEQB,
-                                     [UOP_PCMPEQW & UOP_MASK] = codegen_PCMPEQW,
-                                     [UOP_PCMPEQD & UOP_MASK] = codegen_PCMPEQD,
-                                     [UOP_PCMPGTB & UOP_MASK] = codegen_PCMPGTB,
-                                     [UOP_PCMPGTW & UOP_MASK] = codegen_PCMPGTW,
-                                     [UOP_PCMPGTD & UOP_MASK] = codegen_PCMPGTD,
-
-                                     [UOP_PF2ID & UOP_MASK] = codegen_PF2ID,
-                                     [UOP_PFADD & UOP_MASK] = codegen_PFADD,
-                                     [UOP_PFCMPEQ & UOP_MASK] = codegen_PFCMPEQ,
-                                     [UOP_PFCMPGE & UOP_MASK] = codegen_PFCMPGE,
-                                     [UOP_PFCMPGT & UOP_MASK] = codegen_PFCMPGT,
-                                     [UOP_PFMAX & UOP_MASK] = codegen_PFMAX,
-                                     [UOP_PFMIN & UOP_MASK] = codegen_PFMIN,
-                                     [UOP_PFMUL & UOP_MASK] = codegen_PFMUL,
-                                     [UOP_PFRCP & UOP_MASK] = codegen_PFRCP,
-                                     [UOP_PFRSQRT & UOP_MASK] = codegen_PFRSQRT,
-                                     [UOP_PFSUB & UOP_MASK] = codegen_PFSUB,
-                                     [UOP_PI2FD & UOP_MASK] = codegen_PI2FD,
-
-                                     [UOP_PMADDWD & UOP_MASK] = codegen_PMADDWD,
-                                     [UOP_PMULHW & UOP_MASK] = codegen_PMULHW,
-                                     [UOP_PMULLW & UOP_MASK] = codegen_PMULLW,
-
-                                     [UOP_PSLLW_IMM & UOP_MASK] = codegen_PSLLW_IMM,
-                                     [UOP_PSLLD_IMM & UOP_MASK] = codegen_PSLLD_IMM,
-                                     [UOP_PSLLQ_IMM & UOP_MASK] = codegen_PSLLQ_IMM,
-                                     [UOP_PSRAW_IMM & UOP_MASK] = codegen_PSRAW_IMM,
-                                     [UOP_PSRAD_IMM & UOP_MASK] = codegen_PSRAD_IMM,
-                                     [UOP_PSRAQ_IMM & UOP_MASK] = codegen_PSRAQ_IMM,
-                                     [UOP_PSRLW_IMM & UOP_MASK] = codegen_PSRLW_IMM,
-                                     [UOP_PSRLD_IMM & UOP_MASK] = codegen_PSRLD_IMM,
-                                     [UOP_PSRLQ_IMM & UOP_MASK] = codegen_PSRLQ_IMM,
-
-                                     [UOP_PSUBB & UOP_MASK] = codegen_PSUBB,
-                                     [UOP_PSUBW & UOP_MASK] = codegen_PSUBW,
-                                     [UOP_PSUBD & UOP_MASK] = codegen_PSUBD,
-                                     [UOP_PSUBSB & UOP_MASK] = codegen_PSUBSB,
-                                     [UOP_PSUBSW & UOP_MASK] = codegen_PSUBSW,
-                                     [UOP_PSUBUSB & UOP_MASK] = codegen_PSUBUSB,
-                                     [UOP_PSUBUSW & UOP_MASK] = codegen_PSUBUSW,
-
-                                     [UOP_PUNPCKHBW & UOP_MASK] = codegen_PUNPCKHBW,
-                                     [UOP_PUNPCKHWD & UOP_MASK] = codegen_PUNPCKHWD,
-                                     [UOP_PUNPCKHDQ & UOP_MASK] = codegen_PUNPCKHDQ,
-                                     [UOP_PUNPCKLBW & UOP_MASK] = codegen_PUNPCKLBW,
-                                     [UOP_PUNPCKLWD & UOP_MASK] = codegen_PUNPCKLWD,
-                                     [UOP_PUNPCKLDQ & UOP_MASK] = codegen_PUNPCKLDQ,
-
-                                     [UOP_NOP_BARRIER & UOP_MASK] = codegen_NOP};
+static const bool _uop_handlers_init = []() -> bool {
+	uop_handlers[UOP_CALL_FUNC & UOP_MASK] = codegen_CALL_FUNC;
+	uop_handlers[UOP_CALL_FUNC_RESULT & UOP_MASK] = codegen_CALL_FUNC_RESULT;
+	uop_handlers[UOP_CALL_INSTRUCTION_FUNC & UOP_MASK] = codegen_CALL_INSTRUCTION_FUNC;
+	uop_handlers[UOP_JMP & UOP_MASK] = codegen_JMP;
+	uop_handlers[UOP_LOAD_SEG & UOP_MASK] = codegen_LOAD_SEG;
+	uop_handlers[UOP_LOAD_FUNC_ARG_0 & UOP_MASK] = codegen_LOAD_FUNC_ARG0;
+	uop_handlers[UOP_LOAD_FUNC_ARG_1 & UOP_MASK] = codegen_LOAD_FUNC_ARG1;
+	uop_handlers[UOP_LOAD_FUNC_ARG_2 & UOP_MASK] = codegen_LOAD_FUNC_ARG2;
+	uop_handlers[UOP_LOAD_FUNC_ARG_3 & UOP_MASK] = codegen_LOAD_FUNC_ARG3;
+	uop_handlers[UOP_LOAD_FUNC_ARG_0_IMM & UOP_MASK] = codegen_LOAD_FUNC_ARG0_IMM;
+	uop_handlers[UOP_LOAD_FUNC_ARG_1_IMM & UOP_MASK] = codegen_LOAD_FUNC_ARG1_IMM;
+	uop_handlers[UOP_LOAD_FUNC_ARG_2_IMM & UOP_MASK] = codegen_LOAD_FUNC_ARG2_IMM;
+	uop_handlers[UOP_LOAD_FUNC_ARG_3_IMM & UOP_MASK] = codegen_LOAD_FUNC_ARG3_IMM;
+	uop_handlers[UOP_STORE_P_IMM & UOP_MASK] = codegen_STORE_PTR_IMM;
+	uop_handlers[UOP_STORE_P_IMM_8 & UOP_MASK] = codegen_STORE_PTR_IMM_8;
+	uop_handlers[UOP_MEM_LOAD_ABS & UOP_MASK] = codegen_MEM_LOAD_ABS;
+	uop_handlers[UOP_MEM_LOAD_REG & UOP_MASK] = codegen_MEM_LOAD_REG;
+	uop_handlers[UOP_MEM_LOAD_SINGLE & UOP_MASK] = codegen_MEM_LOAD_SINGLE;
+	uop_handlers[UOP_MEM_LOAD_DOUBLE & UOP_MASK] = codegen_MEM_LOAD_DOUBLE;
+	uop_handlers[UOP_MEM_STORE_ABS & UOP_MASK] = codegen_MEM_STORE_ABS;
+	uop_handlers[UOP_MEM_STORE_REG & UOP_MASK] = codegen_MEM_STORE_REG;
+	uop_handlers[UOP_MEM_STORE_IMM_8 & UOP_MASK] = codegen_MEM_STORE_IMM_8;
+	uop_handlers[UOP_MEM_STORE_IMM_16 & UOP_MASK] = codegen_MEM_STORE_IMM_16;
+	uop_handlers[UOP_MEM_STORE_IMM_32 & UOP_MASK] = codegen_MEM_STORE_IMM_32;
+	uop_handlers[UOP_MEM_STORE_SINGLE & UOP_MASK] = codegen_MEM_STORE_SINGLE;
+	uop_handlers[UOP_MEM_STORE_DOUBLE & UOP_MASK] = codegen_MEM_STORE_DOUBLE;
+	uop_handlers[UOP_MOV & UOP_MASK] = codegen_MOV;
+	uop_handlers[UOP_MOV_PTR & UOP_MASK] = codegen_MOV_PTR;
+	uop_handlers[UOP_MOV_IMM & UOP_MASK] = codegen_MOV_IMM;
+	uop_handlers[UOP_MOVSX & UOP_MASK] = codegen_MOVSX;
+	uop_handlers[UOP_MOVZX & UOP_MASK] = codegen_MOVZX;
+	uop_handlers[UOP_MOV_DOUBLE_INT & UOP_MASK] = codegen_MOV_DOUBLE_INT;
+	uop_handlers[UOP_MOV_INT_DOUBLE & UOP_MASK] = codegen_MOV_INT_DOUBLE;
+	uop_handlers[UOP_MOV_INT_DOUBLE_64 & UOP_MASK] = codegen_MOV_INT_DOUBLE_64;
+	uop_handlers[UOP_MOV_REG_PTR & UOP_MASK] = codegen_MOV_REG_PTR;
+	uop_handlers[UOP_MOVZX_REG_PTR_8 & UOP_MASK] = codegen_MOVZX_REG_PTR_8;
+	uop_handlers[UOP_MOVZX_REG_PTR_16 & UOP_MASK] = codegen_MOVZX_REG_PTR_16;
+	uop_handlers[UOP_ADD & UOP_MASK] = codegen_ADD;
+	uop_handlers[UOP_ADD_IMM & UOP_MASK] = codegen_ADD_IMM;
+	uop_handlers[UOP_ADD_LSHIFT & UOP_MASK] = codegen_ADD_LSHIFT;
+	uop_handlers[UOP_AND & UOP_MASK] = codegen_AND;
+	uop_handlers[UOP_ANDN & UOP_MASK] = codegen_ANDN;
+	uop_handlers[UOP_AND_IMM & UOP_MASK] = codegen_AND_IMM;
+	uop_handlers[UOP_OR & UOP_MASK] = codegen_OR;
+	uop_handlers[UOP_OR_IMM & UOP_MASK] = codegen_OR_IMM;
+	uop_handlers[UOP_SUB & UOP_MASK] = codegen_SUB;
+	uop_handlers[UOP_SUB_IMM & UOP_MASK] = codegen_SUB_IMM;
+	uop_handlers[UOP_XOR & UOP_MASK] = codegen_XOR;
+	uop_handlers[UOP_XOR_IMM & UOP_MASK] = codegen_XOR_IMM;
+	uop_handlers[UOP_SAR & UOP_MASK] = codegen_SAR;
+	uop_handlers[UOP_SAR_IMM & UOP_MASK] = codegen_SAR_IMM;
+	uop_handlers[UOP_SHL & UOP_MASK] = codegen_SHL;
+	uop_handlers[UOP_SHL_IMM & UOP_MASK] = codegen_SHL_IMM;
+	uop_handlers[UOP_SHR & UOP_MASK] = codegen_SHR;
+	uop_handlers[UOP_SHR_IMM & UOP_MASK] = codegen_SHR_IMM;
+	uop_handlers[UOP_ROL & UOP_MASK] = codegen_ROL;
+	uop_handlers[UOP_ROL_IMM & UOP_MASK] = codegen_ROL_IMM;
+	uop_handlers[UOP_ROR & UOP_MASK] = codegen_ROR;
+	uop_handlers[UOP_ROR_IMM & UOP_MASK] = codegen_ROR_IMM;
+	uop_handlers[UOP_CMP_IMM_JZ & UOP_MASK] = codegen_CMP_IMM_JZ;
+	uop_handlers[UOP_CMP_JB & UOP_MASK] = codegen_CMP_JB;
+	uop_handlers[UOP_CMP_JNBE & UOP_MASK] = codegen_CMP_JNBE;
+	uop_handlers[UOP_CMP_JNB_DEST & UOP_MASK] = codegen_CMP_JNB_DEST;
+	uop_handlers[UOP_CMP_JNBE_DEST & UOP_MASK] = codegen_CMP_JNBE_DEST;
+	uop_handlers[UOP_CMP_JNL_DEST & UOP_MASK] = codegen_CMP_JNL_DEST;
+	uop_handlers[UOP_CMP_JNLE_DEST & UOP_MASK] = codegen_CMP_JNLE_DEST;
+	uop_handlers[UOP_CMP_JNO_DEST & UOP_MASK] = codegen_CMP_JNO_DEST;
+	uop_handlers[UOP_CMP_JNZ_DEST & UOP_MASK] = codegen_CMP_JNZ_DEST;
+	uop_handlers[UOP_CMP_JB_DEST & UOP_MASK] = codegen_CMP_JB_DEST;
+	uop_handlers[UOP_CMP_JBE_DEST & UOP_MASK] = codegen_CMP_JBE_DEST;
+	uop_handlers[UOP_CMP_JL_DEST & UOP_MASK] = codegen_CMP_JL_DEST;
+	uop_handlers[UOP_CMP_JLE_DEST & UOP_MASK] = codegen_CMP_JLE_DEST;
+	uop_handlers[UOP_CMP_JO_DEST & UOP_MASK] = codegen_CMP_JO_DEST;
+	uop_handlers[UOP_CMP_JZ_DEST & UOP_MASK] = codegen_CMP_JZ_DEST;
+	uop_handlers[UOP_CMP_IMM_JNZ_DEST & UOP_MASK] = codegen_CMP_IMM_JNZ_DEST;
+	uop_handlers[UOP_CMP_IMM_JZ_DEST & UOP_MASK] = codegen_CMP_IMM_JZ_DEST;
+	uop_handlers[UOP_TEST_JNS_DEST & UOP_MASK] = codegen_TEST_JNS_DEST;
+	uop_handlers[UOP_TEST_JS_DEST & UOP_MASK] = codegen_TEST_JS_DEST;
+	uop_handlers[UOP_FP_ENTER & UOP_MASK] = codegen_FP_ENTER;
+	uop_handlers[UOP_MMX_ENTER & UOP_MASK] = codegen_MMX_ENTER;
+	uop_handlers[UOP_FADD & UOP_MASK] = codegen_FADD;
+	uop_handlers[UOP_FCOM & UOP_MASK] = codegen_FCOM;
+	uop_handlers[UOP_FDIV & UOP_MASK] = codegen_FDIV;
+	uop_handlers[UOP_FMUL & UOP_MASK] = codegen_FMUL;
+	uop_handlers[UOP_FSUB & UOP_MASK] = codegen_FSUB;
+	uop_handlers[UOP_FABS & UOP_MASK] = codegen_FABS;
+	uop_handlers[UOP_FCHS & UOP_MASK] = codegen_FCHS;
+	uop_handlers[UOP_FSQRT & UOP_MASK] = codegen_FSQRT;
+	uop_handlers[UOP_FTST & UOP_MASK] = codegen_FTST;
+	uop_handlers[UOP_PACKSSWB & UOP_MASK] = codegen_PACKSSWB;
+	uop_handlers[UOP_PACKSSDW & UOP_MASK] = codegen_PACKSSDW;
+	uop_handlers[UOP_PACKUSWB & UOP_MASK] = codegen_PACKUSWB;
+	uop_handlers[UOP_PADDB & UOP_MASK] = codegen_PADDB;
+	uop_handlers[UOP_PADDW & UOP_MASK] = codegen_PADDW;
+	uop_handlers[UOP_PADDD & UOP_MASK] = codegen_PADDD;
+	uop_handlers[UOP_PADDSB & UOP_MASK] = codegen_PADDSB;
+	uop_handlers[UOP_PADDSW & UOP_MASK] = codegen_PADDSW;
+	uop_handlers[UOP_PADDUSB & UOP_MASK] = codegen_PADDUSB;
+	uop_handlers[UOP_PADDUSW & UOP_MASK] = codegen_PADDUSW;
+	uop_handlers[UOP_PCMPEQB & UOP_MASK] = codegen_PCMPEQB;
+	uop_handlers[UOP_PCMPEQW & UOP_MASK] = codegen_PCMPEQW;
+	uop_handlers[UOP_PCMPEQD & UOP_MASK] = codegen_PCMPEQD;
+	uop_handlers[UOP_PCMPGTB & UOP_MASK] = codegen_PCMPGTB;
+	uop_handlers[UOP_PCMPGTW & UOP_MASK] = codegen_PCMPGTW;
+	uop_handlers[UOP_PCMPGTD & UOP_MASK] = codegen_PCMPGTD;
+	uop_handlers[UOP_PF2ID & UOP_MASK] = codegen_PF2ID;
+	uop_handlers[UOP_PFADD & UOP_MASK] = codegen_PFADD;
+	uop_handlers[UOP_PFCMPEQ & UOP_MASK] = codegen_PFCMPEQ;
+	uop_handlers[UOP_PFCMPGE & UOP_MASK] = codegen_PFCMPGE;
+	uop_handlers[UOP_PFCMPGT & UOP_MASK] = codegen_PFCMPGT;
+	uop_handlers[UOP_PFMAX & UOP_MASK] = codegen_PFMAX;
+	uop_handlers[UOP_PFMIN & UOP_MASK] = codegen_PFMIN;
+	uop_handlers[UOP_PFMUL & UOP_MASK] = codegen_PFMUL;
+	uop_handlers[UOP_PFRCP & UOP_MASK] = codegen_PFRCP;
+	uop_handlers[UOP_PFRSQRT & UOP_MASK] = codegen_PFRSQRT;
+	uop_handlers[UOP_PFSUB & UOP_MASK] = codegen_PFSUB;
+	uop_handlers[UOP_PI2FD & UOP_MASK] = codegen_PI2FD;
+	uop_handlers[UOP_PMADDWD & UOP_MASK] = codegen_PMADDWD;
+	uop_handlers[UOP_PMULHW & UOP_MASK] = codegen_PMULHW;
+	uop_handlers[UOP_PMULLW & UOP_MASK] = codegen_PMULLW;
+	uop_handlers[UOP_PSLLW_IMM & UOP_MASK] = codegen_PSLLW_IMM;
+	uop_handlers[UOP_PSLLD_IMM & UOP_MASK] = codegen_PSLLD_IMM;
+	uop_handlers[UOP_PSLLQ_IMM & UOP_MASK] = codegen_PSLLQ_IMM;
+	uop_handlers[UOP_PSRAW_IMM & UOP_MASK] = codegen_PSRAW_IMM;
+	uop_handlers[UOP_PSRAD_IMM & UOP_MASK] = codegen_PSRAD_IMM;
+	uop_handlers[UOP_PSRAQ_IMM & UOP_MASK] = codegen_PSRAQ_IMM;
+	uop_handlers[UOP_PSRLW_IMM & UOP_MASK] = codegen_PSRLW_IMM;
+	uop_handlers[UOP_PSRLD_IMM & UOP_MASK] = codegen_PSRLD_IMM;
+	uop_handlers[UOP_PSRLQ_IMM & UOP_MASK] = codegen_PSRLQ_IMM;
+	uop_handlers[UOP_PSUBB & UOP_MASK] = codegen_PSUBB;
+	uop_handlers[UOP_PSUBW & UOP_MASK] = codegen_PSUBW;
+	uop_handlers[UOP_PSUBD & UOP_MASK] = codegen_PSUBD;
+	uop_handlers[UOP_PSUBSB & UOP_MASK] = codegen_PSUBSB;
+	uop_handlers[UOP_PSUBSW & UOP_MASK] = codegen_PSUBSW;
+	uop_handlers[UOP_PSUBUSB & UOP_MASK] = codegen_PSUBUSB;
+	uop_handlers[UOP_PSUBUSW & UOP_MASK] = codegen_PSUBUSW;
+	uop_handlers[UOP_PUNPCKHBW & UOP_MASK] = codegen_PUNPCKHBW;
+	uop_handlers[UOP_PUNPCKHWD & UOP_MASK] = codegen_PUNPCKHWD;
+	uop_handlers[UOP_PUNPCKHDQ & UOP_MASK] = codegen_PUNPCKHDQ;
+	uop_handlers[UOP_PUNPCKLBW & UOP_MASK] = codegen_PUNPCKLBW;
+	uop_handlers[UOP_PUNPCKLWD & UOP_MASK] = codegen_PUNPCKLWD;
+	uop_handlers[UOP_PUNPCKLDQ & UOP_MASK] = codegen_PUNPCKLDQ;
+	uop_handlers[UOP_NOP_BARRIER & UOP_MASK] = codegen_NOP;
+	return true;
+}();
 
 void codegen_direct_read_8(codeblock_t *block, int host_reg, void *p) { host_x86_MOV8_REG_ABS(block, host_reg, p); }
 void codegen_direct_read_16(codeblock_t *block, int host_reg, void *p) { host_x86_MOV16_REG_ABS(block, host_reg, p); }

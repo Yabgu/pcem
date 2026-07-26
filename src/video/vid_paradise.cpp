@@ -16,12 +16,14 @@
 #include "vid_unk_ramdac.h"
 #include "wd76c10.h"
 
+enum { PVGA1A = 0, WD90C11 };
+
 typedef struct paradise_t {
         svga_t svga;
 
         rom_t bios_rom;
 
-        enum { PVGA1A = 0, WD90C11 } type;
+        int type;
 
         uint32_t read_bank[4], write_bank[4];
 } paradise_t;

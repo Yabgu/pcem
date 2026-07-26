@@ -26,7 +26,7 @@ struct ir_data_t *codegen_get_ir_data();
 
 typedef int (*uOpFn)(codeblock_t *codeblock, struct uop_t *uop);
 
-extern const uOpFn uop_handlers[];
+extern uOpFn uop_handlers[];
 
 /*Register will not be preserved across function calls*/
 #define HOST_REG_FLAG_VOLATILE (1 << 0)

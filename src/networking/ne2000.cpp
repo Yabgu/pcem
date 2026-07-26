@@ -1810,7 +1810,6 @@ void ne2000_close(void *p) {
 
 static device_config_t ne2000_config[] = {{.name = "addr",
                                            .description = "Address",
-                                           .type = CONFIG_BINARY,
                                            .type = CONFIG_SELECTION,
                                            .selection = {{.description = "0x280", .value = 0x280},
                                                          {.description = "0x300", .value = 0x300},

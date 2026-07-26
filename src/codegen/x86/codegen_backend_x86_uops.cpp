@@ -679,7 +679,7 @@ static int codegen_FP_ENTER(codeblock_t *block, uop_t *uop) {
         branch_offset = host_x86_JZ_long(block);
         host_x86_MOV32_ABS_IMM(block, &cpu_state.oldpc, uop->imm_data);
         host_x86_MOV32_STACK_IMM(block, STACK_ARG0, 7);
-        host_x86_CALL(block, x86_int);
+        host_x86_CALL(block, (void *)(uintptr_t)x86_int);
         host_x86_JMP(block, codegen_exit_rout);
         *branch_offset = (uint32_t)((uintptr_t)&block_write_data[block_pos] - (uintptr_t)branch_offset) - 4;
 
@@ -694,7 +694,7 @@ static int codegen_MMX_ENTER(codeblock_t *block, uop_t *uop) {
         branch_offset = host_x86_JZ_long(block);
         host_x86_MOV32_ABS_IMM(block, &cpu_state.oldpc, uop->imm_data);
         host_x86_MOV32_STACK_IMM(block, STACK_ARG0, 7);
-        host_x86_CALL(block, x86_int);
+        host_x86_CALL(block, (void *)(uintptr_t)x86_int);
         host_x86_JMP(block, codegen_exit_rout);
         *branch_offset = (uint32_t)((uintptr_t)&block_write_data[block_pos] - (uintptr_t)branch_offset) - 4;
         host_x86_MOV32_ABS_IMM(block, &cpu_state.tag[0], 0x01010101);

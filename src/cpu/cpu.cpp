@@ -81,7 +81,6 @@ enum { CPUID_3DNOW = (1 << 31) };
 
 int cpu = 3, cpu_manufacturer = 0;
 CPU *cpu_s;
-int cpu_multi;
 int cpu_iscyrix;
 int cpu_16bitbus;
 int cpu_busspeed;
@@ -163,8 +162,6 @@ int fpu_get_type_from_index(int model, int manu, int cpu, int c) {
 
         return fpus[c].type;
 }
-
-CPU *cpu_s;
 
 void cpu_set() {
         if (!models[model]->cpu[cpu_manufacturer].cpus) {

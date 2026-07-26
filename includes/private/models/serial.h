@@ -12,9 +12,7 @@ void serial1_remove();
 void serial2_remove();
 void serial_reset();
 
-struct SERIAL;
-
-typedef struct {
+typedef struct SERIAL {
         uint8_t lsr, thr, mctrl, rcr, iir, ier, lcr, msr;
         uint8_t dlab1, dlab2;
         uint8_t dat;

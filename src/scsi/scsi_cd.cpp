@@ -1278,7 +1278,7 @@ static int scsi_cd_command(uint8_t *cdb, void *p) {
                                 uint8_t opcode;
                                 uint8_t polled;
                                 uint8_t reserved2[2];
-                                uint8_t class;
+                                uint8_t cls;
                                 uint8_t reserved3[2];
                                 uint16_t len;
                                 uint8_t control;
@@ -1325,7 +1325,7 @@ static int scsi_cd_command(uint8_t *cdb, void *p) {
                          * notification_class_request_type enum above specifies the
                          * priority: upper elements are higher prio than lower ones.
                          */
-                        if (gesn_cdb->class & (1 << GESN_MEDIA)) {
+                        if (gesn_cdb->cls & (1 << GESN_MEDIA)) {
                                 gesn_event_header->notification_class |= GESN_MEDIA;
                                 used_len = atapi_event_status(data->data_in);
                         } else {

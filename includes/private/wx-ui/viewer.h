@@ -32,8 +32,9 @@ extern viewer_t viewer_vram;
 
 #ifdef __cplusplus
 }
+#endif
 
-
+#if defined(__cplusplus) && defined(wxFRAME_H)
 class Viewer: public wxFrame
 {
 public:
@@ -58,7 +59,6 @@ public:
 	{
 	}
 };
-
 #endif
 
 #endif

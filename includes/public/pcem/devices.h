@@ -27,8 +27,8 @@ typedef struct device_config_t {
         char description[256];
         int type;
         char default_string[256];
-        int default_int;
         device_config_selection_t selection[30];
+        int default_int;
 } device_config_t;
 
 typedef struct device_t {

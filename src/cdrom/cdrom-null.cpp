@@ -4,7 +4,6 @@
 
 extern int cdrom_drive;
 
-static ATAPI null_atapi;
 
 void cdrom_null_audio_callback(int16_t *output, int len) { memset(output, 0, len * 2); }
 
@@ -45,18 +44,9 @@ static uint32_t null_size() { return 0; }
 
 static int null_status() { return CD_STATUS_EMPTY; }
 
-void cdrom_null_reset() {}
-
-int cdrom_null_open(char d) {
-        atapi = &null_atapi;
-        return 0;
-}
-
-void null_close(void) {}
-
-static void null_exit(void) {}
-
 static int null_is_track_audio(uint32_t pos, int ismsf) { return 0; }
+static void null_exit(void);
+void cdrom_null_reset() {}
 
 static ATAPI null_atapi = {null_ready,
                            null_medium_changed,
@@ -77,3 +67,13 @@ static ATAPI null_atapi = {null_ready,
                            null_is_track_audio,
                            null_stop,
                            null_exit};
+
+int cdrom_null_open(char d) {
+        atapi = &null_atapi;
+        return 0;
+}
+
+void null_close(void) {}
+
+static void null_exit(void) {}
+

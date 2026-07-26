@@ -686,7 +686,7 @@ static int codegen_FP_ENTER(codeblock_t *block, uop_t *uop) {
         host_arm_MOV_IMM(block, REG_TEMP, uop->imm_data);
         host_arm_STR_IMM(block, REG_TEMP, REG_CPUSTATE, (uintptr_t)&cpu_state.oldpc - (uintptr_t)&cpu_state);
         host_arm_MOV_IMM(block, REG_ARG0, 7);
-        host_arm_call(block, x86_int);
+        host_arm_call(block, (void *)(uintptr_t)x86_int);
         host_arm_B(block, (uintptr_t)codegen_exit_rout);
 
         *branch_ptr |= ((((uintptr_t)&block_write_data[block_pos] - (uintptr_t)branch_ptr) - 8) & 0x3fffffc) >> 2;
@@ -706,7 +706,7 @@ static int codegen_MMX_ENTER(codeblock_t *block, uop_t *uop) {
         host_arm_MOV_IMM(block, REG_TEMP, uop->imm_data);
         host_arm_STR_IMM(block, REG_TEMP, REG_CPUSTATE, (uintptr_t)&cpu_state.oldpc - (uintptr_t)&cpu_state);
         host_arm_MOV_IMM(block, REG_ARG0, 7);
-        host_arm_call(block, x86_int);
+        host_arm_call(block, (void *)(uintptr_t)x86_int);
         host_arm_B(block, (uintptr_t)codegen_exit_rout);
 
         *branch_ptr |= ((((uintptr_t)&block_write_data[block_pos] - (uintptr_t)branch_ptr) - 8) & 0x3fffffc) >> 2;
