@@ -11,14 +11,7 @@
 
 #define peek2(a) (nvrram[(a##1)] + 10 * nvrram[(a##10)])
 
-extern struct internal_clock_t {
-        int sec;
-        int min;
-        int hour;
-        int mday;
-        int mon;
-        int year;
-} internal_clock;
+struct internal_clock_t internal_clock;
 
 /* Table for days in each month */
 static int rtc_days_in_month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};

@@ -33,4 +33,15 @@ void tc8521_get(uint8_t *nvrram);
 void tc8521_internal_set_nvrram(uint8_t *nvrram);
 void tc8521_internal_sync(uint8_t *nvrram);
 
+struct internal_clock_t {
+        int sec;
+        int min;
+        int hour;
+        int mday;
+        int mon;
+        int year;
+};
+
+extern struct internal_clock_t internal_clock;
+
 #endif /* _RTC_TC8521_H_ */
