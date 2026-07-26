@@ -755,7 +755,7 @@ void *sigma_init() {
         contrast = device_get_config_int("contrast");
         sigma->enable_nmi = device_get_config_int("enable_nmi");
 
-        loadfont("sigma400_font.rom", 7);
+        loadfont("sigma400_font.rom", FONT_SIGMA400/*7*/);
         rom_init(&sigma->bios_rom, "sigma400_bios.rom", 0xC0000, 0x2000, 0x1FFF, 0, MEM_MAPPING_EXTERNAL);
         /* The BIOS ROM is overlaid by RAM, so remove its default mapping
          * and access it through sigma_bread() / sigma_bwrite() below */

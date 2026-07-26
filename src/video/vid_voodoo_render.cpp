@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include "ibm.h"
 #include "device.h"
+#include "viewer.h"
 #include "mem.h"
 #include "thread.h"
 #include "video.h"
@@ -12,7 +13,6 @@
 #include "vid_voodoo_regs.h"
 #include "vid_voodoo_render.h"
 #include "vid_voodoo_texture.h"
-#include "viewer.h"
 #include "viewer_voodoo.h"
 
 typedef struct voodoo_state_t {

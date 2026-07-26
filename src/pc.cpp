@@ -17,6 +17,7 @@
 #include "cpu.h"
 #include "disc.h"
 #include "disc_img.h"
+#include "viewer.h"
 #include "mem.h"
 #include "x86_ops.h"
 #include "codegen.h"
@@ -61,7 +62,6 @@
 #include "x86.h"
 #include "paths.h"
 #include "plugin.h"
-#include "viewer.h"
 
 #ifdef USE_NETWORKING
 #include "nethandler.h"

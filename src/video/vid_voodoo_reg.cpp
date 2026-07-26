@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include "ibm.h"
 #include "device.h"
+#include "viewer.h"
 #include "mem.h"
 #include "thread.h"
 #include "video.h"
@@ -17,7 +18,6 @@
 #include "vid_voodoo_render.h"
 #include "vid_voodoo_setup.h"
 #include "vid_voodoo_texture.h"
-#include "viewer.h"
 #include "viewer_voodoo.h"
 
 enum { CHIP_FBI = 0x1, CHIP_TREX0 = 0x2, CHIP_TREX1 = 0x4, CHIP_TREX2 = 0x8 };

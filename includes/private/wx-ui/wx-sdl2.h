@@ -5,9 +5,9 @@ extern "C" {
 #endif
 
 void leave_fullscreen();
-int getfile(void *hwnd, char *f, char *fn);
-int getsfile(void *hwnd, char *f, char *fn, char *dir, char *ext);
-int getfilewithcaption(void *hwnd, char *f, char *fn, char *caption);
+int getfile(void *hwnd, const char *f, const char *fn);
+int getsfile(void *hwnd, const char *f, const char *fn, const char *dir, const char *ext);
+int getfilewithcaption(void *hwnd, const char *f, const char *fn, const char *caption);
 void screenshot_taken(unsigned char *rgb, int width, int height);
 
 #ifdef __cplusplus

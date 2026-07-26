@@ -150,7 +150,7 @@ int pgc_commandlist_append(pgc_commandlist_t *list, uint8_t v) {
                 list->listmax = 4096;
         }
         while (list->wrptr >= list->listmax) {
-                uint8_t *buf = realloc(list->list, 2 * list->listmax);
+                uint8_t *buf = (uint8_t *)realloc(list->list, 2 * list->listmax);
                 if (!buf) {
                         PGCLOG(("Out of memory growing command list\n"));
                         return 0;
@@ -1164,7 +1164,7 @@ void pgc_write(uint32_t addr, uint8_t val, void *p) {
                                 break;
 
                         case 0x030C: /* Display type */
-                                pgc_setdisplay(p, pgc->mapram[0x30C]);
+                                pgc_setdisplay(pgc, pgc->mapram[0x30C]);
                                 pgc->mapram[0x30D] = pgc->mapram[0x30C];
                                 break;
 
@@ -2096,7 +2096,7 @@ void pgc_core_init(pgc_core_t *pgc, int maxw, int maxh, int visw, int vish,
         pgc->vish = vish;
         pgc->vram = (uint8_t *)malloc(maxw * maxh);
         pgc->cga_vram = (uint8_t *)malloc(0x4000);
-        pgc->clist = calloc(256, sizeof(pgc_commandlist_t));
+        pgc->clist = (pgc_commandlist_t*)calloc(256, sizeof(pgc_commandlist_t));
         pgc->clcur = NULL;
         pgc->native_pixel_clock = native_pixel_clock;
 

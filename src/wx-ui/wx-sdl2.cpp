@@ -1,3 +1,10 @@
+#if !defined(__APPLE__) && !defined(_WIN32)
+/* unistd.h declares int pause(void) which conflicts with the pause variable */
+#define pause _pause_func
+#include <unistd.h>
+#undef pause
+#endif
+
 #include "wx-sdl2.h"
 
 #include <SDL2/SDL.h>
@@ -37,6 +44,7 @@
 #include "thread.h"
 #include "disc.h"
 #include "disc_img.h"
+#include "viewer.h"
 #include "mem.h"
 #include "paths.h"
 #include "nethandler.h"
@@ -49,7 +57,6 @@
 #include "plugin.h"
 #include "pic.h"
 
-#include "viewer.h"
 
 #if __APPLE__
 #define pause __pause
@@ -650,7 +657,7 @@ int wx_stop() {
 }
 
 char openfilestring[260];
-int getfile(void *hwnd, char *f, char *fn) {
+int getfile(void *hwnd, const char *f, const char *fn) {
         int ret = wx_filedialog(hwnd, "Open", fn, f, 0, 1, openfilestring);
 #ifdef __APPLE__
         /* wxWidgets on OSX may mess up the SDL-window somehow, so just in case we reset it here */
@@ -659,7 +666,7 @@ int getfile(void *hwnd, char *f, char *fn) {
         return ret;
 }
 
-int getsfile(void *hwnd, char *f, char *fn, char *dir, char *ext) {
+int getsfile(void *hwnd, const char *f, const char *fn, const char *dir, const char *ext) {
         int ret = wx_filedialog(hwnd, "Save", dir, f, ext, 0, openfilestring);
 #ifdef __APPLE__
         window_doreset = 1;
@@ -667,7 +674,7 @@ int getsfile(void *hwnd, char *f, char *fn, char *dir, char *ext) {
         return ret;
 }
 
-int getfilewithcaption(void *hwnd, char *f, char *fn, char *caption) {
+int getfilewithcaption(void *hwnd, const char *f, const char *fn, const char *caption) {
         int ret = wx_filedialog(hwnd, caption, fn, f, 0, 1, openfilestring);
 #ifdef __APPLE__
         /* wxWidgets on OSX may mess up the SDL-window somehow, so just in case we reset it here */

@@ -2,13 +2,13 @@
 /*This is intended to be used by another SVGA driver, and not as a card in it's own right*/
 #include <stdlib.h>
 #include "ibm.h"
+#include "viewer.h"
 #include "mem.h"
 #include "video.h"
 #include "vid_svga.h"
 #include "vid_svga_render.h"
 #include "io.h"
 #include "timer.h"
-#include "viewer.h"
 
 #define svga_output 0
 

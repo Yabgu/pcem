@@ -701,7 +701,7 @@ int wx_stop() {
 }
 
 char openfilestring[260] = {0};
-int getfile(void *hwnd, char *f, char *fn) {
+int getfile(void *hwnd, const char *f, const char *fn) {
         int ret = wx_filedialog(hwnd, "Open", fn, f, 0, 1, openfilestring);
 #ifdef __APPLE__
         /* wxWidgets on OSX may mess up the SDL-window somehow, so just in case we reset it here */
@@ -710,7 +710,7 @@ int getfile(void *hwnd, char *f, char *fn) {
         return ret;
 }
 
-int getsfile(void *hwnd, char *f, char *fn, char *dir, char *ext) {
+int getsfile(void *hwnd, const char *f, const char *fn, const char *dir, const char *ext) {
         int ret = wx_filedialog(hwnd, "Save", dir, f, ext, 0, openfilestring);
 #ifdef __APPLE__
         window_doreset = 1;
@@ -718,7 +718,7 @@ int getsfile(void *hwnd, char *f, char *fn, char *dir, char *ext) {
         return ret;
 }
 
-int getfilewithcaption(void *hwnd, char *f, char *fn, char *caption) {
+int getfilewithcaption(void *hwnd, const char *f, const char *fn, const char *caption) {
         int ret = wx_filedialog(hwnd, caption, fn, f, 0, 1, openfilestring);
 #ifdef __APPLE__
         /* wxWidgets on OSX may mess up the SDL-window somehow, so just in case we reset it here */

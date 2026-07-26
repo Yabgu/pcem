@@ -3,6 +3,7 @@
 #include <math.h>
 #include "ibm.h"
 #include "device.h"
+#include "viewer.h"
 #include "mem.h"
 #include "pci.h"
 #include "thread.h"
@@ -20,7 +21,6 @@
 #include "vid_voodoo_regs.h"
 #include "vid_voodoo_render.h"
 #include "vid_voodoo_texture.h"
-#include "viewer.h"
 
 rgba8_t rgb332[0x100], ai44[0x100], rgb565[0x10000], argb1555[0x10000], argb4444[0x10000], ai88[0x10000];
 
