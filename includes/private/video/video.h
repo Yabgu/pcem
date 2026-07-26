@@ -90,7 +90,7 @@ typedef enum {
         FONT_IM1024,   /* Image Manager 1024 */
 } fontformat_t;
 
-void loadfont(char *s, fontformat_t format);
+void loadfont(const char *s, fontformat_t format);
 
 void initvideo();
 void video_init();

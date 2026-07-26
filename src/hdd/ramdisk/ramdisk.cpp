@@ -165,7 +165,7 @@ int ramdisk_set_size(ramdisk_t *ramdisk, size_t size) {
         return 0;
 }
 
-int ramdisk_write(ramdisk_t *ramdisk, const char *buf, size_t size) {
+int ramdisk_write(ramdisk_t *ramdisk, const void *buf, size_t size) {
         if (ramdisk->stream->cursor > MAX_STREAM_SIZE - size)
                 size = MAX_STREAM_SIZE - ramdisk->stream->cursor;
 

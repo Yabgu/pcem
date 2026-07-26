@@ -179,7 +179,7 @@ static void *scsi_zip_init(scsi_bus_t *bus, int id) {
 }
 
 static void *scsi_zip_atapi_init(scsi_bus_t *bus, int id, atapi_device_t *atapi_dev) {
-        scsi_zip_data *data = scsi_zip_init(bus, id);
+        scsi_zip_data *data = (scsi_zip_data *)scsi_zip_init(bus, id);
 
         data->is_atapi = 1;
         data->atapi_dev = atapi_dev;

@@ -691,7 +691,7 @@ void pas16_get_buffer(int32_t *buffer, int len, void *p) {
 }
 
 void *pas16_init() {
-        pas16_t *pas16 = malloc(sizeof(pas16_t));
+        pas16_t *pas16 = (pas16_t *)malloc(sizeof(pas16_t));
         memset(pas16, 0, sizeof(pas16_t));
 
         opl3_init(&pas16->opl, 0);

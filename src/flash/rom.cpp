@@ -50,7 +50,7 @@ uint32_t rom_readl(uint32_t addr, void *p) {
         return *(uint32_t *)&rom->rom[addr & rom->mask];
 }
 
-int rom_init(rom_t *rom, char *fn, uint32_t address, int size, int mask, int file_offset, uint32_t flags) {
+int rom_init(rom_t *rom, const char *fn, uint32_t address, int size, int mask, int file_offset, uint32_t flags) {
         FILE *f = romfopen(fn, "rb");
 
         if (!f) {

@@ -1,4 +1,5 @@
 /*CGA emulation*/
+#include <cstdint>
 #include <stdlib.h>
 #include <math.h>
 #include "ibm.h"
@@ -415,7 +416,7 @@ void cga_init(cga_t *cga) {
 
 void *cga_standalone_init() {
         int display_type, contrast;
-        cga_t *cga = malloc(sizeof(cga_t));
+        cga_t *cga = (cga_t *)malloc(sizeof(cga_t));
         memset(cga, 0, sizeof(cga_t));
 
         display_type = device_get_config_int("display_type");
@@ -424,7 +425,7 @@ void *cga_standalone_init() {
         cga->snow_enabled = device_get_config_int("snow_enabled");
         contrast = device_get_config_int("contrast");
 
-        cga->vram = malloc(0x4000);
+        cga->vram = (uint8_t*)malloc(0x4000);
 
         cga_comp_init(cga->revision);
 

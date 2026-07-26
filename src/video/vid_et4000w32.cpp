@@ -843,8 +843,8 @@ uint8_t et4000w32p_mmu_read(uint32_t addr, void *p) {
 }
 
 static int et4000w32_max_x[8] = {0, 0, 4, 8, 16, 32, 64, 0x70000000};
-static int et4000w32_wrap_x[8] = {0, 0, 3, 7, 15, 31, 63, 0xFFFFFFFF};
-static int et4000w32_wrap_y[8] = {1, 2, 4, 8, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF};
+static int et4000w32_wrap_x[8] = {0, 0, 3, 7, 15, 31, 63, -1};
+static int et4000w32_wrap_y[8] = {1, 2, 4, 8, -1, -1, -1, -1};
 
 int bltout = 0;
 void et4000w32_blit_start(et4000w32p_t *et4000) {
@@ -1343,7 +1343,7 @@ void et4000w32p_pci_write(int func, int addr, uint8_t val, void *p) {
 void *et4000w32p_init() {
         int vram_size;
         int offset;
-        et4000w32p_t *et4000 = malloc(sizeof(et4000w32p_t));
+        et4000w32p_t *et4000 = (et4000w32p_t *)malloc(sizeof(et4000w32p_t));
         memset(et4000, 0, sizeof(et4000w32p_t));
 
         vram_size = device_get_config_int("memory");

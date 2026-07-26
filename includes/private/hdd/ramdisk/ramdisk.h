@@ -46,7 +46,7 @@ int ramdisk_set_size(ramdisk_t *ramdisk, size_t size);
  * @param size Size of the buffer
  * @return 0 on EOF, -1 on error (sets errno), >0 number of bytes written
  */
-int ramdisk_write(ramdisk_t *ramdisk, const char *buf, size_t size);
+int ramdisk_write(ramdisk_t *ramdisk, const void *buf, size_t size);
 
 /**
  * Read data from ramdisk at cursor.

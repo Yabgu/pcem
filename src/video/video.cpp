@@ -926,7 +926,7 @@ uint8_t fontdatksc5601_user[192][32]; /* Korean KSC-5601 user defined font */
 
 int xsize = 1, ysize = 1;
 
-void loadfont(char *s, fontformat_t format) {
+void loadfont(const char *s, fontformat_t format) {
         FILE *f = romfopen(s, "rb");
         int c, d;
 

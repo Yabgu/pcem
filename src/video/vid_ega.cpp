@@ -1,4 +1,5 @@
 /*EGA emulation*/
+#include <cstdint>
 #include <stdlib.h>
 #include "ibm.h"
 #include "device.h"
@@ -934,7 +935,7 @@ uint8_t ega_read(uint32_t addr, void *p) {
 void ega_init(ega_t *ega, int monitor_type, int is_mono) {
         int c, d, e;
 
-        ega->vram = malloc(0x40000);
+        ega->vram = (uint8_t*)malloc(0x40000);
         ega->vrammask = 0x3ffff;
 
         for (c = 0; c < 256; c++) {
@@ -1033,7 +1034,7 @@ void ega_init(ega_t *ega, int monitor_type, int is_mono) {
 }
 
 void *ega_standalone_init() {
-        ega_t *ega = malloc(sizeof(ega_t));
+        ega_t *ega = (ega_t *)malloc(sizeof(ega_t));
         memset(ega, 0, sizeof(ega_t));
         int monitor_type;
 

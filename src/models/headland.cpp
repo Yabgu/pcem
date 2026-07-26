@@ -3,6 +3,7 @@
 #include "mem.h"
 #include "cpu.h"
 #include "x86.h"
+#include <cstdint>
 
 #include "headland.h"
 
@@ -386,7 +387,7 @@ uint8_t mem_read_headlandb(uint32_t addr, void *priv) {
 }
 
 void mem_write_headlandb(uint32_t addr, uint8_t val, void *priv) {
-        addr = get_headland_addr(addr, priv);
+        addr = get_headland_addr(addr, (uint16_t*)priv);
         if (addr < (mem_size << 10))
                 ram[addr] = val;
 }
@@ -396,7 +397,7 @@ uint16_t mem_read_headlandw(uint32_t addr, void *priv) {
 
         if ((addr & 0x3FFF) == 0x3FFF)
                 pclog("mem_read_headlandw(%08X, %p) called.\n", addr, priv);
-        addr = get_headland_addr(addr, priv);
+        addr = get_headland_addr(addr, (uint16_t*)priv);
         if (addr < (mem_size << 10))
                 val = *(uint16_t *)&ram[addr];
 
@@ -406,7 +407,7 @@ uint16_t mem_read_headlandw(uint32_t addr, void *priv) {
 void mem_write_headlandw(uint32_t addr, uint16_t val, void *priv) {
         if ((addr & 0x3FFF) == 0x3FFF)
                 pclog("mem_write_headlandw(%08X, %04X, %p) called.\n", addr, val, priv);
-        addr = get_headland_addr(addr, priv);
+        addr = get_headland_addr(addr, (uint16_t*)priv);
         if (addr < (mem_size << 10))
                 *(uint16_t *)&ram[addr] = val;
 }
@@ -416,7 +417,7 @@ uint32_t mem_read_headlandl(uint32_t addr, void *priv) {
 
         if ((addr & 0x3FFF) > 0x3FFC)
                 pclog("mem_read_headlandl(%08X, %p) called.\n", addr, priv);
-        addr = get_headland_addr(addr, priv);
+        addr = get_headland_addr(addr, (uint16_t*)priv);
         if (addr < (mem_size << 10))
                 val = *(uint32_t *)&ram[addr];
 
@@ -426,7 +427,7 @@ uint32_t mem_read_headlandl(uint32_t addr, void *priv) {
 void mem_write_headlandl(uint32_t addr, uint32_t val, void *priv) {
         if ((addr & 0x3FFF) > 0x3FFC)
                 pclog("mem_write_headland(%08X, %08X, %p) called.\n", addr, val, priv);
-        addr = get_headland_addr(addr, priv);
+        addr = get_headland_addr(addr, (uint16_t*)priv);
         if (addr < (mem_size << 10))
                 *(uint32_t *)&ram[addr] = val;
 }

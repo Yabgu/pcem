@@ -1,4 +1,5 @@
 /*MDA emulation*/
+#include <cstdint>
 #include <stdlib.h>
 #include "ibm.h"
 #include "device.h"
@@ -231,12 +232,12 @@ void mda_poll(void *p) {
 }
 
 void *mda_standalone_init() {
-        mda_t *mda = malloc(sizeof(mda_t));
+        mda_t *mda = (mda_t *)malloc(sizeof(mda_t));
 
         memset(mda, 0, sizeof(mda_t));
         mda_init(mda);
 
-        mda->vram = malloc(0x1000);
+        mda->vram = (uint8_t*)malloc(0x1000);
         mem_mapping_add(&mda->mapping, 0xb0000, 0x08000, mda_read, NULL, NULL, mda_write, NULL, NULL, NULL, MEM_MAPPING_EXTERNAL,
                         mda);
         io_sethandler(0x03b0, 0x0010, mda_in, NULL, NULL, mda_out, NULL, NULL, mda);

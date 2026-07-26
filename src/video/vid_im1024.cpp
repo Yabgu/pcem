@@ -811,10 +811,10 @@ static const pgc_command_t im1024_commands[] = {{"BLKMOV", 0xDF, hndl_blkmov, pg
                                                 {"******", 0x00, NULL}};
 
 void *im1024_init() {
-        im1024_t *im1024 = malloc(sizeof(im1024_t));
+        im1024_t *im1024 = (im1024_t *)malloc(sizeof(im1024_t));
         memset(im1024, 0, sizeof(im1024_t));
 
-        im1024->fifo = malloc(4096);
+        im1024->fifo = (unsigned char *)malloc(4096);
         im1024->fifo_len = 4096;
         im1024->fifo_wrptr = 0;
         im1024->fifo_rdptr = 0;

@@ -268,7 +268,7 @@ void mach64_ext_writew(uint32_t addr, uint16_t val, void *priv);
 void mach64_ext_writel(uint32_t addr, uint32_t val, void *priv);
 
 void mach64_out(uint16_t addr, uint8_t val, void *p) {
-        mach64_t *mach64 = p;
+        mach64_t *mach64 = (mach64_t *)p;
         svga_t *svga = &mach64->svga;
         uint8_t old;
 
@@ -332,7 +332,7 @@ void mach64_out(uint16_t addr, uint8_t val, void *p) {
 }
 
 uint8_t mach64_in(uint16_t addr, void *p) {
-        mach64_t *mach64 = p;
+        mach64_t *mach64 = (mach64_t *)p;
         svga_t *svga = &mach64->svga;
 
         if (((addr & 0xFFF0) == 0x3D0 || (addr & 0xFFF0) == 0x3B0) && !(svga->miscout & 1))
@@ -4000,7 +4000,7 @@ void mach64_pci_write(int func, int addr, uint8_t val, void *p) {
 }
 
 static void *mach64_common_init() {
-        mach64_t *mach64 = malloc(sizeof(mach64_t));
+        mach64_t *mach64 = (mach64_t *)malloc(sizeof(mach64_t));
         memset(mach64, 0, sizeof(mach64_t));
 
         mach64->vram_size = device_get_config_int("memory");
@@ -4045,7 +4045,7 @@ static void *mach64_common_init() {
 }
 
 static void *mach64gx_init() {
-        mach64_t *mach64 = mach64_common_init();
+        mach64_t *mach64 = (mach64_t *)mach64_common_init();
 
         mach64->type = MACH64_GX;
         mach64->pci_id = (int)'X' | ((int)'G' << 8);
@@ -4064,7 +4064,7 @@ static void *mach64gx_init() {
         return mach64;
 }
 static void *mach64vt2_init() {
-        mach64_t *mach64 = mach64_common_init();
+        mach64_t *mach64 = (mach64_t *)mach64_common_init();
         svga_t *svga = &mach64->svga;
 
         mach64->type = MACH64_VT2;

@@ -1,4 +1,5 @@
 /*Plantronics ColorPlus emulation*/
+#include <cstdint>
 #include <stdlib.h>
 #include <math.h>
 #include "ibm.h"
@@ -297,10 +298,10 @@ void colorplus_poll(void *p) {
 
 void *colorplus_init() {
         int display_type, contrast;
-        colorplus_t *colorplus = malloc(sizeof(colorplus_t));
+        colorplus_t *colorplus = (colorplus_t *)malloc(sizeof(colorplus_t));
         memset(colorplus, 0, sizeof(colorplus_t));
 
-        colorplus->cga.vram = malloc(0x8000);
+        colorplus->cga.vram = (uint8_t*)malloc(0x8000);
         colorplus->cga.composite = colorplus->cga.snow_enabled = 0;
 
         display_type = device_get_config_int("display_type");

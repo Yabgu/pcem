@@ -1965,8 +1965,8 @@ static void cl_pci_write(int func, int addr, uint8_t val, void *p) {
         }
 }
 
-static void *cl_init(int type, char *fn, int pci_card, uint32_t force_vram_size) {
-        gd5429_t *gd5429 = malloc(sizeof(gd5429_t));
+static void *cl_init(int type, const char *fn, int pci_card, uint32_t force_vram_size) {
+        gd5429_t *gd5429 = (gd5429_t *)malloc(sizeof(gd5429_t));
         svga_t *svga = &gd5429->svga;
         int vram_size;
         memset(gd5429, 0, sizeof(gd5429_t));
@@ -2044,7 +2044,7 @@ static void *ibm_gd5428_init() {
         gd5429_t *gd5429;
         svga_t *mb_vga = svga_get_pri();
 
-        gd5429 = cl_init(CL_TYPE_GD5428, "SVGA141.ROM", -1, 1); /*Only supports 1MB*/
+        gd5429 = (gd5429_t *)cl_init(CL_TYPE_GD5428, "SVGA141.ROM", -1, 1); /*Only supports 1MB*/
         gd5429->mb_vga = mb_vga;
 
         mca_add(ibm_gd5428_mca_read, ibm_gd5428_mca_write, ibm_gd5428_mca_reset, gd5429);
