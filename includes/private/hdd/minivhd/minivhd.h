@@ -165,7 +165,7 @@ MVHDMeta *mvhd_create_diff(const char *path, const char *par_path, int *err);
  *
  * \retval NULL if an error occurrs. Check value of *err for actual error. Otherwise returns pointer to a MVHDMeta struct
  */
-MVHDMeta *mvhd_create_ex(MVHDCreationOptions options, int *err);
+MVHDMeta *mvhd_create_ex(MVHDCreationOptions options, MVHDError *err);
 
 /**
  * \brief Safely close a VHD image

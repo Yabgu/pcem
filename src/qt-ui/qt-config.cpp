@@ -1501,7 +1501,7 @@ static int create_drive_vhd_fixed(void *data) {
 static int create_drive_vhd_dynamic(int blocksize) {
         MVHDGeom geometry = {.cyl = hd_new_cyl, .heads = hd_new_hpc, .spt = hd_new_spt};
         adjust_pcem_geometry_for_vhd(&geometry);
-        int vhd_error = 0;
+        MVHDError vhd_error = MVHD_ERR_UNKNOWN;
         MVHDCreationOptions options;
         options.block_size_in_sectors = blocksize;
         options.path = hd_new_name;
@@ -1519,7 +1519,7 @@ static int create_drive_vhd_dynamic(int blocksize) {
 }
 
 static int create_drive_vhd_diff(char *parent_filename, int blocksize) {
-        int vhd_error = 0;
+        MVHDError vhd_error = MVHD_ERR_UNKNOWN;
         MVHDCreationOptions options;
         options.block_size_in_sectors = blocksize;
         options.path = hd_new_name;

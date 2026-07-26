@@ -1,7 +1,7 @@
 #ifndef _KEYBOARD_H_
 #define _KEYBOARD_H_
 extern void (*keyboard_send)(uint8_t val);
-extern void (*keyboard_poll)();
+extern void (*keyboard_poll)(void*);
 void keyboard_process();
 extern int keyboard_scan;
 

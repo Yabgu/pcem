@@ -418,7 +418,7 @@ MVHDMeta *mvhd_create_diff(const char *path, const char *par_path, int *err) {
         return mvhd_create_sparse_diff(path, par_path, 0, NULL, MVHD_BLOCK_LARGE, err);
 }
 
-MVHDMeta *mvhd_create_ex(MVHDCreationOptions options, int *err) {
+MVHDMeta *mvhd_create_ex(MVHDCreationOptions options, MVHDError *err) {
         uint32_t geom_sector_size;
         switch (options.type) {
         case MVHD_TYPE_FIXED:
