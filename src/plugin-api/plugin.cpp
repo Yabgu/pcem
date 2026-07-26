@@ -30,12 +30,12 @@ char plugin_path[512] = {0};
 char default_plugin_path[512] = {0};
 
 #ifdef PLUGIN_ENGINE
-void set_plugin_path(char *s) {
+void set_plugin_path(const char *s) {
         safe_strncpy(plugin_path, s, 512);
 }
 
 void pluginengine_load_config() {
-        char *cfg_plugin_path = config_get_string(CFG_GLOBAL, "Paths", "plugin_path", 0);
+        const char *cfg_plugin_path = config_get_string(CFG_GLOBAL, "Paths", "plugin_path", 0);
 
         if (cfg_plugin_path)
                 set_plugin_path(cfg_plugin_path);

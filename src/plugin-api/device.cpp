@@ -92,7 +92,7 @@ void device_add_status_info(char *s, int max_len) {
         }
 }
 
-int device_get_config_int(char *s) {
+int device_get_config_int(const char *s) {
         device_config_t *config = current_device->config;
 
         while (config->type != -1) {
@@ -104,7 +104,7 @@ int device_get_config_int(char *s) {
         return 0;
 }
 
-char *device_get_config_string(char *s) {
+const char *device_get_config_string(const char *s) {
         device_config_t *config = current_device->config;
 
         while (config->type != -1) {
@@ -116,7 +116,7 @@ char *device_get_config_string(char *s) {
         return NULL;
 }
 
-int model_get_config_int(char *s) {
+int model_get_config_int(const char *s) {
         device_t *device = model_getdevice(model);
         device_config_t *config;
 
@@ -134,7 +134,7 @@ int model_get_config_int(char *s) {
         return 0;
 }
 
-char *model_get_config_string(char *s) {
+const char *model_get_config_string(const char *s) {
         device_t *device = model_getdevice(model);
         device_config_t *config;
 
@@ -152,7 +152,7 @@ char *model_get_config_string(char *s) {
         return NULL;
 }
 
-int pcem_device_get_config_int(device_t *device, char *s) {
+int pcem_device_get_config_int(device_t *device, const char *s) {
         device_config_t *config = device->config;
 
         while (config->type != -1) {
@@ -164,7 +164,7 @@ int pcem_device_get_config_int(device_t *device, char *s) {
         return 0;
 }
 
-char *pcem_device_get_config_string(device_t *device, char *s) {
+const char *pcem_device_get_config_string(device_t *device, const char *s) {
         device_config_t *config = device->config;
 
         while (config->type != -1) {
@@ -176,7 +176,7 @@ char *pcem_device_get_config_string(device_t *device, char *s) {
         return NULL;
 }
 
-int pcem_model_get_config_int(device_t *device, char *s) {
+int pcem_model_get_config_int(device_t *device, const char *s) {
         device_config_t *config;
 
         if (!device)
@@ -193,7 +193,7 @@ int pcem_model_get_config_int(device_t *device, char *s) {
         return 0;
 }
 
-char *pcem_model_get_config_string(device_t *device, char *s) {
+const char *pcem_model_get_config_string(device_t *device, const char *s) {
         device_config_t *config;
 
         if (!device)

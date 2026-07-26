@@ -662,7 +662,7 @@ static void ncr53c400_dma_callback(void *p) {
         }
 }
 
-static void *scsi_53c400_init(char *bios_fn) {
+static void *scsi_53c400_init(const char *bios_fn) {
         lcs6821n_t *scsi = malloc(sizeof(lcs6821n_t));
         memset(scsi, 0, sizeof(lcs6821n_t));
 

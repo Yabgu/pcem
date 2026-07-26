@@ -11,6 +11,6 @@ void tc8521_savenvr();
 
 void tc8521_nvr_recalc();
 
-FILE *nvrfopen(char *fn, char *mode);
+FILE *nvrfopen(const char *fn, const char *mode);
 
 #endif /* _NVR_TC8521_H_ */

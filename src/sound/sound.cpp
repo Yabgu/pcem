@@ -60,7 +60,7 @@ int sound_card_available(int card) {
         return 1;
 }
 
-char *sound_card_getname(int card) {
+const char *sound_card_getname(int card) {
         if (sound_cards[card] != NULL)
                 return sound_cards[card]->name;
 
@@ -80,13 +80,13 @@ int sound_card_has_config(int card) {
         return sound_cards[card]->device->config ? 1 : 0;
 }
 
-char *sound_card_get_internal_name(int card) {
+const char *sound_card_get_internal_name(int card) {
         if (sound_cards[card] != NULL)
                 return sound_cards[card]->internal_name;
         return "error-no-name";
 }
 
-int sound_card_get_from_internal_name(char *s) {
+int sound_card_get_from_internal_name(const char *s) {
         int c = 0;
 
         while (sound_cards[c] != NULL) {

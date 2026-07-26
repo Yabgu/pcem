@@ -91,7 +91,7 @@ void config_free(int is_global) {
         }
 }
 
-int config_free_section(int is_global, char *name) {
+int config_free_section(int is_global, const char *name) {
         section_t *current_section, *prev_section;
         list_t *head = is_global ? &global_config_head : &machine_config_head;
         current_section = (section_t *)head->next;
@@ -124,7 +124,7 @@ int config_free_section(int is_global, char *name) {
         return 0;
 }
 
-void config_load(int is_global, char *fn) {
+void config_load(int is_global, const char *fn) {
         FILE *f = fopen(fn, "rt");
         section_t *current_section;
         list_t *head = is_global ? &global_config_head : &machine_config_head;
@@ -223,7 +223,7 @@ void config_new() {
         fclose(f);
 }
 
-static section_t *find_section(char *name, int is_global) {
+static section_t *find_section(const char *name, int is_global) {
         section_t *current_section;
         char blank[256] = "";
         list_t *head = is_global ? &global_config_head : &machine_config_head;
@@ -241,7 +241,7 @@ static section_t *find_section(char *name, int is_global) {
         return NULL;
 }
 
-static entry_t *find_entry(section_t *section, char *name) {
+static entry_t *find_entry(section_t *section, const char *name) {
         entry_t *current_entry;
 
         current_entry = (entry_t *)section->entry_head.next;
@@ -255,7 +255,7 @@ static entry_t *find_entry(section_t *section, char *name) {
         return NULL;
 }
 
-static section_t *create_section(char *name, int is_global) {
+static section_t *create_section(const char *name, int is_global) {
         section_t *new_section = (section_t *)malloc(sizeof(section_t));
         list_t *head = is_global ? &global_config_head : &machine_config_head;
 
@@ -266,7 +266,7 @@ static section_t *create_section(char *name, int is_global) {
         return new_section;
 }
 
-static entry_t *create_entry(section_t *section, char *name) {
+static entry_t *create_entry(section_t *section, const char *name) {
         entry_t *new_entry = (entry_t *)malloc(sizeof(entry_t));
         memset(new_entry, 0, sizeof(entry_t));
         strncpy(new_entry->name, name, 256);
@@ -275,7 +275,7 @@ static entry_t *create_entry(section_t *section, char *name) {
         return new_entry;
 }
 
-int config_get_int(int is_global, char *head, char *name, int def) {
+int config_get_int(int is_global, const char *head, const char *name, int def) {
         section_t *section;
         entry_t *entry;
         int value;
@@ -295,7 +295,7 @@ int config_get_int(int is_global, char *head, char *name, int def) {
         return value;
 }
 
-float config_get_float(int is_global, char *head, char *name, float def) {
+float config_get_float(int is_global, const char *head, const char *name, float def) {
         section_t *section;
         entry_t *entry;
         float value;
@@ -315,7 +315,7 @@ float config_get_float(int is_global, char *head, char *name, float def) {
         return value;
 }
 
-char *config_get_string(int is_global, char *head, char *name, char *def) {
+const char *config_get_string(int is_global, const char *head, const char *name, const char *def) {
         section_t *section;
         entry_t *entry;
 
@@ -332,7 +332,7 @@ char *config_get_string(int is_global, char *head, char *name, char *def) {
         return entry->data;
 }
 
-void config_set_int(int is_global, char *head, char *name, int val) {
+void config_set_int(int is_global, const char *head, const char *name, int val) {
         section_t *section;
         entry_t *entry;
 
@@ -349,7 +349,7 @@ void config_set_int(int is_global, char *head, char *name, int val) {
         sprintf(entry->data, "%i", val);
 }
 
-void config_set_float(int is_global, char *head, char *name, float val) {
+void config_set_float(int is_global, const char *head, const char *name, float val) {
         section_t *section;
         entry_t *entry;
 
@@ -366,7 +366,7 @@ void config_set_float(int is_global, char *head, char *name, float val) {
         sprintf(entry->data, "%f", val);
 }
 
-void config_set_string(int is_global, char *head, char *name, char *val) {
+void config_set_string(int is_global, const char *head, const char *name, const char *val) {
         section_t *section;
         entry_t *entry;
 
@@ -393,7 +393,7 @@ char *get_filename(char *s) {
         return s;
 }
 
-void append_filename(char *dest, char *s1, char *s2, int size) { sprintf(dest, "%s%s", s1, s2); }
+void append_filename(char *dest, const char *s1, const char *s2, int size) { sprintf(dest, "%s%s", s1, s2); }
 
 void append_slash(char *s, int size) {
         int c = strlen(s) - 1;
@@ -428,7 +428,7 @@ char *get_extension(char *s) {
         return &s[c + 1];
 }
 
-void config_save(int is_global, char *fn) {
+void config_save(int is_global, const char *fn) {
         FILE *f = fopen(fn, "wt");
         section_t *current_section;
         list_t *head = is_global ? &global_config_head : &machine_config_head;

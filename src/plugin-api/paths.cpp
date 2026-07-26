@@ -142,11 +142,11 @@ void set_default_screenshots_path(char *s) {
 }
 
 void paths_loadconfig() {
-        char *cfg_roms_paths = config_get_string(CFG_GLOBAL, "Paths", "roms_paths", 0);
-        char *cfg_nvr_path = config_get_string(CFG_GLOBAL, "Paths", "nvr_path", 0);
-        char *cfg_configs_path = config_get_string(CFG_GLOBAL, "Paths", "configs_path", 0);
-        char *cfg_logs_path = config_get_string(CFG_GLOBAL, "Paths", "logs_path", 0);
-        char *cfg_screenshots_path = config_get_string(CFG_GLOBAL, "Paths", "screenshots_path", 0);
+        const char *cfg_roms_paths = config_get_string(CFG_GLOBAL, "Paths", "roms_paths", 0);
+        const char *cfg_nvr_path = config_get_string(CFG_GLOBAL, "Paths", "nvr_path", 0);
+        const char *cfg_configs_path = config_get_string(CFG_GLOBAL, "Paths", "configs_path", 0);
+        const char *cfg_logs_path = config_get_string(CFG_GLOBAL, "Paths", "logs_path", 0);
+        const char *cfg_screenshots_path = config_get_string(CFG_GLOBAL, "Paths", "screenshots_path", 0);
 
         if (cfg_roms_paths)
                 safe_strncpy(default_roms_paths, cfg_roms_paths, 4096);

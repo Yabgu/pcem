@@ -1248,7 +1248,7 @@ static void es1371_speed_changed(void *p) {
 
 void es1371_add_status_info_dac(es1371_t *es1371, char *s, int max_len, int dac_nr) {
         int ena = dac_nr ? INT_DAC2_EN : INT_DAC1_EN;
-        char *dac_name = dac_nr ? "DAC2 (Wave)" : "DAC1 (MIDI)";
+        const char *dac_name = dac_nr ? "DAC2 (Wave)" : "DAC1 (MIDI)";
         char temps[128];
 
         if (es1371->int_ctrl & ena) {

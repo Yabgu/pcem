@@ -30,7 +30,7 @@ typedef struct nvr_t {
         int onesec_cnt;
 } nvr_t;
 
-FILE *nvrfopen(char *fn, char *mode) {
+FILE *nvrfopen(const char *fn, const char *mode) {
         char s[512];
         FILE *f;
 
