@@ -1318,7 +1318,7 @@ void s3_updatemapping(s3_t *s3) {
                         s3->linear_size = 0x200000;
                         break;
                 case 3: /* 4MB or 8MB depending on card maximum */
-                        switch(s3->chip) { 
+                        switch(s3->chip) {
                             case S3_TRIO64: /* 4MB cards go first.... */
                                 s3->linear_size = 0x400000;
                                 break;
@@ -2870,7 +2870,7 @@ static int vram_sizes[] = {
         0, 0, 0, 3 /*8 MB*/
 };
 
-static void *s3_init(char *bios_fn, int chip) {
+static void *s3_init(const char *bios_fn, int chip) {
         s3_t *s3 = (s3_t *)malloc(sizeof(s3_t));
         svga_t *svga = &s3->svga;
         int vram;
@@ -2953,7 +2953,7 @@ static void *s3_init(char *bios_fn, int chip) {
 }
 
 void *s3_bahamas64_init() {
-        s3_t *s3 = s3_init("bahamas64.bin", S3_VISION864);
+        s3_t *s3 = (s3_t *)s3_init("bahamas64.bin", S3_VISION864);
 
         s3->id = 0xc0; /*Vision864P*/
         s3->id_ext = s3->id_ext_pci = 0xc0;
@@ -2969,7 +2969,7 @@ void *s3_bahamas64_init() {
 int s3_bahamas64_available() { return rom_present("bahamas64.bin"); }
 
 void *s3_9fx_init() {
-        s3_t *s3 = s3_init("s3_764.bin", S3_TRIO64);
+        s3_t *s3 = (s3_t *)s3_init("s3_764.bin", S3_TRIO64);
 
         s3->id = 0xe1; /*Trio64*/
         s3->id_ext = s3->id_ext_pci = 0x11;
@@ -2984,7 +2984,7 @@ void *s3_9fx_init() {
 int s3_9fx_available() { return rom_present("s3_764.bin"); }
 
 void *s3_phoenix_trio32_init() {
-        s3_t *s3 = s3_init("86c732p.bin", S3_TRIO32);
+        s3_t *s3 = (s3_t *)s3_init("86c732p.bin", S3_TRIO32);
 
         s3->id = 0xe1; /*Trio32*/
         s3->id_ext = 0x10;
@@ -3000,7 +3000,7 @@ void *s3_phoenix_trio32_init() {
 int s3_phoenix_trio32_available() { return rom_present("86c732p.bin"); }
 
 void *s3_phoenix_trio64_init() {
-        s3_t *s3 = s3_init("86c764x1.bin", S3_TRIO64);
+        s3_t *s3 = (s3_t *)s3_init("86c764x1.bin", S3_TRIO64);
 
         s3->id = 0xe1; /*Trio64*/
         s3->id_ext = s3->id_ext_pci = 0x11;

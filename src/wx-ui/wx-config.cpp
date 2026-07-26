@@ -22,6 +22,7 @@
 #include "wx-config-eventbinder.h"
 
 #include "minivhd/minivhd.h"
+#include <cstdint>
 
 //#define MAX_CYLINDERS ((((1 << 28)-1) / 16) / 63)
 #define MAX_CYLINDERS 265264 /*Award 430VX won't POST with a larger drive*/
@@ -42,7 +43,8 @@ int has_been_inited = 0;
 static int hd_changed = 0;
 
 static char hd_new_name[512];
-static int hd_new_spt, hd_new_hpc, hd_new_cyl;
+static uint8_t hd_new_spt, hd_new_hpc;
+static uint16_t hd_new_cyl;
 static int hd_new_type;
 static int new_cdrom_channel;
 static int new_zip_channel;
@@ -1249,7 +1251,7 @@ int config_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM lParam)
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBOLPT1"));
                         temp_lpt1_current = wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0);
 
-                        deviceconfig_open(hdlg, lpt_get_device(temp_lpt1_current));
+                        deviceconfig_open(hdlg, /*TODO device_t type */(device_t *)lpt_get_device(temp_lpt1_current));
                 } else if (wParam == WX_ID("IDC_COMBOLPT1")) {
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBOLPT1"));
                         temp_lpt1_current = wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0);

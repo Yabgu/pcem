@@ -1299,8 +1299,8 @@ static int scsi_cd_command(uint8_t *cdb, void *p) {
                         } * gesn_event_header;
                         unsigned int used_len;
 
-                        gesn_cdb = (gesn_cdb_t *)cdb;
-                        gesn_event_header = (gesn_event_header_t *)data->data_in;
+                        gesn_cdb = (struct gesn_cdb_t *)cdb;
+                        gesn_event_header = (struct gesn_event_header_t *)data->data_in;
 
                         /* It is fine by the MMC spec to not support async mode operations */
                         if (!(gesn_cdb->polled & 0x01)) { /* asynchronous mode */

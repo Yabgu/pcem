@@ -493,7 +493,7 @@ void mvhd_close(MVHDMeta *vhdm) {
         }
 }
 
-int mvhd_diff_update_par_timestamp(MVHDMeta *vhdm, int *err) {
+int mvhd_diff_update_par_timestamp(MVHDMeta *vhdm, MVHDError *err) {
         uint8_t sparse_buff[1024];
         if (vhdm == NULL || err == NULL) {
                 *err = MVHD_ERR_INVALID_PARAMS;

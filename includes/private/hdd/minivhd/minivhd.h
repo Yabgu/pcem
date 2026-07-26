@@ -25,7 +25,8 @@ typedef enum MVHDError {
         MVHD_ERR_INVALID_BLOCK_SIZE,
         MVHD_ERR_INVALID_PARAMS,
         MVHD_ERR_CONV_SIZE,
-        MVHD_ERR_TIMESTAMP
+        MVHD_ERR_TIMESTAMP,
+        MVHD_ERR_UNKNOWN = 0,
 } MVHDError;
 
 typedef enum MVHDType { MVHD_TYPE_FIXED = 2, MVHD_TYPE_DYNAMIC = 3, MVHD_TYPE_DIFF = 4 } MVHDType;
@@ -117,7 +118,7 @@ MVHDMeta *mvhd_open(const char *path, bool readonly, MVHDError *err);
  *
  * \return non-zero on error, 0 on success
  */
-int mvhd_diff_update_par_timestamp(MVHDMeta *vhdm, int *err);
+int mvhd_diff_update_par_timestamp(MVHDMeta *vhdm, MVHDError *err);
 
 /**
  * \brief Create a fixed VHD image
