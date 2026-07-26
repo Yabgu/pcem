@@ -81,14 +81,7 @@ endif()
 if(${PCEM_DISPLAY_ENGINE} STREQUAL "wxWidgets")
 add_executable(pcem ${PCEM_SRC} ${PCEM_PRIVATE_API} ${PCEM_EMBEDDED_PLUGIN_API})
 endif()
-set_source_files_properties(
-    ${CMAKE_CURRENT_SOURCE_DIR}/codegen/codegen_timing_p6.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/codegen/codegen_timing_k6.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hdd/minivhd/minivhd_convert.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hdd/minivhd/minivhd_create.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/hdd/minivhd/minivhd_manage.cpp
-    PROPERTIES LANGUAGE C
-)
+
 target_compile_definitions(pcem PUBLIC ${PCEM_DEFINES})
 target_compile_options(pcem PUBLIC $<$<COMPILE_LANGUAGE:CXX>:-fno-common> $<$<COMPILE_LANGUAGE:C>:-fno-common>)
 target_compile_options(pcem PUBLIC $<$<COMPILE_LANGUAGE:CXX>:-fpermissive>)

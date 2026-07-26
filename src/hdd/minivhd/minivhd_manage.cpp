@@ -2,6 +2,7 @@
  * \file
  * \brief VHD management functions (open, close, read write etc)
  */
+#include <cstdint>
 #ifndef _FILE_OFFSET_BITS
 #define _FILE_OFFSET_BITS 64
 #endif
@@ -97,7 +98,7 @@ static bool mvhd_sparse_checksum_valid(MVHDMeta *vhdm) {
  * \retval 0 if the function call succeeds
  */
 static int mvhd_read_bat(MVHDMeta *vhdm, MVHDError *err) {
-        vhdm->block_offset = calloc(vhdm->sparse.max_bat_ent, sizeof *vhdm->block_offset);
+        vhdm->block_offset = (uint32_t*)calloc(vhdm->sparse.max_bat_ent, sizeof *vhdm->block_offset);
         if (vhdm->block_offset == NULL) {
                 *err = MVHD_ERR_MEM;
                 return -1;
@@ -139,7 +140,7 @@ static void mvhd_calc_sparse_values(MVHDMeta *vhdm) {
  * \retval 0 if the function call succeeds
  */
 static int mvhd_init_sector_bitmap(MVHDMeta *vhdm, MVHDError *err) {
-        vhdm->bitmap.curr_bitmap = calloc(vhdm->bitmap.sector_count, MVHD_SECTOR_SIZE);
+        vhdm->bitmap.curr_bitmap = (uint8_t*)calloc(vhdm->bitmap.sector_count, MVHD_SECTOR_SIZE);
         if (vhdm->bitmap.curr_bitmap == NULL) {
                 *err = MVHD_ERR_MEM;
                 return -1;
@@ -167,7 +168,8 @@ static int mvhd_init_sector_bitmap(MVHDMeta *vhdm, MVHDError *err) {
 static bool mvhd_parent_path_exists(struct MVHDPaths *paths, uint32_t plat_code) {
         memset(paths->joined_path, 0, sizeof paths->joined_path);
         FILE *f;
-        int cwk_ret, ferr;
+        int cwk_ret;
+        MVHDError ferr = MVHD_ERR_UNKNOWN;
         enum cwk_path_style style = cwk_path_guess_style((const char *)paths->dir_path);
         cwk_path_set_style(style);
         cwk_ret = 1;
@@ -211,7 +213,7 @@ static bool mvhd_parent_path_exists(struct MVHDPaths *paths, uint32_t plat_code)
  * \return a pointer to the global string `tmp_open_path`, or NULL if a path could
  * not be found, or some error occurred
  */
-static char *mvhd_get_diff_parent_path(MVHDMeta *vhdm, int *err) {
+static char *mvhd_get_diff_parent_path(MVHDMeta *vhdm, MVHDError *err) {
         int utf_outlen, utf_inlen, utf_ret;
         char *par_fp = NULL;
         /* We can't resolve relative paths if we don't have an absolute
@@ -220,7 +222,7 @@ static char *mvhd_get_diff_parent_path(MVHDMeta *vhdm, int *err) {
                 *err = MVHD_ERR_PATH_REL;
                 goto end;
         }
-        struct MVHDPaths *paths = calloc(1, sizeof *paths);
+        struct MVHDPaths *paths = (struct MVHDPaths *)calloc(1, sizeof *paths);
         if (paths == NULL) {
                 *err = MVHD_ERR_MEM;
                 goto end;
@@ -370,9 +372,9 @@ MVHDGeom mvhd_calculate_geometry(uint64_t size) {
         return chs;
 }
 
-MVHDMeta *mvhd_open(const char *path, bool readonly, int *err) {
+MVHDMeta *mvhd_open(const char *path, bool readonly, MVHDError *err) {
         MVHDError open_err;
-        MVHDMeta *vhdm = calloc(sizeof *vhdm, 1);
+        MVHDMeta *vhdm = (MVHDMeta *)calloc(sizeof *vhdm, 1);
         if (vhdm == NULL) {
                 *err = MVHD_ERR_MEM;
                 goto end;
@@ -420,7 +422,7 @@ MVHDMeta *mvhd_open(const char *path, bool readonly, int *err) {
                 goto cleanup_bitmap;
         }
         mvhd_assign_io_funcs(vhdm);
-        vhdm->format_buffer.zero_data = calloc(64, MVHD_SECTOR_SIZE);
+        vhdm->format_buffer.zero_data = (uint8_t*)calloc(64, MVHD_SECTOR_SIZE);
         if (vhdm->format_buffer.zero_data == NULL) {
                 *err = MVHD_ERR_MEM;
                 goto cleanup_bitmap;

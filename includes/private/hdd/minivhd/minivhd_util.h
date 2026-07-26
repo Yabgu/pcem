@@ -74,9 +74,9 @@ time_t vhd_get_created_time(MVHDMeta *vhdm);
  *
  * \return a FILE pointer if successful, NULL otherwise. If NULL, check the value of err
  */
-FILE *mvhd_fopen(const char *path, const char *mode, int *err);
+FILE *mvhd_fopen(const char *path, const char *mode, MVHDError *err);
 
-void mvhd_set_encoding_err(int encoding_retval, int *err);
+void mvhd_set_encoding_err(int encoding_retval, MVHDError *err);
 
 /**
  * \brief Generate VHD footer checksum
@@ -129,7 +129,7 @@ uint32_t mvhd_crc32(const void *data, size_t n_bytes);
  * \return The file modified timestamp, in VHD compatible timestamp.
  * 'err' will be set to non-zero on error
  */
-uint32_t mvhd_file_mod_timestamp(const char *path, int *err);
+uint32_t mvhd_file_mod_timestamp(const char *path, MVHDError *err);
 
 const char *mvhd_strerr(MVHDError err);
 

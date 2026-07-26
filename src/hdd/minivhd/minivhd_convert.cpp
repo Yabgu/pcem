@@ -50,7 +50,7 @@ MVHDMeta *mvhd_convert_to_vhd_fixed(const char *utf8_raw_path, const char *utf8_
         }
         return vhdm;
 }
-MVHDMeta *mvhd_convert_to_vhd_sparse(const char *utf8_raw_path, const char *utf8_vhd_path, int *err) {
+MVHDMeta *mvhd_convert_to_vhd_sparse(const char *utf8_raw_path, const char *utf8_vhd_path, MVHDError *err) {
         MVHDGeom geom;
         MVHDMeta *vhdm = NULL;
         FILE *raw_img = mvhd_open_existing_raw_img(utf8_raw_path, &geom, err);
@@ -81,7 +81,7 @@ end:
         fclose(raw_img);
         return vhdm;
 }
-FILE *mvhd_convert_to_raw(const char *utf8_vhd_path, const char *utf8_raw_path, int *err) {
+FILE *mvhd_convert_to_raw(const char *utf8_vhd_path, const char *utf8_raw_path, MVHDError *err) {
         FILE *raw_img = mvhd_fopen(utf8_raw_path, "wb", err);
         if (raw_img == NULL) {
                 return NULL;

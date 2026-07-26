@@ -126,7 +126,7 @@ time_t vhd_get_created_time(MVHDMeta *vhdm) {
         return vhd_time_unix;
 }
 
-FILE *mvhd_fopen(const char *path, const char *mode, int *err) {
+FILE *mvhd_fopen(const char *path, const char *mode, MVHDError *err) {
         FILE *f = NULL;
 #ifdef _WIN32
         size_t path_len = strlen(path);
@@ -160,7 +160,7 @@ FILE *mvhd_fopen(const char *path, const char *mode, int *err) {
         return f;
 }
 
-void mvhd_set_encoding_err(int encoding_retval, int *err) {
+void mvhd_set_encoding_err(int encoding_retval, MVHDError *err) {
         if (encoding_retval == -1) {
                 *err = MVHD_ERR_UTF_SIZE;
         } else if (encoding_retval == -2) {
@@ -293,8 +293,8 @@ uint32_t mvhd_crc32(const void *data, size_t n_bytes) {
         return crc;
 }
 
-uint32_t mvhd_file_mod_timestamp(const char *path, int *err) {
-        *err = 0;
+uint32_t mvhd_file_mod_timestamp(const char *path, MVHDError *err) {
+        *err = MVHD_ERR_UNKNOWN;
 #ifdef _WIN32
         struct _stat file_stat;
         size_t path_len = strlen(path);

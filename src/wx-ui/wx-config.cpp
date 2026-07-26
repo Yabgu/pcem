@@ -1490,8 +1490,8 @@ static int create_drive_vhd_fixed(void *data) {
         MVHDGeom geometry = {.cyl = hd_new_cyl, .heads = hd_new_hpc, .spt = hd_new_spt};
         adjust_pcem_geometry_for_vhd(&geometry);
 
-        int vhd_error = 0;
-        MVHDMeta *vhd = mvhd_create_fixed(hd_new_name, geometry, &vhd_error, vhd_progress_callback);
+        MVHDError vhd_error = MVHD_ERR_UNKNOWN;
+        MVHDMeta *vhd = (MVHDMeta *)mvhd_create_fixed(hd_new_name, geometry, &vhd_error, vhd_progress_callback);
         if (vhd == NULL) {
                 return 0;
         } else {

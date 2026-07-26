@@ -130,7 +130,7 @@ int mvhd_diff_update_par_timestamp(MVHDMeta *vhdm, MVHDError *err);
  *
  * \retval NULL if an error occurrs. Check value of *err for actual error. Otherwise returns pointer to a MVHDMeta struct
  */
-MVHDMeta *mvhd_create_fixed(const char *path, MVHDGeom geom, int *err, mvhd_progress_callback progress_callback);
+MVHDMeta *mvhd_create_fixed(const char *path, MVHDGeom geom, MVHDError *err, mvhd_progress_callback progress_callback);
 
 /**
  * \brief Create sparse (dynamic) VHD image.
@@ -141,7 +141,7 @@ MVHDMeta *mvhd_create_fixed(const char *path, MVHDGeom geom, int *err, mvhd_prog
  *
  * \return NULL if an error occurrs. Check value of *err for actual error. Otherwise returns pointer to a MVHDMeta struct
  */
-MVHDMeta *mvhd_create_sparse(const char *path, MVHDGeom geom, int *err);
+MVHDMeta *mvhd_create_sparse(const char *path, MVHDGeom geom, MVHDError *err);
 
 /**
  * \brief Create differencing VHD imagee.
@@ -152,7 +152,7 @@ MVHDMeta *mvhd_create_sparse(const char *path, MVHDGeom geom, int *err);
  *
  * \return NULL if an error occurrs. Check value of *err for actual error. Otherwise returns pointer to a MVHDMeta struct
  */
-MVHDMeta *mvhd_create_diff(const char *path, const char *par_path, int *err);
+MVHDMeta *mvhd_create_diff(const char *path, const char *par_path, MVHDError *err);
 
 /**
  * \brief Create a VHD using the provided options
@@ -243,7 +243,7 @@ uint32_t mvhd_calc_size_sectors(MVHDGeom *geom);
  *
  * \return NULL if an error occurrs. Check value of *err for actual error. Otherwise returns pointer to a MVHDMeta struct
  */
-MVHDMeta *mvhd_convert_to_vhd_fixed(const char *utf8_raw_path, const char *utf8_vhd_path, int *err);
+MVHDMeta *mvhd_convert_to_vhd_fixed(const char *utf8_raw_path, const char *utf8_vhd_path, MVHDError *err);
 
 /**
  * \brief Convert a raw disk image to a sparse VHD image
@@ -254,7 +254,7 @@ MVHDMeta *mvhd_convert_to_vhd_fixed(const char *utf8_raw_path, const char *utf8_
  *
  * \return NULL if an error occurrs. Check value of *err for actual error. Otherwise returns pointer to a MVHDMeta struct
  */
-MVHDMeta *mvhd_convert_to_vhd_sparse(const char *utf8_raw_path, const char *utf8_vhd_path, int *err);
+MVHDMeta *mvhd_convert_to_vhd_sparse(const char *utf8_raw_path, const char *utf8_vhd_path, MVHDError *err);
 
 /**
  * \brief Convert a VHD image to a raw disk image
@@ -265,7 +265,7 @@ MVHDMeta *mvhd_convert_to_vhd_sparse(const char *utf8_raw_path, const char *utf8
  *
  * \return NULL if an error occurrs. Check value of *err for actual error. Otherwise returns the raw disk image FILE pointer
  */
-FILE *mvhd_convert_to_raw(const char *utf8_vhd_path, const char *utf8_raw_path, int *err);
+FILE *mvhd_convert_to_raw(const char *utf8_vhd_path, const char *utf8_raw_path, MVHDError *err);
 
 /**
  * \brief Read sectors from VHD file
