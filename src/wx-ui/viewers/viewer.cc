@@ -21,7 +21,7 @@ public:
 	ViewerRout()
 	{
 	}
-	ViewerRout(char *title, viewer_t *viewer, void *p) : title(title), viewer(viewer), p(p)
+	ViewerRout(const char *title, viewer_t *viewer, void *p) : title(title), viewer(viewer), p(p)
 	{
 	}
 };
@@ -43,7 +43,7 @@ void viewer_close_all()
 		(*it)->Close(true);
 }
 
-void viewer_add(char *title, viewer_t *viewer, void *p)
+void viewer_add(const char *title, viewer_t *viewer, void *p)
 {
 	viewer_routs.push_back(ViewerRout(title, viewer, p));
 }
