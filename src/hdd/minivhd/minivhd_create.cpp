@@ -100,7 +100,7 @@ static int mvhd_gen_par_loc(MVHDSparseHeader *header, const char *child_path, co
         } else {
                 *err = MVHD_ERR_PATH_LEN;
                 rv = -1;
-                goto end;
+                return rv;
         }
         cwk_path_get_basename(par_path, (const char **)&par_filename, &par_fn_len);
         cwk_path_get_dirname(child_dir, &child_dir_len);
@@ -109,7 +109,7 @@ static int mvhd_gen_par_loc(MVHDSparseHeader *header, const char *child_path, co
         if (rel_len > sizeof rel_path) {
                 *err = MVHD_ERR_PATH_LEN;
                 rv = -1;
-                goto end;
+                return rv;
         }
         /* We have our paths, now store the parent filename directly in the sparse header. */
         int outlen = sizeof header->par_utf16_name;
@@ -119,7 +119,7 @@ static int mvhd_gen_par_loc(MVHDSparseHeader *header, const char *child_path, co
         if (utf_ret < 0) {
                 mvhd_set_encoding_err(utf_ret, err);
                 rv = -1;
-                goto end;
+                return rv;
         }
 
         /* And encode the paths to UTF16-LE */
@@ -129,7 +129,7 @@ static int mvhd_gen_par_loc(MVHDSparseHeader *header, const char *child_path, co
         if (utf_ret < 0) {
                 mvhd_set_encoding_err(utf_ret, err);
                 rv = -1;
-                goto end;
+                return rv;
         }
         int w2ku_len = utf_ret;
         outlen = sizeof *w2ru_path_buff * MVHD_MAX_PATH_CHARS;
@@ -137,7 +137,7 @@ static int mvhd_gen_par_loc(MVHDSparseHeader *header, const char *child_path, co
         if (utf_ret < 0) {
                 mvhd_set_encoding_err(utf_ret, err);
                 rv = -1;
-                goto end;
+                return rv;
         }
         int w2ru_len = utf_ret;
         /**
@@ -161,9 +161,6 @@ static int mvhd_gen_par_loc(MVHDSparseHeader *header, const char *child_path, co
         header->par_loc_entry[1].plat_data_offset = (uint64_t)start_offset + ((uint64_t)header->par_loc_entry[0].plat_data_space);
         header->par_loc_entry[1].plat_data_space =
                 ((header->par_loc_entry[1].plat_data_len / MVHD_SECTOR_SIZE) + 1) * MVHD_SECTOR_SIZE;
-        goto end;
-
-end:
         return rv;
 }
 
@@ -187,15 +184,19 @@ MVHDMeta *mvhd_create_fixed_raw(const char *path, FILE *raw_img, uint64_t size_i
         MVHDMeta *vhdm = (MVHDMeta *)calloc(1, sizeof *vhdm);
         if (vhdm == NULL) {
                 *err = MVHD_ERR_MEM;
-                goto end;
+                return vhdm;
         }
         if (geom == NULL || (geom->cyl == 0 || geom->heads == 0 || geom->spt == 0)) {
                 *err = MVHD_ERR_INVALID_GEOM;
-                goto cleanup_vhdm;
+                free(vhdm);
+                vhdm = NULL;
+                return vhdm;
         }
         FILE *f = mvhd_fopen(path, "wb+", err);
         if (f == NULL) {
-                goto cleanup_vhdm;
+                free(vhdm);
+                vhdm = NULL;
+                return vhdm;
         }
         mvhd_fseeko64(f, 0, SEEK_SET);
         uint32_t size_sectors = (uint32_t)(size_in_bytes / MVHD_SECTOR_SIZE);
@@ -208,7 +209,9 @@ MVHDMeta *mvhd_create_fixed_raw(const char *path, FILE *raw_img, uint64_t size_i
                 MVHDGeom raw_geom = mvhd_calculate_geometry(raw_size);
                 if (mvhd_calc_size_bytes(&raw_geom) != raw_size) {
                         *err = MVHD_ERR_CONV_SIZE;
-                        goto cleanup_vhdm;
+                        free(vhdm);
+                        vhdm = NULL;
+                        return vhdm;
                 }
                 mvhd_gen_footer(&vhdm->footer, raw_size, geom, MVHD_TYPE_FIXED, 0);
                 mvhd_fseeko64(raw_img, 0, SEEK_SET);
@@ -232,12 +235,6 @@ MVHDMeta *mvhd_create_fixed_raw(const char *path, FILE *raw_img, uint64_t size_i
         f = NULL;
         free(vhdm);
         vhdm = mvhd_open(path, false, err);
-        goto end;
-
-cleanup_vhdm:
-        free(vhdm);
-        vhdm = NULL;
-end:
         return vhdm;
 }
 
@@ -267,17 +264,28 @@ static MVHDMeta *mvhd_create_sparse_diff(const char *path, const char *par_path,
         if (par_path != NULL) {
                 par_mod_timestamp = mvhd_file_mod_timestamp(par_path, err);
                 if (*err != 0) {
-                        goto end;
+                        free(w2ku_path_buff);
+                        free(w2ru_path_buff);
+                        return vhdm;
                 }
                 par_vhdm = mvhd_open(par_path, true, err);
                 if (par_vhdm == NULL) {
-                        goto end;
+                        free(w2ku_path_buff);
+                        free(w2ru_path_buff);
+                        return vhdm;
                 }
         }
         vhdm = (MVHDMeta *)calloc(1, sizeof *vhdm);
         if (vhdm == NULL) {
                 *err = MVHD_ERR_MEM;
-                goto cleanup_par_vhdm;
+
+                if (par_vhdm != NULL) {
+                        mvhd_close(par_vhdm);
+                }
+
+                free(w2ku_path_buff);
+                free(w2ru_path_buff);
+                return vhdm;
         }
         if (par_vhdm != NULL) {
                 /* We use the geometry from the parent VHD, not what was passed in */
@@ -288,12 +296,29 @@ static MVHDMeta *mvhd_create_sparse_diff(const char *path, const char *par_path,
                 size_in_bytes = par_vhdm->footer.curr_sz;
         } else if (geom == NULL || (geom->cyl == 0 || geom->heads == 0 || geom->spt == 0)) {
                 *err = MVHD_ERR_INVALID_GEOM;
-                goto cleanup_vhdm;
+
+                free(vhdm);
+                vhdm = NULL;
+                if (par_vhdm != NULL) {
+                        mvhd_close(par_vhdm);
+                }
+
+                free(w2ku_path_buff);
+                free(w2ru_path_buff);
+                return vhdm;
         }
 
         FILE *f = mvhd_fopen(path, "wb+", err);
         if (f == NULL) {
-                goto cleanup_vhdm;
+                free(vhdm);
+                vhdm = NULL;
+                if (par_vhdm != NULL) {
+                        mvhd_close(par_vhdm);
+                }
+
+                free(w2ku_path_buff);
+                free(w2ru_path_buff);
+                return vhdm;
         }
         mvhd_fseeko64(f, 0, SEEK_SET);
         /* Note, the sparse header follows the footer copy at the beginning of the file */
@@ -337,18 +362,30 @@ static MVHDMeta *mvhd_create_sparse_diff(const char *path, const char *par_path,
                 w2ku_path_buff = (mvhd_utf16 *)calloc(MVHD_MAX_PATH_CHARS, sizeof *w2ku_path_buff);
                 if (w2ku_path_buff == NULL) {
                         *err = MVHD_ERR_MEM;
-                        goto end;
+                        free(w2ku_path_buff);
+                        free(w2ru_path_buff);
+                        return vhdm;
                 }
                 w2ru_path_buff = (mvhd_utf16 *)calloc(MVHD_MAX_PATH_CHARS, sizeof *w2ru_path_buff);
                 if (w2ru_path_buff == NULL) {
                         *err = MVHD_ERR_MEM;
-                        goto end;
+                        free(w2ku_path_buff);
+                        free(w2ru_path_buff);
+                        return vhdm;
                 }
                 memcpy(vhdm->sparse.par_uuid, par_vhdm->footer.uuid, sizeof vhdm->sparse.par_uuid);
                 par_loc_offset = bat_offset + ((uint64_t)num_bat_sect * MVHD_SECTOR_SIZE) + (5 * MVHD_SECTOR_SIZE);
                 if (mvhd_gen_par_loc(&vhdm->sparse, path, par_path, par_loc_offset, w2ku_path_buff, w2ru_path_buff,
                                      (MVHDError *)err) < 0) {
-                        goto cleanup_vhdm;
+                        free(vhdm);
+                        vhdm = NULL;
+                        if (par_vhdm != NULL) {
+                                mvhd_close(par_vhdm);
+                        }
+
+                        free(w2ku_path_buff);
+                        free(w2ru_path_buff);
+                        return vhdm;
                 }
                 vhdm->sparse.par_timestamp = par_mod_timestamp;
         }
@@ -394,16 +431,6 @@ static MVHDMeta *mvhd_create_sparse_diff(const char *path, const char *par_path,
         f = NULL;
         free(vhdm);
         vhdm = mvhd_open(path, false, err);
-        goto end;
-
-cleanup_vhdm:
-        free(vhdm);
-        vhdm = NULL;
-cleanup_par_vhdm:
-        if (par_vhdm != NULL) {
-                mvhd_close(par_vhdm);
-        }
-end:
         free(w2ku_path_buff);
         free(w2ru_path_buff);
         return vhdm;

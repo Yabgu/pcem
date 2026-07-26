@@ -220,12 +220,12 @@ static char *mvhd_get_diff_parent_path(MVHDMeta *vhdm, MVHDError *err) {
            path to work with */
         if (!cwk_path_is_absolute((const char *)vhdm->filename)) {
                 *err = MVHD_ERR_PATH_REL;
-                goto end;
+                return par_fp;
         }
         struct MVHDPaths *paths = (struct MVHDPaths *)calloc(1, sizeof *paths);
         if (paths == NULL) {
                 *err = MVHD_ERR_MEM;
-                goto end;
+                return par_fp;
         }
         size_t dirlen;
         cwk_path_get_dirname((const char *)vhdm->filename, &dirlen);
@@ -293,7 +293,6 @@ static char *mvhd_get_diff_parent_path(MVHDMeta *vhdm, MVHDError *err) {
 paths_cleanup:
         free(paths);
         paths = NULL;
-end:
         return par_fp;
 }
 

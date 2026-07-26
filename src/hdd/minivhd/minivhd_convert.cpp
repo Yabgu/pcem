@@ -59,7 +59,8 @@ MVHDMeta *mvhd_convert_to_vhd_sparse(const char *utf8_raw_path, const char *utf8
         }
         vhdm = mvhd_create_sparse(utf8_vhd_path, geom, err);
         if (vhdm == NULL) {
-                goto end;
+                fclose(raw_img);
+                return vhdm;
         }
         uint8_t buff[4096] = {0}; // 8 sectors
         uint8_t empty_buff[4096] = {0};
@@ -77,7 +78,7 @@ MVHDMeta *mvhd_convert_to_vhd_sparse(const char *utf8_raw_path, const char *utf8
                         mvhd_write_sectors(vhdm, i, copy_sect, buff);
                 }
         }
-end:
+
         fclose(raw_img);
         return vhdm;
 }
