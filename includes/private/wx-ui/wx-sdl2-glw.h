@@ -1,6 +1,8 @@
 #ifndef _WX_SDL2_GLW_H_
 #define _WX_SDL2_GLW_H_
 
+#include <stdlib.h>
+
 typedef struct glw_t {
         PFNGLACTIVETEXTUREPROC glActiveTexture;
         PFNGLCREATESHADERPROC glCreateShader;
@@ -41,47 +43,51 @@ typedef struct glw_t {
         PFNGLBUFFERSUBDATAPROC glBufferSubData;
 } glw_t;
 
+#define GLW_LOAD_PROC(name) glw->name = (decltype(glw->name))SDL_GL_GetProcAddress(#name)
+
 glw_t *glw_init() {
         glw_t *glw = (glw_t *)malloc(sizeof(glw_t));
-        glw->glActiveTexture = SDL_GL_GetProcAddress("glActiveTexture");
-        glw->glCreateShader = SDL_GL_GetProcAddress("glCreateShader");
-        glw->glShaderSource = SDL_GL_GetProcAddress("glShaderSource");
-        glw->glCompileShader = SDL_GL_GetProcAddress("glCompileShader");
-        glw->glGetShaderiv = SDL_GL_GetProcAddress("glGetShaderiv");
-        glw->glGetShaderInfoLog = SDL_GL_GetProcAddress("glGetShaderInfoLog");
-        glw->glCreateProgram = SDL_GL_GetProcAddress("glCreateProgram");
-        glw->glAttachShader = SDL_GL_GetProcAddress("glAttachShader");
-        glw->glLinkProgram = SDL_GL_GetProcAddress("glLinkProgram");
-        glw->glGetProgramiv = SDL_GL_GetProcAddress("glGetProgramiv");
-        glw->glGetProgramInfoLog = SDL_GL_GetProcAddress("glGetProgramInfoLog");
-        glw->glGetUniformLocation = SDL_GL_GetProcAddress("glGetUniformLocation");
-        glw->glGetAttribLocation = SDL_GL_GetProcAddress("glGetAttribLocation");
-        glw->glUseProgram = SDL_GL_GetProcAddress("glUseProgram");
-        glw->glGenerateMipmap = SDL_GL_GetProcAddress("glGenerateMipmap");
-        glw->glDeleteFramebuffers = SDL_GL_GetProcAddress("glDeleteFramebuffers");
-        glw->glDeleteShader = SDL_GL_GetProcAddress("glDeleteShader");
-        glw->glDeleteProgram = SDL_GL_GetProcAddress("glDeleteProgram");
-        glw->glDeleteBuffers = SDL_GL_GetProcAddress("glDeleteBuffers");
-        glw->glDeleteVertexArrays = SDL_GL_GetProcAddress("glDeleteVertexArrays");
-        glw->glGenFramebuffers = SDL_GL_GetProcAddress("glGenFramebuffers");
-        glw->glBindFramebuffer = SDL_GL_GetProcAddress("glBindFramebuffer");
-        glw->glFramebufferTexture2D = SDL_GL_GetProcAddress("glFramebufferTexture2D");
-        glw->glCheckFramebufferStatus = SDL_GL_GetProcAddress("glCheckFramebufferStatus");
-        glw->glGenVertexArrays = SDL_GL_GetProcAddress("glGenVertexArrays");
-        glw->glBindVertexArray = SDL_GL_GetProcAddress("glBindVertexArray");
-        glw->glGenBuffers = SDL_GL_GetProcAddress("glGenBuffers");
-        glw->glBindBuffer = SDL_GL_GetProcAddress("glBindBuffer");
-        glw->glBufferData = SDL_GL_GetProcAddress("glBufferData");
-        glw->glVertexAttribPointer = SDL_GL_GetProcAddress("glVertexAttribPointer");
-        glw->glUniform1i = SDL_GL_GetProcAddress("glUniform1i");
-        glw->glUniform1f = SDL_GL_GetProcAddress("glUniform1f");
-        glw->glEnableVertexAttribArray = SDL_GL_GetProcAddress("glEnableVertexAttribArray");
-        glw->glUniformMatrix4fv = SDL_GL_GetProcAddress("glUniformMatrix4fv");
-        glw->glUniform2fv = SDL_GL_GetProcAddress("glUniform2fv");
-        glw->glDisableVertexAttribArray = SDL_GL_GetProcAddress("glDisableVertexAttribArray");
-        glw->glBufferSubData = SDL_GL_GetProcAddress("glBufferSubData");
+        GLW_LOAD_PROC(glActiveTexture);
+        GLW_LOAD_PROC(glCreateShader);
+        GLW_LOAD_PROC(glShaderSource);
+        GLW_LOAD_PROC(glCompileShader);
+        GLW_LOAD_PROC(glGetShaderiv);
+        GLW_LOAD_PROC(glGetShaderInfoLog);
+        GLW_LOAD_PROC(glCreateProgram);
+        GLW_LOAD_PROC(glAttachShader);
+        GLW_LOAD_PROC(glLinkProgram);
+        GLW_LOAD_PROC(glGetProgramiv);
+        GLW_LOAD_PROC(glGetProgramInfoLog);
+        GLW_LOAD_PROC(glGetUniformLocation);
+        GLW_LOAD_PROC(glGetAttribLocation);
+        GLW_LOAD_PROC(glUseProgram);
+        GLW_LOAD_PROC(glGenerateMipmap);
+        GLW_LOAD_PROC(glDeleteFramebuffers);
+        GLW_LOAD_PROC(glDeleteShader);
+        GLW_LOAD_PROC(glDeleteProgram);
+        GLW_LOAD_PROC(glDeleteBuffers);
+        GLW_LOAD_PROC(glDeleteVertexArrays);
+        GLW_LOAD_PROC(glGenFramebuffers);
+        GLW_LOAD_PROC(glBindFramebuffer);
+        GLW_LOAD_PROC(glFramebufferTexture2D);
+        GLW_LOAD_PROC(glCheckFramebufferStatus);
+        GLW_LOAD_PROC(glGenVertexArrays);
+        GLW_LOAD_PROC(glBindVertexArray);
+        GLW_LOAD_PROC(glGenBuffers);
+        GLW_LOAD_PROC(glBindBuffer);
+        GLW_LOAD_PROC(glBufferData);
+        GLW_LOAD_PROC(glVertexAttribPointer);
+        GLW_LOAD_PROC(glUniform1i);
+        GLW_LOAD_PROC(glUniform1f);
+        GLW_LOAD_PROC(glEnableVertexAttribArray);
+        GLW_LOAD_PROC(glUniformMatrix4fv);
+        GLW_LOAD_PROC(glUniform2fv);
+        GLW_LOAD_PROC(glDisableVertexAttribArray);
+        GLW_LOAD_PROC(glBufferSubData);
         return glw;
 }
+
+#undef GLW_LOAD_PROC
 
 void glw_free(glw_t *glw) { free(glw); }
 
