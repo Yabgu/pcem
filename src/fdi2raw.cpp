@@ -54,7 +54,7 @@
 #include <assert.h>
 
 #ifdef DEBUG
-static char *datalog(uae_u8 *src, int len) {
+static const char *datalog(uae_u8 *src, int len) {
         static char buf[1000];
         static int offset;
         int i = 0, offset2;
@@ -75,7 +75,7 @@ static char *datalog(uae_u8 *src, int len) {
         return buf + offset2;
 }
 #else
-static char *datalog(uae_u8 *src, int len) { return ""; }
+static const char *datalog(uae_u8 *src, int len) { return ""; }
 #endif
 
 #define outlog pclog
