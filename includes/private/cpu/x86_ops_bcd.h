@@ -10,7 +10,6 @@ static int opAAA(uint32_t fetchdat) {
                 cpu_state.flags &= ~(A_FLAG | C_FLAG);
         AL &= 0xF;
         CLOCK_CYCLES(is486 ? 3 : 4);
-        PREFETCH_RUN(is486 ? 3 : 4, 1, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 
@@ -22,7 +21,6 @@ static int opAAD(uint32_t fetchdat) {
         AH = 0;
         setznp16(AX);
         CLOCK_CYCLES((is486) ? 14 : 19);
-        PREFETCH_RUN(is486 ? 14 : 19, 2, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 
@@ -34,7 +32,6 @@ static int opAAM(uint32_t fetchdat) {
         AL %= base;
         setznp16(AX);
         CLOCK_CYCLES((is486) ? 15 : 17);
-        PREFETCH_RUN(is486 ? 15 : 17, 2, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 
@@ -48,7 +45,6 @@ static int opAAS(uint32_t fetchdat) {
                 cpu_state.flags &= ~(A_FLAG | C_FLAG);
         AL &= 0xF;
         CLOCK_CYCLES(is486 ? 3 : 4);
-        PREFETCH_RUN(is486 ? 3 : 4, 1, -1, 0, 0, 0, 0, 0);
         return 0;
 }
 
@@ -73,7 +69,6 @@ static int opDAA(uint32_t fetchdat) {
         flags_rebuild();
         cpu_state.flags |= tempw;
         CLOCK_CYCLES(4);
-        PREFETCH_RUN(4, 1, -1, 0, 0, 0, 0, 0);
 
         return 0;
 }
@@ -99,7 +94,6 @@ static int opDAS(uint32_t fetchdat) {
         flags_rebuild();
         cpu_state.flags |= tempw;
         CLOCK_CYCLES(4);
-        PREFETCH_RUN(4, 1, -1, 0, 0, 0, 0, 0);
 
         return 0;
 }

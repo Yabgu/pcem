@@ -4,7 +4,6 @@
         static int opPUSH_##reg(uint32_t fetchdat) {                                                                             \
                 PUSH_W(reg);                                                                                                     \
                 CLOCK_CYCLES((is486) ? 1 : 2);                                                                                   \
-                PREFETCH_RUN(2, 1, -1, 0, 0, 1, 0, 0);                                                                           \
                 return cpu_state.abrt;                                                                                           \
         }
 
@@ -12,7 +11,6 @@
         static int opPUSH_##reg(uint32_t fetchdat) {                                                                             \
                 PUSH_L(reg);                                                                                                     \
                 CLOCK_CYCLES((is486) ? 1 : 2);                                                                                   \
-                PREFETCH_RUN(2, 1, -1, 0, 0, 0, 1, 0);                                                                           \
                 return cpu_state.abrt;                                                                                           \
         }
 
@@ -20,7 +18,6 @@
         static int opPOP_##reg(uint32_t fetchdat) {                                                                              \
                 reg = POP_W();                                                                                                   \
                 CLOCK_CYCLES((is486) ? 1 : 4);                                                                                   \
-                PREFETCH_RUN(4, 1, -1, 1, 0, 0, 0, 0);                                                                           \
                 return cpu_state.abrt;                                                                                           \
         }
 
@@ -28,7 +25,6 @@
         static int opPOP_##reg(uint32_t fetchdat) {                                                                              \
                 reg = POP_L();                                                                                                   \
                 CLOCK_CYCLES((is486) ? 1 : 4);                                                                                   \
-                PREFETCH_RUN(4, 1, -1, 0, 1, 0, 0, 0);                                                                           \
                 return cpu_state.abrt;                                                                                           \
         }
 
@@ -93,7 +89,6 @@ static int opPUSHA_w(uint32_t fetchdat) {
                         SP -= 16;
         }
         CLOCK_CYCLES((is486) ? 11 : 18);
-        PREFETCH_RUN(18, 1, -1, 0, 0, 8, 0, 0);
         return cpu_state.abrt;
 }
 static int opPUSHA_l(uint32_t fetchdat) {
@@ -121,7 +116,6 @@ static int opPUSHA_l(uint32_t fetchdat) {
                         SP -= 32;
         }
         CLOCK_CYCLES((is486) ? 11 : 18);
-        PREFETCH_RUN(18, 1, -1, 0, 0, 0, 8, 0);
         return cpu_state.abrt;
 }
 
@@ -174,7 +168,6 @@ static int opPOPA_w(uint32_t fetchdat) {
                 SP += 16;
         }
         CLOCK_CYCLES((is486) ? 9 : 24);
-        PREFETCH_RUN(24, 1, -1, 7, 0, 0, 0, 0);
         return 0;
 }
 static int opPOPA_l(uint32_t fetchdat) {
@@ -226,7 +219,6 @@ static int opPOPA_l(uint32_t fetchdat) {
                 SP += 32;
         }
         CLOCK_CYCLES((is486) ? 9 : 24);
-        PREFETCH_RUN(24, 1, -1, 0, 7, 0, 0, 0);
         return 0;
 }
 
@@ -234,7 +226,6 @@ static int opPUSH_imm_w(uint32_t fetchdat) {
         uint16_t val = getwordf();
         PUSH_W(val);
         CLOCK_CYCLES(2);
-        PREFETCH_RUN(2, 3, -1, 0, 0, 1, 0, 0);
         return cpu_state.abrt;
 }
 static int opPUSH_imm_l(uint32_t fetchdat) {
@@ -243,7 +234,6 @@ static int opPUSH_imm_l(uint32_t fetchdat) {
                 return 1;
         PUSH_L(val);
         CLOCK_CYCLES(2);
-        PREFETCH_RUN(2, 3, -1, 0, 0, 0, 1, 0);
         return cpu_state.abrt;
 }
 
@@ -255,7 +245,6 @@ static int opPUSH_imm_bw(uint32_t fetchdat) {
         PUSH_W(tempw);
 
         CLOCK_CYCLES(2);
-        PREFETCH_RUN(2, 2, -1, 0, 0, 1, 0, 0);
         return cpu_state.abrt;
 }
 static int opPUSH_imm_bl(uint32_t fetchdat) {
@@ -266,7 +255,6 @@ static int opPUSH_imm_bl(uint32_t fetchdat) {
         PUSH_L(templ);
 
         CLOCK_CYCLES(2);
-        PREFETCH_RUN(2, 2, -1, 0, 0, 0, 1, 0);
         return cpu_state.abrt;
 }
 
@@ -292,7 +280,6 @@ static int opPOPW_a16(uint32_t fetchdat) {
                 CLOCK_CYCLES((cpu_mod == 3) ? 1 : 6);
         else
                 CLOCK_CYCLES((cpu_mod == 3) ? 4 : 5);
-        PREFETCH_RUN((cpu_mod == 3) ? 4 : 5, 2, rmdat, 1, 0, (cpu_mod == 3) ? 0 : 1, 0, 0);
         return cpu_state.abrt;
 }
 static int opPOPW_a32(uint32_t fetchdat) {
@@ -317,7 +304,6 @@ static int opPOPW_a32(uint32_t fetchdat) {
                 CLOCK_CYCLES((cpu_mod == 3) ? 1 : 6);
         else
                 CLOCK_CYCLES((cpu_mod == 3) ? 4 : 5);
-        PREFETCH_RUN((cpu_mod == 3) ? 4 : 5, 2, rmdat, 1, 0, (cpu_mod == 3) ? 0 : 1, 0, 1);
         return cpu_state.abrt;
 }
 
@@ -343,7 +329,6 @@ static int opPOPL_a16(uint32_t fetchdat) {
                 CLOCK_CYCLES((cpu_mod == 3) ? 1 : 6);
         else
                 CLOCK_CYCLES((cpu_mod == 3) ? 4 : 5);
-        PREFETCH_RUN((cpu_mod == 3) ? 4 : 5, 2, rmdat, 0, 1, 0, (cpu_mod == 3) ? 0 : 1, 0);
         return cpu_state.abrt;
 }
 static int opPOPL_a32(uint32_t fetchdat) {
@@ -368,7 +353,6 @@ static int opPOPL_a32(uint32_t fetchdat) {
                 CLOCK_CYCLES((cpu_mod == 3) ? 1 : 6);
         else
                 CLOCK_CYCLES((cpu_mod == 3) ? 4 : 5);
-        PREFETCH_RUN((cpu_mod == 3) ? 4 : 5, 2, rmdat, 0, 1, 0, (cpu_mod == 3) ? 0 : 1, 1);
         return cpu_state.abrt;
 }
 
@@ -424,7 +408,6 @@ static int opENTER_w(uint32_t fetchdat) {
                 SP -= offset;
         CLOCK_CYCLES((is486) ? 14 : 10);
         instr_cycles += (is486) ? 14 : 10;
-        PREFETCH_RUN(instr_cycles, 3, -1, reads, 0, writes, 0, 0);
         return 0;
 }
 static int opENTER_l(uint32_t fetchdat) {
@@ -479,7 +462,6 @@ static int opENTER_l(uint32_t fetchdat) {
                 SP -= offset;
         CLOCK_CYCLES((is486) ? 14 : 10);
         instr_cycles += (is486) ? 14 : 10;
-        PREFETCH_RUN(instr_cycles, 3, -1, reads, 0, writes, 0, 0);
         return 0;
 }
 
@@ -496,7 +478,6 @@ static int opLEAVE_w(uint32_t fetchdat) {
         BP = temp;
 
         CLOCK_CYCLES(4);
-        PREFETCH_RUN(4, 1, -1, 1, 0, 0, 0, 0);
         return 0;
 }
 static int opLEAVE_l(uint32_t fetchdat) {
@@ -512,7 +493,6 @@ static int opLEAVE_l(uint32_t fetchdat) {
         EBP = temp;
 
         CLOCK_CYCLES(4);
-        PREFETCH_RUN(4, 1, -1, 0, 1, 0, 0, 0);
         return 0;
 }
 
@@ -520,13 +500,11 @@ static int opLEAVE_l(uint32_t fetchdat) {
         static int opPUSH_##seg##_w(uint32_t fetchdat) {                                                                         \
                 PUSH_W(seg);                                                                                                     \
                 CLOCK_CYCLES(2);                                                                                                 \
-                PREFETCH_RUN(2, 1, -1, 0, 0, 1, 0, 0);                                                                           \
                 return cpu_state.abrt;                                                                                           \
         }                                                                                                                        \
         static int opPUSH_##seg##_l(uint32_t fetchdat) {                                                                         \
                 PUSH_L(seg);                                                                                                     \
                 CLOCK_CYCLES(2);                                                                                                 \
-                PREFETCH_RUN(2, 1, -1, 0, 0, 0, 1, 0);                                                                           \
                 return cpu_state.abrt;                                                                                           \
         }
 
@@ -541,7 +519,6 @@ static int opLEAVE_l(uint32_t fetchdat) {
                 if (unlikely(cpu_state.abrt))                                                                                              \
                         ESP = temp_esp;                                                                                          \
                 CLOCK_CYCLES(is486 ? 3 : 7);                                                                                     \
-                PREFETCH_RUN(is486 ? 3 : 7, 1, -1, 0, 0, 1, 0, 0);                                                               \
                 return cpu_state.abrt;                                                                                           \
         }                                                                                                                        \
         static int opPOP_##seg##_l(uint32_t fetchdat) {                                                                          \
@@ -554,7 +531,6 @@ static int opLEAVE_l(uint32_t fetchdat) {
                 if (unlikely(cpu_state.abrt))                                                                                              \
                         ESP = temp_esp;                                                                                          \
                 CLOCK_CYCLES(is486 ? 3 : 7);                                                                                     \
-                PREFETCH_RUN(is486 ? 3 : 7, 1, -1, 0, 0, 1, 0, 0);                                                               \
                 return cpu_state.abrt;                                                                                           \
         }
 
@@ -582,7 +558,6 @@ static int opPOP_SS_w(uint32_t fetchdat) {
                 return 1;
         }
         CLOCK_CYCLES(is486 ? 3 : 7);
-        PREFETCH_RUN(is486 ? 3 : 7, 1, -1, 0, 0, 1, 0, 0);
 
         cpu_state.oldpc = cpu_state.pc;
         cpu_state.op32 = use32;
@@ -608,7 +583,6 @@ static int opPOP_SS_l(uint32_t fetchdat) {
                 return 1;
         }
         CLOCK_CYCLES(is486 ? 3 : 7);
-        PREFETCH_RUN(is486 ? 3 : 7, 1, -1, 0, 0, 1, 0, 0);
 
         cpu_state.oldpc = cpu_state.pc;
         cpu_state.op32 = use32;

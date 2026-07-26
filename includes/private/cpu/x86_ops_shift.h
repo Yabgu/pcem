@@ -14,8 +14,6 @@
                                 return 1;                                                                                        \
                         set_flags_rotate(FLAGS_ROL8, temp);                                                                      \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x08: /*ROR b,CL*/                                                                                          \
                         temp = (temp >> (c & 7)) | (temp << (8 - (c & 7)));                                                      \
@@ -24,8 +22,6 @@
                                 return 1;                                                                                        \
                         set_flags_rotate(FLAGS_ROR8, temp);                                                                      \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x10: /*RCL b,CL*/                                                                                          \
                         temp2 = cpu_state.flags & C_FLAG;                                                                        \
@@ -46,8 +42,6 @@
                         if ((cpu_state.flags & C_FLAG) ^ (temp >> 7))                                                            \
                                 cpu_state.flags |= V_FLAG;                                                                       \
                         CLOCK_CYCLES((cpu_mod == 3) ? 9 : 10);                                                                   \
-                        PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,    \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x18: /*RCR b,CL*/                                                                                          \
                         temp2 = cpu_state.flags & C_FLAG;                                                                        \
@@ -68,8 +62,6 @@
                         if ((temp ^ (temp >> 1)) & 0x40)                                                                         \
                                 cpu_state.flags |= V_FLAG;                                                                       \
                         CLOCK_CYCLES((cpu_mod == 3) ? 9 : 10);                                                                   \
-                        PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,    \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x20:                                                                                                       \
                 case 0x30: /*SHL b,CL*/                                                                                          \
@@ -78,8 +70,6 @@
                                 return 1;                                                                                        \
                         set_flags_shift(FLAGS_SHL8, temp_orig, c, (temp << c) & 0xff);                                           \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x28: /*SHR b,CL*/                                                                                          \
                         seteab(temp >> c);                                                                                       \
@@ -87,8 +77,6 @@
                                 return 1;                                                                                        \
                         set_flags_shift(FLAGS_SHR8, temp_orig, c, temp >> c);                                                    \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x38: /*SAR b,CL*/                                                                                          \
                         temp = (int8_t)temp >> c;                                                                                \
@@ -97,8 +85,6 @@
                                 return 1;                                                                                        \
                         set_flags_shift(FLAGS_SAR8, temp_orig, c, temp);                                                         \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 }                                                                                                                \
         }
@@ -117,8 +103,6 @@
                                 return 1;                                                                                        \
                         set_flags_rotate(FLAGS_ROL16, temp);                                                                     \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x08: /*ROR w,CL*/                                                                                          \
                         temp = (temp >> (c & 15)) | (temp << (16 - (c & 15)));                                                   \
@@ -127,8 +111,6 @@
                                 return 1;                                                                                        \
                         set_flags_rotate(FLAGS_ROR16, temp);                                                                     \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x10: /*RCL w, c*/                                                                                          \
                         temp2 = cpu_state.flags & C_FLAG;                                                                        \
@@ -149,8 +131,6 @@
                         if ((cpu_state.flags & C_FLAG) ^ (temp >> 15))                                                           \
                                 cpu_state.flags |= V_FLAG;                                                                       \
                         CLOCK_CYCLES((cpu_mod == 3) ? 9 : 10);                                                                   \
-                        PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,    \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x18: /*RCR w, c*/                                                                                          \
                         temp2 = cpu_state.flags & C_FLAG;                                                                        \
@@ -171,8 +151,6 @@
                         if ((temp ^ (temp >> 1)) & 0x4000)                                                                       \
                                 cpu_state.flags |= V_FLAG;                                                                       \
                         CLOCK_CYCLES((cpu_mod == 3) ? 9 : 10);                                                                   \
-                        PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,    \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x20:                                                                                                       \
                 case 0x30: /*SHL w, c*/                                                                                          \
@@ -181,8 +159,6 @@
                                 return 1;                                                                                        \
                         set_flags_shift(FLAGS_SHL16, temp_orig, c, (temp << c) & 0xffff);                                        \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x28: /*SHR w, c*/                                                                                          \
                         seteaw(temp >> c);                                                                                       \
@@ -190,8 +166,6 @@
                                 return 1;                                                                                        \
                         set_flags_shift(FLAGS_SHR16, temp_orig, c, temp >> c);                                                   \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x38: /*SAR w, c*/                                                                                          \
                         temp = (int16_t)temp >> c;                                                                               \
@@ -200,8 +174,6 @@
                                 return 1;                                                                                        \
                         set_flags_shift(FLAGS_SAR16, temp_orig, c, temp);                                                        \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 }                                                                                                                \
         }
@@ -220,8 +192,6 @@
                                 return 1;                                                                                        \
                         set_flags_rotate(FLAGS_ROL32, temp);                                                                     \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x08: /*ROR l,CL*/                                                                                          \
                         temp = (temp >> c) | (temp << (32 - c));                                                                 \
@@ -230,8 +200,6 @@
                                 return 1;                                                                                        \
                         set_flags_rotate(FLAGS_ROR32, temp);                                                                     \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x10: /*RCL l, c*/                                                                                          \
                         temp2 = CF_SET();                                                                                        \
@@ -252,8 +220,6 @@
                         if ((cpu_state.flags & C_FLAG) ^ (temp >> 31))                                                           \
                                 cpu_state.flags |= V_FLAG;                                                                       \
                         CLOCK_CYCLES((cpu_mod == 3) ? 9 : 10);                                                                   \
-                        PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1,    \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x18: /*RCR l, c*/                                                                                          \
                         temp2 = cpu_state.flags & C_FLAG;                                                                        \
@@ -274,8 +240,6 @@
                         if ((temp ^ (temp >> 1)) & 0x40000000)                                                                   \
                                 cpu_state.flags |= V_FLAG;                                                                       \
                         CLOCK_CYCLES((cpu_mod == 3) ? 9 : 10);                                                                   \
-                        PREFETCH_RUN((cpu_mod == 3) ? 9 : 10, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1,    \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x20:                                                                                                       \
                 case 0x30: /*SHL l, c*/                                                                                          \
@@ -284,8 +248,6 @@
                                 return 1;                                                                                        \
                         set_flags_shift(FLAGS_SHL32, temp_orig, c, temp << c);                                                   \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x28: /*SHR l, c*/                                                                                          \
                         seteal(temp >> c);                                                                                       \
@@ -293,8 +255,6 @@
                                 return 1;                                                                                        \
                         set_flags_shift(FLAGS_SHR32, temp_orig, c, temp >> c);                                                   \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 case 0x38: /*SAR l, c*/                                                                                          \
                         temp = (int32_t)temp >> c;                                                                               \
@@ -303,8 +263,6 @@
                                 return 1;                                                                                        \
                         set_flags_shift(FLAGS_SAR32, temp_orig, c, temp);                                                        \
                         CLOCK_CYCLES((cpu_mod == 3) ? 3 : 7);                                                                    \
-                        PREFETCH_RUN((cpu_mod == 3) ? 3 : 7, 2, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1,     \
-                                     ea32);                                                                                      \
                         break;                                                                                                   \
                 }                                                                                                                \
         }
@@ -319,7 +277,6 @@ static int opC0_a16(uint32_t fetchdat) {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31;
         cpu_state.pc++;
-        PREFETCH_PREFIX();
         temp = geteab();
         if (unlikely(cpu_state.abrt))
                 return 1;
@@ -336,7 +293,6 @@ static int opC0_a32(uint32_t fetchdat) {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31;
         cpu_state.pc++;
-        PREFETCH_PREFIX();
         temp = geteab();
         if (unlikely(cpu_state.abrt))
                 return 1;
@@ -353,7 +309,6 @@ static int opC1_w_a16(uint32_t fetchdat) {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31;
         cpu_state.pc++;
-        PREFETCH_PREFIX();
         temp = geteaw();
         if (unlikely(cpu_state.abrt))
                 return 1;
@@ -370,7 +325,6 @@ static int opC1_w_a32(uint32_t fetchdat) {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31;
         cpu_state.pc++;
-        PREFETCH_PREFIX();
         temp = geteaw();
         if (unlikely(cpu_state.abrt))
                 return 1;
@@ -387,7 +341,6 @@ static int opC1_l_a16(uint32_t fetchdat) {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31;
         cpu_state.pc++;
-        PREFETCH_PREFIX();
         temp = geteal();
         if (unlikely(cpu_state.abrt))
                 return 1;
@@ -404,7 +357,6 @@ static int opC1_l_a32(uint32_t fetchdat) {
                 SEG_CHECK_WRITE(cpu_state.ea_seg);
         c = readmemb(cs, cpu_state.pc) & 31;
         cpu_state.pc++;
-        PREFETCH_PREFIX();
         temp = geteal();
         if (unlikely(cpu_state.abrt))
                 return 1;
@@ -668,7 +620,6 @@ static int opD3_l_a32(uint32_t fetchdat) {
                 operation();                                                                                                     \
                                                                                                                                  \
                 CLOCK_CYCLES(3);                                                                                                 \
-                PREFETCH_RUN(3, 3, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0);                              \
                 return 0;                                                                                                        \
         }                                                                                                                        \
         static int op##operation##_CL_a16(uint32_t fetchdat) {                                                                   \
@@ -681,7 +632,6 @@ static int opD3_l_a32(uint32_t fetchdat) {
                 operation();                                                                                                     \
                                                                                                                                  \
                 CLOCK_CYCLES(3);                                                                                                 \
-                PREFETCH_RUN(3, 3, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 0);                              \
                 return 0;                                                                                                        \
         }                                                                                                                        \
         static int op##operation##_i_a32(uint32_t fetchdat) {                                                                    \
@@ -694,7 +644,6 @@ static int opD3_l_a32(uint32_t fetchdat) {
                 operation();                                                                                                     \
                                                                                                                                  \
                 CLOCK_CYCLES(3);                                                                                                 \
-                PREFETCH_RUN(3, 3, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 1);                              \
                 return 0;                                                                                                        \
         }                                                                                                                        \
         static int op##operation##_CL_a32(uint32_t fetchdat) {                                                                   \
@@ -707,7 +656,6 @@ static int opD3_l_a32(uint32_t fetchdat) {
                 operation();                                                                                                     \
                                                                                                                                  \
                 CLOCK_CYCLES(3);                                                                                                 \
-                PREFETCH_RUN(3, 3, rmdat, 0, (cpu_mod == 3) ? 0 : 1, 0, (cpu_mod == 3) ? 0 : 1, 1);                              \
                 return 0;                                                                                                        \
         }
 

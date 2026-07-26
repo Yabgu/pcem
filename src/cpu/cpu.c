@@ -90,8 +90,7 @@ int cpu_cyrix_alignment;
 
 uint64_t cpu_CR4_mask;
 
-int cpu_cycles_read, cpu_cycles_read_l, cpu_cycles_write, cpu_cycles_write_l;
-int cpu_prefetch_cycles, cpu_prefetch_width, cpu_mem_prefetch_cycles, cpu_rom_prefetch_cycles;
+int cpu_cycles_read_l, cpu_cycles_write, cpu_cycles_write_l;
 int cpu_waitstates;
 int cpu_cache_int_enabled, cpu_cache_ext_enabled;
 
@@ -205,11 +204,6 @@ void cpu_set() {
         cpu_update_waitstates();
 
         isa_cycles = cpu_s->atclk_div;
-
-        if (cpu_s->rspeed <= 8000000)
-                cpu_rom_prefetch_cycles = cpu_mem_prefetch_cycles;
-        else
-                cpu_rom_prefetch_cycles = cpu_s->rspeed / 1000000;
 
         if (cpu_s->pci_speed) {
                 pci_nonburst_time = 4 * cpu_s->rspeed / cpu_s->pci_speed;
@@ -2008,43 +2002,6 @@ void x86_setopcodes(OpFn *opcodes, OpFn *opcodes_0f, OpFn *dynarec_opcodes, OpFn
 }
 
 void cpu_update_waitstates() {
-        cpu_s = &models[model]->cpu[cpu_manufacturer].cpus[cpu];
-
-        if (is486)
-                cpu_prefetch_width = 16;
-        else
-                cpu_prefetch_width = cpu_16bitbus ? 2 : 4;
-
-        if (cpu_cache_int_enabled) {
-                /* Disable prefetch emulation */
-                cpu_prefetch_cycles = 0;
-        } else if (cpu_waitstates && (cpu_s->cpu_type >= CPU_286 && cpu_s->cpu_type <= CPU_386DX)) {
-                /* Waitstates override */
-                cpu_prefetch_cycles = cpu_waitstates + 1;
-                cpu_cycles_read = cpu_waitstates + 1;
-                cpu_cycles_read_l = (cpu_16bitbus ? 2 : 1) * (cpu_waitstates + 1);
-                cpu_cycles_write = cpu_waitstates + 1;
-                cpu_cycles_write_l = (cpu_16bitbus ? 2 : 1) * (cpu_waitstates + 1);
-        } else if (cpu_cache_ext_enabled) {
-                /* Use cache timings */
-                cpu_prefetch_cycles = cpu_s->cache_read_cycles;
-                cpu_cycles_read = cpu_s->cache_read_cycles;
-                cpu_cycles_read_l = (cpu_16bitbus ? 2 : 1) * cpu_s->cache_read_cycles;
-                cpu_cycles_write = cpu_s->cache_write_cycles;
-                cpu_cycles_write_l = (cpu_16bitbus ? 2 : 1) * cpu_s->cache_write_cycles;
-        } else {
-                /* Use memory timings */
-                cpu_prefetch_cycles = cpu_s->mem_read_cycles;
-                cpu_cycles_read = cpu_s->mem_read_cycles;
-                cpu_cycles_read_l = (cpu_16bitbus ? 2 : 1) * cpu_s->mem_read_cycles;
-                cpu_cycles_write = cpu_s->mem_write_cycles;
-                cpu_cycles_write_l = (cpu_16bitbus ? 2 : 1) * cpu_s->mem_write_cycles;
-        }
-        if (is486)
-                cpu_prefetch_cycles = (cpu_prefetch_cycles * 11) / 16;
-        cpu_mem_prefetch_cycles = cpu_prefetch_cycles;
-        if (cpu_s->rspeed <= 8000000)
-                cpu_rom_prefetch_cycles = cpu_mem_prefetch_cycles;
 }
 
 void cpu_set_turbo(int turbo) {

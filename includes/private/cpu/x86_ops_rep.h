@@ -24,7 +24,6 @@
                         writes++;                                                                                                \
                         total_cycles += 15;                                                                                      \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, writes, 0, 0);                                                       \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -56,7 +55,6 @@
                         writes++;                                                                                                \
                         total_cycles += 15;                                                                                      \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, writes, 0, 0);                                                       \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -90,7 +88,6 @@
                         writes++;                                                                                                \
                         total_cycles += 15;                                                                                      \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, 0, reads, 0, writes, 0);                                                       \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -120,7 +117,6 @@
                         writes++;                                                                                                \
                         total_cycles += 14;                                                                                      \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, writes, 0, 0);                                                       \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -150,7 +146,6 @@
                         writes++;                                                                                                \
                         total_cycles += 14;                                                                                      \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, writes, 0, 0);                                                       \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -182,7 +177,6 @@
                         writes++;                                                                                                \
                         total_cycles += 14;                                                                                      \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, 0, reads, 0, writes, 0);                                                       \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -228,7 +222,6 @@
                                 break;                                                                                           \
                 }                                                                                                                \
                 ins--;                                                                                                           \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, writes, 0, 0);                                                       \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -273,7 +266,6 @@
                                 break;                                                                                           \
                 }                                                                                                                \
                 ins--;                                                                                                           \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, writes, 0, 0);                                                       \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -318,7 +310,6 @@
                                 break;                                                                                           \
                 }                                                                                                                \
                 ins--;                                                                                                           \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, writes, 0, 0);                                                       \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -351,7 +342,6 @@
                         if (cycles < cycles_end)                                                                                 \
                                 break;                                                                                           \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, 0, 0, writes, 0, 0);                                                           \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -383,7 +373,6 @@
                         if (cycles < cycles_end)                                                                                 \
                                 break;                                                                                           \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, 0, 0, writes, 0, 0);                                                           \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -415,7 +404,6 @@
                         if (cycles < cycles_end)                                                                                 \
                                 break;                                                                                           \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, 0, 0, 0, writes, 0);                                                           \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -447,7 +435,6 @@
                         if (cycles < cycles_end)                                                                                 \
                                 break;                                                                                           \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, 0, 0, 0);                                                            \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -478,7 +465,6 @@
                         if (cycles < cycles_end)                                                                                 \
                                 break;                                                                                           \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, 0, 0, 0);                                                            \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -509,7 +495,6 @@
                         if (cycles < cycles_end)                                                                                 \
                                 break;                                                                                           \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, 0, reads, 0, 0, 0);                                                            \
                 if (CNT_REG > 0) {                                                                                               \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -546,7 +531,6 @@
                         setsub8(temp, temp2);                                                                                    \
                         tempz = (ZF_SET()) ? 1 : 0;                                                                              \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, 0, 0, 0);                                                            \
                 if ((CNT_REG > 0) && (FV == tempz)) {                                                                            \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -581,7 +565,6 @@
                         setsub16(temp, temp2);                                                                                   \
                         tempz = (ZF_SET()) ? 1 : 0;                                                                              \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, 0, 0, 0);                                                            \
                 if ((CNT_REG > 0) && (FV == tempz)) {                                                                            \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -616,7 +599,6 @@
                         setsub32(temp, temp2);                                                                                   \
                         tempz = (ZF_SET()) ? 1 : 0;                                                                              \
                 }                                                                                                                \
-                PREFETCH_RUN(total_cycles, 1, -1, 0, reads, 0, 0, 0);                                                            \
                 if ((CNT_REG > 0) && (FV == tempz)) {                                                                            \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -652,7 +634,6 @@
                                 break;                                                                                           \
                 }                                                                                                                \
                 ins--;                                                                                                           \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, 0, 0, 0);                                                            \
                 if ((CNT_REG > 0) && (FV == tempz)) {                                                                            \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -687,7 +668,6 @@
                                 break;                                                                                           \
                 }                                                                                                                \
                 ins--;                                                                                                           \
-                PREFETCH_RUN(total_cycles, 1, -1, reads, 0, 0, 0, 0);                                                            \
                 if ((CNT_REG > 0) && (FV == tempz)) {                                                                            \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -722,7 +702,6 @@
                                 break;                                                                                           \
                 }                                                                                                                \
                 ins--;                                                                                                           \
-                PREFETCH_RUN(total_cycles, 1, -1, 0, reads, 0, 0, 0);                                                            \
                 if ((CNT_REG > 0) && (FV == tempz)) {                                                                            \
                         CPU_BLOCK_END();                                                                                         \
                         cpu_state.pc = cpu_state.oldpc;                                                                          \
@@ -745,7 +724,6 @@ static int opREPNE(uint32_t fetchdat) {
         cpu_state.pc++;
 
         CLOCK_CYCLES(2);
-        PREFETCH_PREFIX();
         if (x86_opcodes_REPNE[(fetchdat & 0xff) | cpu_state.op32])
                 return x86_opcodes_REPNE[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
         return x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
@@ -757,7 +735,6 @@ static int opREPE(uint32_t fetchdat) {
         cpu_state.pc++;
 
         CLOCK_CYCLES(2);
-        PREFETCH_PREFIX();
         if (x86_opcodes_REPE[(fetchdat & 0xff) | cpu_state.op32])
                 return x86_opcodes_REPE[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);
         return x86_opcodes[(fetchdat & 0xff) | cpu_state.op32](fetchdat >> 8);

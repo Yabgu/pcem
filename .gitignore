@@ -426,3 +426,8 @@ build-*/
 cmake-build-*/
 output/
 !.vs/launch.vs.json
+.codewhale
+.deepseek
+.vscode
+/perf*
+vram.dmp
