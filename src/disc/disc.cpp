@@ -32,18 +32,6 @@ int motoron;
 
 int fdc_indexcount = 52;
 
-/*void (*fdc_callback)();
-void (*fdc_data)(uint8_t dat);
-void (*fdc_spindown)();
-void (*fdc_finishread)();
-void (*fdc_notfound)();
-void (*fdc_datacrcerror)();
-void (*fdc_headercrcerror)();
-void (*fdc_writeprotect)();
-int  (*fdc_getdata)(int last);
-void (*fdc_sectorid)(uint8_t track, uint8_t side, uint8_t sector, uint8_t size, uint8_t crc1, uint8_t crc2);
-void (*fdc_indexpulse)();*/
-
 static struct {
         char *ext;
         void (*load)(int drive, char *fn);
