@@ -1131,14 +1131,14 @@ int config_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM lParam)
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO1"));
                         temp_model = listtomodel[wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0)];
 
-                        deviceconfig_open(hdlg, (void *)model_getdevice(temp_model));
+                        deviceconfig_open(hdlg, model_getdevice(temp_model));
                 } else if (wParam == WX_ID("IDC_CONFIGUREVID")) {
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBOVID"));
                         wx_sendmessage(h, WX_CB_GETLBTEXT, wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0), (LONG_PARAM)temp_str);
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO1"));
                         temp_model = listtomodel[wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0)];
 
-                        deviceconfig_open(hdlg, (void *)video_card_getdevice(video_card_getid(temp_str),
+                        deviceconfig_open(hdlg, video_card_getdevice(video_card_getid(temp_str),
                                                                              model_getromset_from_model(temp_model)));
                 } else if (wParam == WX_ID("IDC_COMBOVID")) {
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO1"));
@@ -1157,7 +1157,7 @@ int config_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM lParam)
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBOSND"));
                         temp_sound_card_current = settings_list_to_sound[wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0)];
 
-                        deviceconfig_open(hdlg, (void *)sound_card_getdevice(temp_sound_card_current));
+                        deviceconfig_open(hdlg, sound_card_getdevice(temp_sound_card_current));
                 } else if (wParam == WX_ID("IDC_COMBOSND")) {
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBOSND"));
                         temp_sound_card_current = settings_list_to_sound[wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0)];
@@ -1168,7 +1168,7 @@ int config_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM lParam)
                         else
                                 wx_enablewindow(h, FALSE);
                 } else if (wParam == WX_ID("IDC_CONFIGUREVOODOO")) {
-                        deviceconfig_open(hdlg, (void *)&voodoo_device);
+                        deviceconfig_open(hdlg, &voodoo_device);
                 } else if (wParam == WX_ID("IDC_COMBOHDD")) {
                         hdconf_update(hdlg);
 
@@ -1182,7 +1182,7 @@ int config_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM lParam)
                         temp_cd_speed = wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0);
                         recalc_cd_list(hdlg, cd_get_speed(temp_cd_speed), cd_get_model(temp_cd_model));
                 } else if (wParam == WX_ID("IDC_CONFIGUREHDD")) {
-                        deviceconfig_open(hdlg, (void *)hdd_controller_selected_get_device(hdlg));
+                        deviceconfig_open(hdlg, hdd_controller_selected_get_device(hdlg));
                 } else if (wParam == WX_ID("IDC_COMBO_CDMODEL")) {
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO_CDMODEL"));
                         temp_cd_model = wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0);
@@ -1204,7 +1204,7 @@ int config_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM lParam)
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO_NETCARD"));
                         temp_network_card = settings_list_to_network[wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0)];
 
-                        deviceconfig_open(hdlg, (void *)network_card_getdevice(temp_network_card));
+                        deviceconfig_open(hdlg, network_card_getdevice(temp_network_card));
                 }
 #endif
                 else if (wParam == WX_ID("IDC_COMBOJOY")) {
@@ -1249,7 +1249,7 @@ int config_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM lParam)
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBOLPT1"));
                         temp_lpt1_current = wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0);
 
-                        deviceconfig_open(hdlg, (void *)lpt_get_device(temp_lpt1_current));
+                        deviceconfig_open(hdlg, lpt_get_device(temp_lpt1_current));
                 } else if (wParam == WX_ID("IDC_COMBOLPT1")) {
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBOLPT1"));
                         temp_lpt1_current = wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0);

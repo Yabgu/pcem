@@ -86,7 +86,7 @@ int hostconfig_dialog_proc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM
 
                 if (pcap_findalldevs(&alldevs, errbuf) == 0) {
 
-                        char *pcap_device = config_get_string(CFG_GLOBAL, NULL, "pcap_device", "nothing");
+                        const char *pcap_device = config_get_string(CFG_GLOBAL, NULL, "pcap_device", "nothing");
 
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO_NETWORK_DEVICE"));
 

@@ -29,6 +29,7 @@
 
 */
 
+#include <cstdint>
 #define STATIC_INLINE
 #include <stdio.h>
 #include <stdlib.h>
@@ -186,10 +187,10 @@ static uae_u8 *expand_tree(uae_u8 *stream, NODE *node) {
                         temp = *stream++;
                         temp2 = 0x80;
                 }
-                node->left = fdi_malloc(sizeof(NODE));
+                node->left = (struct node*)fdi_malloc(sizeof(NODE));
                 memset(node->left, 0, sizeof(NODE));
                 stream_temp = expand_tree(stream, node->left);
-                node->right = fdi_malloc(sizeof(NODE));
+                node->right = (struct node*)fdi_malloc(sizeof(NODE));
                 memset(node->right, 0, sizeof(NODE));
                 return expand_tree(stream_temp, node->right);
         }
@@ -1284,7 +1285,7 @@ static uae_u8 *fdi_decompress(int pulses, uae_u8 *sizep, uae_u8 *src, int *dofre
                         src += 4;
                 }
         } else if (mode == 1) {
-                dst = fdi_malloc(pulses * 4);
+                dst = (uint8_t*)fdi_malloc(pulses * 4);
                 *dofree = 1;
                 fdi_decode(src, pulses, dst);
         } else {
@@ -1771,7 +1772,7 @@ static int decode_lowlevel_track(FDI *fdi, int track, struct fdi_cache *cache) {
                         idx_off3 = 4;
                 }
         } else {
-                idxp = fdi_malloc(pulses * 2);
+                idxp = (uint8_t*)fdi_malloc(pulses * 2);
                 idx_free = 1;
                 for (i = 0; i < pulses; i++) {
                         idxp[i * 2 + 0] = 2;
@@ -1900,7 +1901,7 @@ FDI *fdi2raw_header(FILE *f) {
         FDI *fdi;
 
         debuglog("ALLOC: memory allocated %d\n", fdi_allocated);
-        fdi = fdi_malloc(sizeof(FDI));
+        fdi = (FDI *)fdi_malloc(sizeof(FDI));
         memset(fdi, 0, sizeof(FDI));
         fdi->file = f;
         oldseek = ftell(fdi->file);
@@ -1917,10 +1918,10 @@ FDI *fdi2raw_header(FILE *f) {
                 return NULL;
         }
 
-        fdi->mfmsync_buffer = fdi_malloc(MAX_MFM_SYNC_BUFFER * sizeof(int));
-        fdi->track_src_buffer = fdi_malloc(MAX_SRC_BUFFER);
-        fdi->track_dst_buffer = fdi_malloc(MAX_DST_BUFFER);
-        fdi->track_dst_buffer_timing = fdi_malloc(MAX_TIMING_BUFFER);
+        fdi->mfmsync_buffer = (int*)fdi_malloc(MAX_MFM_SYNC_BUFFER * sizeof(int));
+        fdi->track_src_buffer = (uint8_t*)fdi_malloc(MAX_SRC_BUFFER);
+        fdi->track_dst_buffer = (uint8_t*)fdi_malloc(MAX_DST_BUFFER);
+        fdi->track_dst_buffer_timing = (uint16_t*)fdi_malloc(MAX_TIMING_BUFFER);
 
         fdi->last_track = ((fdi->header[142] << 8) + fdi->header[143]) + 1;
         fdi->last_track *= fdi->header[144] + 1;

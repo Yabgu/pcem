@@ -503,7 +503,7 @@ void *et4000k_init() {
         memset(et4000, 0, sizeof(et4000_t));
 
         rom_init(&et4000->bios_rom, "tgkorvga.bin", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
-        loadfont("tg_ksc5601.rom", 6);
+        loadfont("tg_ksc5601.rom", FONT_KSC5601 /*i guess 6 means this*/);
 
         io_sethandler(0x03c0, 0x0020, et4000k_in, NULL, NULL, et4000k_out, NULL, NULL, et4000);
 
@@ -533,7 +533,7 @@ void *et4000_kasan_init() {
         memset(et4000, 0, sizeof(et4000_t));
 
         rom_init(&et4000->bios_rom, "et4000_kasan16.bin", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
-        loadfont("kasan_ksc5601.rom", 6);
+        loadfont("kasan_ksc5601.rom", FONT_KSC5601/*6 means this i guess*/);
 
         io_sethandler(0x03c0, 0x0020, et4000k_in, NULL, NULL, et4000k_out, NULL, NULL, et4000);
 

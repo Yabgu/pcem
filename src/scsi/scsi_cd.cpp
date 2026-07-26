@@ -1282,7 +1282,7 @@ static int scsi_cd_command(uint8_t *cdb, void *p) {
                 alloc_length = (cdb[7] << 16) | (cdb[8] << 8) | cdb[9];
 
                 {
-                        struct __attribute__((__packed__)) {
+                        struct __attribute__((__packed__)) gesn_cdb_t {
                                 uint8_t opcode;
                                 uint8_t polled;
                                 uint8_t reserved2[2];
@@ -1292,15 +1292,15 @@ static int scsi_cd_command(uint8_t *cdb, void *p) {
                                 uint8_t control;
                         } * gesn_cdb;
 
-                        struct __attribute__((__packed__)) {
+                        struct __attribute__((__packed__)) gesn_event_header_t {
                                 uint16_t len;
                                 uint8_t notification_class;
                                 uint8_t supported_events;
                         } * gesn_event_header;
                         unsigned int used_len;
 
-                        gesn_cdb = (void *)cdb;
-                        gesn_event_header = (void *)data->data_in;
+                        gesn_cdb = (gesn_cdb_t *)cdb;
+                        gesn_event_header = (gesn_event_header_t *)data->data_in;
 
                         /* It is fine by the MMC spec to not support async mode operations */
                         if (!(gesn_cdb->polled & 0x01)) { /* asynchronous mode */

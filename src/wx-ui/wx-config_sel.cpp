@@ -8,12 +8,12 @@ static int active_config = -1;
 
 extern int config_open(void *hwnd);
 
-char *validate_config_name(const char *name) {
+const char *validate_config_name(const char *name) {
         char notAllowed[] = {'/', '<', '>', ':', '"', '\\', '|', '?', '*'};
         int i;
 
         for (i = 0; i < sizeof(notAllowed) / sizeof(char); i++) {
-                char *ret = strchr(name, notAllowed[i]);
+                const char *ret = strchr(name, notAllowed[i]);
                 if (ret != NULL)
                         return ret;
         }

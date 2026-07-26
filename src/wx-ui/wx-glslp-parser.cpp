@@ -49,22 +49,25 @@ static char *load_file(const char *fn) {
         return data;
 }
 
-static void strip_lines(const char *program, const char *starts_with) {
+static void strip_lines(char *program, const char *starts_with) {
         /* strip parameters */
         char *ptr = strstr(program, starts_with);
         while (ptr) {
                 while (*ptr != '\n' && *ptr != '\0')
-                        *ptr++ = ' ';
+                {
+                        *ptr = ' ';
+                        ptr++;
+                }
                 ptr = strstr(program, starts_with);
         }
 }
 
-static void strip_parameters(const char *program) {
+static void strip_parameters(char *program) {
         /* strip parameters */
         strip_lines(program, "#pragma parameter");
 }
 
-static void strip_defines(const char *program) {
+static void strip_defines(char *program) {
         /* strip texture define */
         strip_lines(program, "#define texture");
 }

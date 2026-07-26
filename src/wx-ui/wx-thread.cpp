@@ -98,10 +98,10 @@ typedef struct event_pthread_t {
         int state;
 } event_pthread_t;
 
-thread_t *thread_create(void (*thread_rout)(void *param), void *param) {
+thread_t *thread_create(void *(*thread_rout)(void *param), void *param) {
         pthread_t *thread = (pthread_t *)malloc(sizeof(pthread_t));
 
-        pthread_create(thread, NULL, (void *)thread_rout, param);
+        pthread_create(thread, NULL, thread_rout, param);
 
         return thread;
 }

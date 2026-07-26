@@ -2577,7 +2577,7 @@ static void *banshee_init_common(char *fn, int has_sgram, int type, int voodoo_t
 
         pci_add(banshee_pci_read, banshee_pci_write, banshee);
 
-        banshee->voodoo = voodoo_2d3d_card_init(voodoo_type);
+        banshee->voodoo = (struct voodoo_t*)voodoo_2d3d_card_init(voodoo_type);
         banshee->voodoo->p = banshee;
         banshee->voodoo->vram = banshee->svga.vram;
         banshee->voodoo->changedvram = banshee->svga.changedvram;

@@ -396,7 +396,7 @@ void *ati28800k_spc4620p_init() {
 
         rom_init_interleaved(&ati28800->bios_rom, "spc4620p/31005h.u8", "spc4620p/31005h.u10", 0xc0000, 0x8000, 0x7fff, 0,
                              MEM_MAPPING_EXTERNAL);
-        loadfont("spc4620p/svb6120a_font.rom", 6);
+        loadfont("spc4620p/svb6120a_font.rom", FONT_KSC5601 /*6*/);
 
         svga_init(&ati28800->svga, ati28800, 1 << 19, /*512kb*/
                   ati28800k_recalctimings, ati28800k_in, ati28800k_out, NULL, NULL);
@@ -430,7 +430,7 @@ void *ati28800k_spc6033p_init() {
         ati28800->ksc5601_mode_enabled = 0;
 
         rom_init(&ati28800->bios_rom, "spc6033p/phoenix.bin", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
-        loadfont("spc6033p/svb6120a_font.rom", 6);
+        loadfont("spc6033p/svb6120a_font.rom", FONT_KSC5601 /*6*/ );
 
         svga_init(&ati28800->svga, ati28800, 1 << 19, /*512kb*/
                   ati28800k_recalctimings, ati28800k_in, ati28800k_out, NULL, NULL);
