@@ -6,24 +6,24 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
 
 set(PCEM_SRC ${PCEM_SRC}
         cdrom/cdrom-image.cc
-        cdrom/cdrom-null.c
+        cdrom/cdrom-null.cpp
         )
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
         set(PCEM_SRC ${PCEM_SRC} ${PCEM_SRC_CDROM}
-                cdrom/cdrom-ioctl-linux.c
+                cdrom/cdrom-ioctl-linux.cpp
                 )
 endif()
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
         set(PCEM_SRC ${PCEM_SRC} ${PCEM_SRC_CDROM}
-                cdrom/cdrom-ioctl.c
+                cdrom/cdrom-ioctl.cpp
                 )
 endif()
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
         set(PCEM_SRC ${PCEM_SRC} ${PCEM_SRC_CDROM}
-                cdrom/cdrom-ioctl-osx.c
+                cdrom/cdrom-ioctl-osx.cpp
                 )
 endif()
 

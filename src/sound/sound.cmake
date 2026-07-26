@@ -35,36 +35,36 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        sound/sound.c
-        sound/sound_ad1848.c
-        sound/sound_adlib.c
-        sound/sound_adlibgold.c
-        sound/sound_audiopci.c
-        sound/sound_azt2316a.c
-        sound/sound_cms.c
+        sound/sound.cpp
+        sound/sound_ad1848.cpp
+        sound/sound_adlib.cpp
+        sound/sound_adlibgold.cpp
+        sound/sound_audiopci.cpp
+        sound/sound_azt2316a.cpp
+        sound/sound_cms.cpp
         sound/sound_dbopl.cc
-        sound/sound_emu8k.c
-        sound/sound_gus.c
-        sound/sound_mmb.c
-        sound/sound_mpu401_uart.c
-        sound/sound_opl.c
-        sound/sound_pas16.c
-        sound/sound_ps1.c
-        sound/sound_pssj.c
+        sound/sound_emu8k.cpp
+        sound/sound_gus.cpp
+        sound/sound_mmb.cpp
+        sound/sound_mpu401_uart.cpp
+        sound/sound_opl.cpp
+        sound/sound_pas16.cpp
+        sound/sound_ps1.cpp
+        sound/sound_pssj.cpp
         sound/sound_resid.cc
-        sound/sound_sb.c
-        sound/sound_sb_dsp.c
-        sound/sound_sn76489.c
-        sound/sound_speaker.c
-        sound/sound_ssi2001.c
-        sound/sound_wss.c
-        sound/sound_ym7128.c
-        sound/soundopenal.c
+        sound/sound_sb.cpp
+        sound/sound_sb_dsp.cpp
+        sound/sound_sn76489.cpp
+        sound/sound_speaker.cpp
+        sound/sound_ssi2001.cpp
+        sound/sound_wss.cpp
+        sound/sound_ym7128.cpp
+        sound/soundopenal.cpp
         )
 
 # AYUMI
 set(PCEM_SRC ${PCEM_SRC}
-        sound/ayumi/ayumi.c
+        sound/ayumi/ayumi.cpp
         )
 
 # RESID-FP
@@ -90,17 +90,17 @@ set(PCEM_SRC ${PCEM_SRC}
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" AND USE_ALSA)
         set(PCEM_SRC ${PCEM_SRC}
-                sound/midi_alsa.c
+                sound/midi_alsa.cpp
                 )
         set(PCEM_ADDITIONAL_LIBS ${PCEM_ADDITIONAL_LIBS} ${ALSA_LIBRARIES})
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     set(PCEM_SRC ${PCEM_SRC}
-                sound/win-midi.c
+                sound/win-midi.cpp
                 )
                 set(PCEM_ADDITIONAL_LIBS ${PCEM_ADDITIONAL_LIBS} winmm)
 else()
     message(STATUS "Warning: Using sdl2-midi. It currently is an empty midi implementation")
         set(PCEM_SRC ${PCEM_SRC}
-                sound/sdl2-midi.c
+                sound/sdl2-midi.cpp
                 )
 endif()

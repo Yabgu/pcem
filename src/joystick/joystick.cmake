@@ -7,9 +7,9 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        joystick/gameport.c
-        joystick/joystick_ch_flightstick_pro.c
-        joystick/joystick_standard.c
-        joystick/joystick_sw_pad.c
-        joystick/joystick_tm_fcs.c
+        joystick/gameport.cpp
+        joystick/joystick_ch_flightstick_pro.cpp
+        joystick/joystick_standard.cpp
+        joystick/joystick_sw_pad.cpp
+        joystick/joystick_tm_fcs.cpp
         )

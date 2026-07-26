@@ -131,7 +131,7 @@ void config_load(int is_global, char *fn) {
 
         memset(head, 0, sizeof(list_t));
 
-        current_section = malloc(sizeof(section_t));
+        current_section = (section_t *)malloc(sizeof(section_t));
         memset(current_section, 0, sizeof(section_t));
         list_add(&current_section->list, head);
 
@@ -171,7 +171,7 @@ void config_load(int is_global, char *fn) {
                                 continue;
                         name[d] = 0;
 
-                        new_section = malloc(sizeof(section_t));
+                        new_section = (section_t *)malloc(sizeof(section_t));
                         memset(new_section, 0, sizeof(section_t));
                         strncpy(new_section->name, name, 256);
                         list_add(&new_section->list, head);
@@ -204,7 +204,7 @@ void config_load(int is_global, char *fn) {
                                 c++;
                         }
 
-                        new_entry = malloc(sizeof(entry_t));
+                        new_entry = (entry_t *)malloc(sizeof(entry_t));
                         memset(new_entry, 0, sizeof(entry_t));
                         strncpy(new_entry->name, name, 256);
                         strncpy(new_entry->data, &buffer[data_pos], 256);
@@ -256,7 +256,7 @@ static entry_t *find_entry(section_t *section, char *name) {
 }
 
 static section_t *create_section(char *name, int is_global) {
-        section_t *new_section = malloc(sizeof(section_t));
+        section_t *new_section = (section_t *)malloc(sizeof(section_t));
         list_t *head = is_global ? &global_config_head : &machine_config_head;
 
         memset(new_section, 0, sizeof(section_t));
@@ -267,7 +267,7 @@ static section_t *create_section(char *name, int is_global) {
 }
 
 static entry_t *create_entry(section_t *section, char *name) {
-        entry_t *new_entry = malloc(sizeof(entry_t));
+        entry_t *new_entry = (entry_t *)malloc(sizeof(entry_t));
         memset(new_entry, 0, sizeof(entry_t));
         strncpy(new_entry->name, name, 256);
         list_add(&new_entry->list, &section->entry_head);

@@ -6,8 +6,8 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        disc/disc.c
-        disc/disc_fdi.c
-        disc/disc_img.c
-        disc/disc_sector.c
+        disc/disc.cpp
+        disc/disc_fdi.cpp
+        disc/disc_img.cpp
+        disc/disc_sector.cpp
         )

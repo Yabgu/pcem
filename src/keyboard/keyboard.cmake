@@ -8,10 +8,10 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        keyboard/keyboard.c
-        keyboard/keyboard_amstrad.c
-        keyboard/keyboard_at.c
-        keyboard/keyboard_olim24.c
-        keyboard/keyboard_pcjr.c
-        keyboard/keyboard_xt.c
+        keyboard/keyboard.cpp
+        keyboard/keyboard_amstrad.cpp
+        keyboard/keyboard_at.cpp
+        keyboard/keyboard_olim24.cpp
+        keyboard/keyboard_pcjr.cpp
+        keyboard/keyboard_xt.cpp
         )

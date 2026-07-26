@@ -6,8 +6,8 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        floppy/fdc.c
-        floppy/fdc37c665.c
-        floppy/fdc37c93x.c
-        floppy/fdd.c
+        floppy/fdc.cpp
+        floppy/fdc37c665.cpp
+        floppy/fdc37c93x.cpp
+        floppy/fdd.cpp
         )

@@ -7,9 +7,9 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        flash/intel_flash.c
-        flash/rom.c
-        flash/sst39sf010.c
-        flash/tandy_eeprom.c
-        flash/tandy_rom.c
+        flash/intel_flash.cpp
+        flash/rom.cpp
+        flash/sst39sf010.cpp
+        flash/tandy_eeprom.cpp
+        flash/tandy_rom.cpp
         )

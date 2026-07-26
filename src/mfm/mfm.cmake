@@ -4,6 +4,6 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        mfm/mfm_at.c
-        mfm/mfm_xebec.c
+        mfm/mfm_at.cpp
+        mfm/mfm_xebec.cpp
         )

@@ -17,9 +17,9 @@ if(USE_PCAP_NETWORKING)
 endif()
 
 set(PCEM_SRC ${PCEM_SRC}
-        networking/ne2000.c
-        networking/nethandler.c
-        networking/queue.c
+        networking/ne2000.cpp
+        networking/nethandler.cpp
+        networking/queue.cpp
         )
 
 if(WIN32)

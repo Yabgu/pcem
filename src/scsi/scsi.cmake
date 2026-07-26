@@ -9,11 +9,11 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        scsi/scsi.c
-        scsi/scsi_53c400.c
-        scsi/scsi_aha1540.c
-        scsi/scsi_cd.c
-        scsi/scsi_hd.c
-        scsi/scsi_ibm.c
-        scsi/scsi_zip.c
+        scsi/scsi.cpp
+        scsi/scsi_53c400.cpp
+        scsi/scsi_aha1540.cpp
+        scsi/scsi_cd.cpp
+        scsi/scsi_hd.cpp
+        scsi/scsi_ibm.cpp
+        scsi/scsi_zip.cpp
         )

@@ -7,8 +7,8 @@ set(EPSON_LX810_HEADER
 
 set(EPSON_LX810_SRC
         wx-imagesave.cc
-        lpt_epsonlx810.c
-        plugin.c
+        lpt_epsonlx810.cpp
+        plugin.cpp
         )
 
 add_library(printer_epsonlx810 SHARED ${EPSON_LX810_SRC} ${EPSON_LX810_HEADER})

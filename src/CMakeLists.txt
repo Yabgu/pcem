@@ -59,15 +59,15 @@ if(${PCEM_DISPLAY_ENGINE} STREQUAL "Qt")
 endif()
 
 set(PCEM_SRC ${PCEM_SRC}
-        fdi2raw.c
-        io.c
-        mcr.c
-        pc.c
-        ppi.c
-        pzx.c
-        rtc.c
-        rtc_tc8521.c
-        timer.c
+        fdi2raw.cpp
+        io.cpp
+        mcr.cpp
+        pc.cpp
+        ppi.cpp
+        pzx.cpp
+        rtc.cpp
+        rtc_tc8521.cpp
+        timer.cpp
         )
 
 set(PCEM_LIBRARIES ${DISPLAY_ENGINE_LIBRARIES} ${SDL2_LIBRARIES} ${OPENAL_LIBRARY} ${OPENGL_LIBRARIES} ${PCEM_ADDITIONAL_LIBS})

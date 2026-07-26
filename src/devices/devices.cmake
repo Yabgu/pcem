@@ -9,10 +9,10 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        devices/cassette.c
-        devices/esdi_at.c
-        devices/f82c710_upc.c
-        devices/nvr.c
-        devices/ps2_nvr.c
-        devices/sis496.c
+        devices/cassette.cpp
+        devices/esdi_at.cpp
+        devices/f82c710_upc.cpp
+        devices/nvr.cpp
+        devices/ps2_nvr.cpp
+        devices/sis496.cpp
         )

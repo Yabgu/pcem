@@ -20,11 +20,11 @@ set(PCEM_PUBLIC_API ${PCEM_PUBLIC_API}
 
 set(PCEM_SRC_PLUGINAPI
         ${PCEM_SRC_PLUGINAPI}
-        plugin-api/config.c
-        plugin-api/paths.c
-        plugin-api/logging.c
-        plugin-api/device.c
-        plugin-api/plugin.c
+        plugin-api/config.cpp
+        plugin-api/paths.cpp
+        plugin-api/logging.cpp
+        plugin-api/device.cpp
+        plugin-api/plugin.cpp
         )
 
 if(${PCEM_DISPLAY_ENGINE} STREQUAL "wxWidgets")

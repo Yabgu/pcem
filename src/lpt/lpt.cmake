@@ -5,7 +5,7 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        lpt/lpt.c
-        lpt/lpt_dac.c
-        lpt/lpt_dss.c
+        lpt/lpt.cpp
+        lpt/lpt_dac.cpp
+        lpt/lpt_dss.cpp
         )

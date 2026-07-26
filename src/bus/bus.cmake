@@ -4,6 +4,6 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        bus/mca.c
-        bus/pci.c
+        bus/mca.cpp
+        bus/pci.cpp
         )

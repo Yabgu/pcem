@@ -21,28 +21,28 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
 
 set(PCEM_SRC ${PCEM_SRC}
         qt-ui/qt-app.cc
-        qt-ui/qt-common.c
-        qt-ui/qt-config.c
-        qt-ui/qt-config_sel.c
+        qt-ui/qt-common.cpp
+        qt-ui/qt-config.cpp
+        qt-ui/qt-config_sel.cpp
         qt-ui/qt-config-eventbinder.cc
         qt-ui/qt-createdisc.cc
         qt-ui/qt-deviceconfig.cc
         qt-ui/qt-dialogbox.cc
-        qt-ui/qt-glslp-parser.c
+        qt-ui/qt-glslp-parser.cpp
         qt-ui/qt-joystickconfig.cc
         qt-ui/qt-main.cc
-        qt-ui/qt-sdl2.c
-        qt-ui/qt-sdl2-joystick.c
-        qt-ui/qt-sdl2-keyboard.c
-        qt-ui/qt-sdl2-mouse.c
-        qt-ui/qt-sdl2-status.c
-        qt-ui/qt-sdl2-video.c
-        qt-ui/qt-sdl2-video-gl3.c
-        qt-ui/qt-sdl2-video-renderer.c
-        qt-ui/qt-shader_man.c
+        qt-ui/qt-sdl2.cpp
+        qt-ui/qt-sdl2-joystick.cpp
+        qt-ui/qt-sdl2-keyboard.cpp
+        qt-ui/qt-sdl2-mouse.cpp
+        qt-ui/qt-sdl2-status.cpp
+        qt-ui/qt-sdl2-video.cpp
+        qt-ui/qt-sdl2-video-gl3.cpp
+        qt-ui/qt-sdl2-video-renderer.cpp
+        qt-ui/qt-shader_man.cpp
         qt-ui/qt-shaderconfig.cc
         qt-ui/qt-status.cc
-        qt-ui/qt-thread.c
+        qt-ui/qt-thread.cpp
         qt-ui/qt-utils.cc
 		qt-ui/AboutDlg.ui
 		qt-ui/ConfigureDlg.ui
@@ -57,7 +57,7 @@ set(PCEM_SRC ${PCEM_SRC}
 
 if(USE_NETWORKING)
         set(PCEM_SRC ${PCEM_SRC}
-                qt-ui/qt-hostconfig.c
+                qt-ui/qt-hostconfig.cpp
                 )
 endif()
 

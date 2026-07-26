@@ -4,6 +4,6 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        memory/mem.c
-        memory/mem_bios.c
+        memory/mem.cpp
+        memory/mem_bios.cpp
         )

@@ -38,7 +38,8 @@ void device_close_all() {
                 if (devices[c] != NULL) {
                         if (devices[c]->close != NULL)
                                 devices[c]->close(device_priv[c]);
-                        devices[c] = device_priv[c] = NULL;
+                        devices[c] = NULL;
+                        device_priv[c] = NULL;
                 }
         }
 }

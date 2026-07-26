@@ -14,24 +14,24 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        hdd/hdd.c
-        hdd/hdd_esdi.c
-        hdd/hdd_file.c
+        hdd/hdd.cpp
+        hdd/hdd_esdi.cpp
+        hdd/hdd_file.cpp
         )
 
 # RAMDisk
 set(PCEM_SRC ${PCEM_SRC}
-        hdd/ramdisk/ramdisk.c
+        hdd/ramdisk/ramdisk.cpp
         )
 
 # MiniVHD
 set(PCEM_SRC ${PCEM_SRC}
-        hdd/minivhd/cwalk.c
-        hdd/minivhd/libxml2_encoding.c
-        hdd/minivhd/minivhd_convert.c
-        hdd/minivhd/minivhd_create.c
-        hdd/minivhd/minivhd_io.c
-        hdd/minivhd/minivhd_manage.c
-        hdd/minivhd/minivhd_struct_rw.c
-        hdd/minivhd/minivhd_util.c
+        hdd/minivhd/cwalk.cpp
+        hdd/minivhd/libxml2_encoding.cpp
+        hdd/minivhd/minivhd_convert.cpp
+        hdd/minivhd/minivhd_create.cpp
+        hdd/minivhd/minivhd_io.cpp
+        hdd/minivhd/minivhd_manage.cpp
+        hdd/minivhd/minivhd_struct_rw.cpp
+        hdd/minivhd/minivhd_util.cpp
         )

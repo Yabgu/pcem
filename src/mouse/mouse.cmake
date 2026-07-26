@@ -6,8 +6,8 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        mouse/mouse.c
-        mouse/mouse_msystems.c
-        mouse/mouse_ps2.c
-        mouse/mouse_serial.c
+        mouse/mouse.cpp
+        mouse/mouse_msystems.cpp
+        mouse/mouse_ps2.cpp
+        mouse/mouse_serial.cpp
         )

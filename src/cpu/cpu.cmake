@@ -52,14 +52,14 @@ set(PCEM_PRIVATE_API ${PCEM_PRIVATE_API}
         )
 
 set(PCEM_SRC ${PCEM_SRC}
-        cpu/386.c
-        cpu/386_common.c
-        cpu/386_dynarec.c
-        cpu/386_dynarec_ops.c
-        cpu/808x.c
-        cpu/cpu.c
-        cpu/cpu_tables.c
-        cpu/x86seg.c
-        cpu/x87.c
-        cpu/x87_timings.c
+        cpu/386.cpp
+        cpu/386_common.cpp
+        cpu/386_dynarec.cpp
+        cpu/386_dynarec_ops.cpp
+        cpu/808x.cpp
+        cpu/cpu.cpp
+        cpu/cpu_tables.cpp
+        cpu/x86seg.cpp
+        cpu/x87.cpp
+        cpu/x87_timings.cpp
         )
