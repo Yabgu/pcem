@@ -690,7 +690,7 @@ static void voodoo_half_triangle(voodoo_t *voodoo, voodoo_params_t *params, vood
         }
 #ifndef NO_CODEGEN
         if (voodoo->use_recompiler)
-                voodoo_draw = voodoo_get_block(voodoo, params, state, odd_even);
+                voodoo_draw = (uint8_t (*)(voodoo_state_t *, voodoo_params_t *, int, int))voodoo_get_block(voodoo, params, state, odd_even);
         else
                 voodoo_draw = NULL;
 #endif
@@ -1291,8 +1291,8 @@ static void voodoo_half_triangle(voodoo_t *voodoo, voodoo_params_t *params, vood
                 state->xend += state->dx2;
         }
 
-        voodoo->texture_cache[0][params->tex_entry[0]].refcount_r[odd_even]++;
-        voodoo->texture_cache[1][params->tex_entry[1]].refcount_r[odd_even]++;
+        voodoo->texture_cache[0][params->tex_entry[0]].refcount_r[odd_even] = voodoo->texture_cache[0][params->tex_entry[0]].refcount_r[odd_even] + 1;
+        voodoo->texture_cache[1][params->tex_entry[1]].refcount_r[odd_even] = voodoo->texture_cache[1][params->tex_entry[1]].refcount_r[odd_even] + 1;
 }
 
 void voodoo_triangle(voodoo_t *voodoo, voodoo_params_t *params, int odd_even) {
@@ -1462,7 +1462,7 @@ static void render_thread(void *param, int odd_even) {
 
                         voodoo_triangle(voodoo, params, odd_even);
 
-                        voodoo->params_read_idx[odd_even]++;
+                        voodoo->params_read_idx[odd_even] = voodoo->params_read_idx[odd_even] + 1;
 
                         if (PARAM_ENTRIES(odd_even) > (PARAM_SIZE - 10))
                                 thread_set_event(voodoo->render_not_full_event[odd_even]);
@@ -1511,7 +1511,7 @@ void voodoo_queue_triangle(voodoo_t *voodoo, voodoo_params_t *params) {
 
         memcpy(params_new, params, sizeof(voodoo_params_t));
 
-        voodoo->params_write_idx++;
+        voodoo->params_write_idx = voodoo->params_write_idx + 1;
 
         if (PARAM_ENTRIES(0) < 4 || (voodoo->render_threads >= 2 && PARAM_ENTRIES(1) < 4) ||
             (voodoo->render_threads == 4 && (PARAM_ENTRIES(2) < 4 || PARAM_ENTRIES(3) < 4)))
