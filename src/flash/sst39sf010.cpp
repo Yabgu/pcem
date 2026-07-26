@@ -160,7 +160,7 @@ static void clear_id_mode(sst_t *sst) {
 
 static void *sst_39sf010_init() {
         FILE *f;
-        sst_t *sst = malloc(sizeof(sst_t));
+        sst_t *sst = (sst_t *)malloc(sizeof(sst_t));
         memset(sst, 0, sizeof(sst_t));
 
         switch (romset) {

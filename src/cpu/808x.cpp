@@ -479,7 +479,7 @@ int indump = 0;
 
 FILE* dofopen(const char *filepath, const char* filename, const char * mode) {
     int c = strlen(filepath) - 1;
-    char* sep = (filepath[c] == '/' || filepath[c] == '\\') ? "" : "/";
+    const char* sep = (filepath[c] == '/' || filepath[c] == '\\') ? "" : "/";
     char buf[1024];
     sprintf(buf, "%s%s%s", filepath, sep, filename);
     return fopen(buf, mode);

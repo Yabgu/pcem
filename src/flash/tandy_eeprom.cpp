@@ -103,7 +103,7 @@ int tandy_eeprom_read() {
 }
 
 void *tandy_eeprom_init() {
-        tandy_eeprom_t *eeprom = malloc(sizeof(tandy_eeprom_t));
+        tandy_eeprom_t *eeprom = (tandy_eeprom_t *)malloc(sizeof(tandy_eeprom_t));
         FILE *f = NULL;
 
         memset(eeprom, 0, sizeof(tandy_eeprom_t));

@@ -119,7 +119,7 @@ int disc_hole(int drive) {
         }
 }
 
-void disc_poll() {
+void disc_poll(void *p) {
         timer_advance_u64(&disc_poll_timer, disc_period * TIMER_USEC);
 
         if (disc_drivesel < 2 && drives[disc_drivesel].poll)
@@ -184,7 +184,7 @@ void disc_reset() {
 
         curdrive = 0;
         disc_period = 32;
-        timer_add(&disc_poll_timer, (void *)disc_poll, NULL, 0);
+        timer_add(&disc_poll_timer, disc_poll, NULL, 0);
 
         for (drive = 0; drive < 2; drive++) {
                 if (loaders[driveloaders[drive]].close)

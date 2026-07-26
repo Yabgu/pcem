@@ -127,7 +127,7 @@ void cassette_set_motor(uint8_t on) {
 }
 
 static void *cassette_init(void) {
-        cassette_t *cas = malloc(sizeof(cassette_t));
+        cassette_t *cas = (cassette_t *)malloc(sizeof(cassette_t));
 
         memset(cas, 0, sizeof(cassette_t));
         pzx_init(&cas->pzx);

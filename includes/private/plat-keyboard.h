@@ -8,7 +8,6 @@ extern "C" {
 void keyboard_init();
 void keyboard_close();
 void keyboard_poll_host();
-extern uint8_t pcem_key[272];
 extern int rawinputkey[272];
 
 #ifndef __unix

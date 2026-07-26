@@ -294,7 +294,7 @@ static void __attribute__((noinline)) exec_recompiler(void) {
         }
 
         if (valid_block && (block->flags & CODEBLOCK_WAS_RECOMPILED)) {
-                void (*code)() = (void *)&block->data[BLOCK_START]; // FIX: This seems to get optimized out, I tried making
+                void (*code)() = (void (*)())&block->data[BLOCK_START]; // FIX: This seems to get optimized out, I tried making
                                                                     // volatile but still segfaulted
 
                 //                if (output) pclog("Run block at %04x:%04x  %04x %04x %04x %04x  %04x %04x  ESP=%08x %04x  %08x

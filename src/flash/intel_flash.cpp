@@ -169,7 +169,7 @@ static void intel_flash_add_mappings_inverted(flash_t *flash) {
 
 void *intel_flash_init(uint8_t type, uint8_t flash_id) {
         FILE *f;
-        flash_t *flash = malloc(sizeof(flash_t));
+        flash_t *flash = (flash_t *)malloc(sizeof(flash_t));
         memset(flash, 0, sizeof(flash_t));
         char fpath[1024];
         int i;

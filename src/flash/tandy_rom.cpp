@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <stdlib.h>
 #include "ibm.h"
 #include "device.h"
@@ -48,7 +49,7 @@ void *tandy_rom_init() {
         FILE *f, *ff;
         int c;
 
-        tandy_rom = malloc(0x80000);
+        tandy_rom = (uint8_t*)malloc(0x80000);
 
         f = romfopen("tandy1000sl2/8079047.hu1", "rb");
         ff = romfopen("tandy1000sl2/8079048.hu2", "rb");

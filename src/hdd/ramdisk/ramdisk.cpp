@@ -75,9 +75,9 @@ int ramdisk_stream_grow(ramdisk_stream_t *stream, size_t required) {
         if (newsize > MAX_STREAM_SIZE)
                 newsize = MAX_STREAM_SIZE;
 
-        uint8_t *newmem = realloc(stream->mem, newsize);
+        uint8_t *newmem = (uint8_t *)realloc(stream->mem, newsize);
         if (newmem == NULL && newsize > required)
-                newmem = realloc(stream->mem, required);
+                newmem = (uint8_t *)realloc(stream->mem, required);
         if (newmem == NULL) {
                 errno = ENOMEM;
                 return -1;
@@ -97,7 +97,7 @@ int ramdisk_stream_resize(ramdisk_stream_t *stream, size_t size) {
                 return -1;
         }
 
-        uint8_t *newmem = realloc(stream->mem, size);
+        uint8_t *newmem = (uint8_t *)realloc(stream->mem, size);
         if (newmem == NULL) {
                 errno = ENOMEM;
                 return -1;
@@ -270,4 +270,3 @@ int ramdisk_load_file(ramdisk_t *ramdisk, FILE *fp) {
 
         return len;
 }
-

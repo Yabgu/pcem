@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <cstdint>
 #include <stdlib.h>
 #include <stdio.h>
 #include "ibm.h"
@@ -57,7 +58,7 @@ int rom_init(rom_t *rom, char *fn, uint32_t address, int size, int mask, int fil
                 return -1;
         }
 
-        rom->rom = malloc(size);
+        rom->rom = (uint8_t*)malloc(size);
         fseek(f, file_offset, SEEK_SET);
         fread(rom->rom, size, 1, f);
         fclose(f);
@@ -88,7 +89,7 @@ int rom_init_interleaved(rom_t *rom, char *fn_low, char *fn_high, uint32_t addre
                 return -1;
         }
 
-        rom->rom = malloc(size);
+        rom->rom = (uint8_t*)malloc(size);
         fseek(f_low, file_offset, SEEK_SET);
         fseek(f_high, file_offset, SEEK_SET);
         for (c = 0; c < size; c += 2) {

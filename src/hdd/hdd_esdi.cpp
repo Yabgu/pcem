@@ -846,7 +846,7 @@ static void esdi_mca_write(int port, uint8_t val, void *p) {
 }
 
 static void *esdi_init() {
-        esdi_t *esdi = malloc(sizeof(esdi_t));
+        esdi_t *esdi = (esdi_t *)malloc(sizeof(esdi_t));
         memset(esdi, 0, sizeof(esdi_t));
 
         rom_init_interleaved(&esdi->bios_rom, "90x8970.bin", "90x8969.bin", 0xc8000, 0x4000, 0x3fff, 0, MEM_MAPPING_EXTERNAL);

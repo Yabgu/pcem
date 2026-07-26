@@ -744,7 +744,7 @@ uint8_t fdc_read(uint16_t addr, void *priv) {
         return temp;
 }
 
-void fdc_callback() {
+void fdc_callback(void*) {
         int temp;
         int drive;
 
@@ -1240,7 +1240,7 @@ void fdc_indexpulse() {
 }
 
 void fdc_init() {
-        timer_add(&fdc.timer, (void *)fdc_callback, NULL, 0);
+        timer_add(&fdc.timer, fdc_callback, NULL, 0);
         fdc.dskchg_activelow = 0;
         fdc.enable_3f1 = 1;
 

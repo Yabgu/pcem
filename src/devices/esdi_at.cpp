@@ -683,7 +683,7 @@ static void esdi_rom_write(uint32_t addr, uint8_t val, void *p) {
 }
 
 void *wd1007vse1_init() {
-        esdi_t *esdi = malloc(sizeof(esdi_t));
+        esdi_t *esdi = (esdi_t *)malloc(sizeof(esdi_t));
         memset(esdi, 0, sizeof(esdi_t));
 
         hdd_load(&esdi->drives[0].hdd_file, 0, ide_fn[0]);
