@@ -433,7 +433,7 @@ void quadcolor_init(quadcolor_t *quadcolor) {
 
 void *quadcolor_standalone_init() {
         int display_type, contrast;
-        quadcolor_t *quadcolor = malloc(sizeof(quadcolor_t));
+        quadcolor_t *quadcolor = (quadcolor_t *)malloc(sizeof(quadcolor_t));
         memset(quadcolor, 0, sizeof(quadcolor_t));
 
         display_type = device_get_config_int("display_type");
@@ -443,8 +443,8 @@ void *quadcolor_standalone_init() {
         quadcolor->has_quadcolor_2 = device_get_config_int("has_quadcolor_2");
         contrast = device_get_config_int("contrast");
 
-        quadcolor->vram = malloc(0x8000);
-        quadcolor->vram_2 = malloc(0x10000);
+        quadcolor->vram = (uint8_t *)malloc(0x8000);
+        quadcolor->vram_2 = (uint8_t *)malloc(0x10000);
 
         cga_comp_init(quadcolor->revision);
 

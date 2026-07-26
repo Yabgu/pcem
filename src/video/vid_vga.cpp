@@ -101,7 +101,7 @@ void vga_enable(void *p) {
 }
 
 void *vga_init() {
-        vga_t *vga = malloc(sizeof(vga_t));
+        vga_t *vga = (vga_t *)malloc(sizeof(vga_t));
         memset(vga, 0, sizeof(vga_t));
 
         rom_init(&vga->bios_rom, "ibm_vga.bin", 0xc0000, 0x8000, 0x7fff, 0x2000, MEM_MAPPING_EXTERNAL);
@@ -119,7 +119,7 @@ void *vga_init() {
 
 /*PS/1 uses a standard VGA controller, but with no option ROM*/
 void *ps1vga_init() {
-        vga_t *vga = malloc(sizeof(vga_t));
+        vga_t *vga = (vga_t *)malloc(sizeof(vga_t));
         memset(vga, 0, sizeof(vga_t));
 
         svga_init(&vga->svga, vga, 1 << 18, /*256kb*/

@@ -2538,7 +2538,7 @@ static device_config_t banshee_sdram_config[] = {
 
 static void *banshee_init_common(char *fn, int has_sgram, int type, int voodoo_type) {
         int mem_size;
-        banshee_t *banshee = malloc(sizeof(banshee_t));
+        banshee_t *banshee = (banshee_t *)malloc(sizeof(banshee_t));
         memset(banshee, 0, sizeof(banshee_t));
 
         banshee->type = type;

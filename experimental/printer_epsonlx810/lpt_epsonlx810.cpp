@@ -1814,7 +1814,7 @@ void outputPage(lpt_epsonprinter_t *printer) {
                 // Find a page that does not exists
                 findNextName("page", ext, filename, MAX_PATH_STRING, printer->outputpath);
 
-                char *rgb = malloc(printer->page->w * printer->page->h * 3);
+                char *rgb = (char *)malloc(printer->page->w * printer->page->h * 3);
                 char *rgbptr = rgb;
 
                 SDL_LockSurface(printer->page);

@@ -769,12 +769,12 @@ int svga_init(svga_t *svga, void *p, int memsize, void (*recalctimings_ex)(struc
         svga->dispontime = 1000ull << 32;
         svga->dispofftime = 1000ull << 32;
         svga->bpp = 8;
-        svga->vram = malloc(memsize);
+        svga->vram = (uint8_t *)malloc(memsize);
         svga->vram_max = memsize;
         svga->vram_display_mask = memsize - 1;
         svga->vram_mask = memsize - 1;
         svga->decode_mask = 0x7fffff;
-        svga->changedvram = malloc(/*(memsize >> 12) << 1*/ 0x1000000 >> 12);
+        svga->changedvram = (uint8_t *)malloc(/*(memsize >> 12) << 1*/ 0x1000000 >> 12);
         svga->recalctimings_ex = recalctimings_ex;
         svga->video_in = video_in;
         svga->video_out = video_out;

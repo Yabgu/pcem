@@ -10,7 +10,7 @@ typedef struct event_pthread_t {
 } event_pthread_t;
 
 thread_t *thread_create(void (*thread_rout)(void *param), void *param) {
-        pthread_t *thread = malloc(sizeof(pthread_t));
+        pthread_t *thread = (pthread_t *)malloc(sizeof(pthread_t));
 
         pthread_create(thread, NULL, (void *)thread_rout, param);
 
@@ -27,7 +27,7 @@ void thread_kill(thread_t *handle) {
 }
 
 event_t *thread_create_event() {
-        event_pthread_t *event = malloc(sizeof(event_pthread_t));
+        event_pthread_t *event = (event_pthread_t *)malloc(sizeof(event_pthread_t));
 
         pthread_cond_init(&event->cond, NULL);
         pthread_mutex_init(&event->mutex, NULL);

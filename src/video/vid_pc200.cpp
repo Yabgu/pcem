@@ -721,7 +721,7 @@ void pc200_poll(void *p) {
 void *pc200_init() {
         int display_type, contrast;
 
-        pc200_t *pc200 = malloc(sizeof(pc200_t));
+        pc200_t *pc200 = (pc200_t *)malloc(sizeof(pc200_t));
 
         memset(pc200, 0, sizeof(pc200_t));
 
@@ -770,7 +770,7 @@ void *pc200_init() {
         pc200_is_mda = (pc200->emulation == PC200_MDA || pc200->emulation == PC200_LCDM);
         PC200LOG(("pc200: DIP switches = %02x\n", pc200->dipswitches));
 
-        pc200->cga.vram = pc200->mda.vram = malloc(0x4000);
+        pc200->cga.vram = pc200->mda.vram = (uint8_t *)malloc(0x4000);
         cga_init(&pc200->cga);
         mda_init(&pc200->mda);
 

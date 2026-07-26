@@ -19,7 +19,7 @@ typedef struct win_event_t {
 } win_event_t;
 
 event_t *thread_create_event() {
-        win_event_t *event = malloc(sizeof(win_event_t));
+        win_event_t *event = (win_event_t *)malloc(sizeof(win_event_t));
 
         event->handle = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -62,7 +62,7 @@ typedef struct win_mutex_t {
 } win_mutex_t;
 
 mutex_t *thread_create_mutex(void) {
-        win_mutex_t *mutex = malloc(sizeof(win_mutex_t));
+        win_mutex_t *mutex = (win_mutex_t *)malloc(sizeof(win_mutex_t));
 
         mutex->handle = CreateSemaphore(NULL, 1, 1, NULL);
 
@@ -99,7 +99,7 @@ typedef struct event_pthread_t {
 } event_pthread_t;
 
 thread_t *thread_create(void (*thread_rout)(void *param), void *param) {
-        pthread_t *thread = malloc(sizeof(pthread_t));
+        pthread_t *thread = (pthread_t *)malloc(sizeof(pthread_t));
 
         pthread_create(thread, NULL, (void *)thread_rout, param);
 
@@ -116,7 +116,7 @@ void thread_kill(thread_t *handle) {
 }
 
 event_t *thread_create_event() {
-        event_pthread_t *event = malloc(sizeof(event_pthread_t));
+        event_pthread_t *event = (event_pthread_t *)malloc(sizeof(event_pthread_t));
 
         pthread_cond_init(&event->cond, NULL);
         pthread_mutex_init(&event->mutex, NULL);
@@ -188,7 +188,7 @@ typedef struct pt_mutex_t {
 } pt_mutex_t;
 
 mutex_t *thread_create_mutex(void) {
-        pt_mutex_t *mutex = malloc(sizeof(pt_mutex_t));
+        pt_mutex_t *mutex = (pt_mutex_t *)malloc(sizeof(pt_mutex_t));
 
         pthread_mutex_init(&mutex->mutex, NULL);
 

@@ -676,7 +676,7 @@ void v6355_init(v6355_t *v6355) {
 
 void *v6355_standalone_init() {
         int n, c, contrast;
-        v6355_t *v6355 = malloc(sizeof(v6355_t));
+        v6355_t *v6355 = (v6355_t *)malloc(sizeof(v6355_t));
         memset(v6355, 0, sizeof(v6355_t));
 
 	/* Initialise the palette registers to default values */
@@ -718,7 +718,7 @@ void *v6355_standalone_init() {
         v6355->revision = device_get_config_int("composite_type");
         contrast = device_get_config_int("contrast");
 
-        v6355->vram = malloc(0x4000);
+        v6355->vram = (uint8_t *)malloc(0x4000);
 
         cga_comp_init(v6355->revision);
 

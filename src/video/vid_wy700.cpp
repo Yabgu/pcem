@@ -780,11 +780,11 @@ void wy700_poll(void *p) {
 
 void *wy700_init() {
         int c;
-        wy700_t *wy700 = malloc(sizeof(wy700_t));
+        wy700_t *wy700 = (wy700_t *)malloc(sizeof(wy700_t));
         memset(wy700, 0, sizeof(wy700_t));
 
         /* 128k video RAM */
-        wy700->vram = malloc(0x20000);
+        wy700->vram = (uint8_t *)malloc(0x20000);
 
         timer_add(&wy700->timer, wy700_poll, wy700, 1);
 

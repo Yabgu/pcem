@@ -904,7 +904,7 @@ static void voodoo_speed_changed(void *p) {
 
 void *voodoo_card_init() {
         int c;
-        voodoo_t *voodoo = malloc(sizeof(voodoo_t));
+        voodoo_t *voodoo = (voodoo_t *)malloc(sizeof(voodoo_t));
         memset(voodoo, 0, sizeof(voodoo_t));
 
         voodoo->bilinear_enabled = device_get_config_int("bilinear");
@@ -942,20 +942,20 @@ void *voodoo_card_init() {
         mem_mapping_add(&voodoo->mapping, 0, 0, NULL, voodoo_readw, voodoo_readl, NULL, voodoo_writew, voodoo_writel, NULL,
                         MEM_MAPPING_EXTERNAL, voodoo);
 
-        voodoo->fb_mem = malloc(4 * 1024 * 1024);
-        voodoo->tex_mem[0] = malloc(voodoo->texture_size * 1024 * 1024);
+        voodoo->fb_mem = (uint8_t *)malloc(4 * 1024 * 1024);
+        voodoo->tex_mem[0] = (uint8_t *)malloc(voodoo->texture_size * 1024 * 1024);
         if (voodoo->dual_tmus)
-                voodoo->tex_mem[1] = malloc(voodoo->texture_size * 1024 * 1024);
+                voodoo->tex_mem[1] = (uint8_t *)malloc(voodoo->texture_size * 1024 * 1024);
         voodoo->tex_mem_w[0] = (uint16_t *)voodoo->tex_mem[0];
         voodoo->tex_mem_w[1] = (uint16_t *)voodoo->tex_mem[1];
 
         for (c = 0; c < TEX_CACHE_MAX; c++) {
                 voodoo->texture_cache[0][c].data =
-                        malloc((256 * 256 + 256 * 256 + 128 * 128 + 64 * 64 + 32 * 32 + 16 * 16 + 8 * 8 + 4 * 4 + 2 * 2) * 4);
+                        (uint32_t *)malloc((256 * 256 + 256 * 256 + 128 * 128 + 64 * 64 + 32 * 32 + 16 * 16 + 8 * 8 + 4 * 4 + 2 * 2) * 4);
                 voodoo->texture_cache[0][c].base = -1; /*invalid*/
                 voodoo->texture_cache[0][c].refcount = 0;
                 if (voodoo->dual_tmus) {
-                        voodoo->texture_cache[1][c].data = malloc(
+                        voodoo->texture_cache[1][c].data = (uint32_t *)malloc(
                                 (256 * 256 + 256 * 256 + 128 * 128 + 64 * 64 + 32 * 32 + 16 * 16 + 8 * 8 + 4 * 4 + 2 * 2) * 4);
                         voodoo->texture_cache[1][c].base = -1; /*invalid*/
                         voodoo->texture_cache[1][c].refcount = 0;
@@ -1047,7 +1047,7 @@ void *voodoo_card_init() {
 
 void *voodoo_2d3d_card_init(int type) {
         int c;
-        voodoo_t *voodoo = malloc(sizeof(voodoo_t));
+        voodoo_t *voodoo = (voodoo_t *)malloc(sizeof(voodoo_t));
         memset(voodoo, 0, sizeof(voodoo_t));
 
         voodoo->bilinear_enabled = device_get_config_int("bilinear");
@@ -1067,11 +1067,11 @@ void *voodoo_2d3d_card_init(int type) {
 
         for (c = 0; c < TEX_CACHE_MAX; c++) {
                 voodoo->texture_cache[0][c].data =
-                        malloc((256 * 256 + 256 * 256 + 128 * 128 + 64 * 64 + 32 * 32 + 16 * 16 + 8 * 8 + 4 * 4 + 2 * 2) * 4);
+                        (uint32_t *)malloc((256 * 256 + 256 * 256 + 128 * 128 + 64 * 64 + 32 * 32 + 16 * 16 + 8 * 8 + 4 * 4 + 2 * 2) * 4);
                 voodoo->texture_cache[0][c].base = -1; /*invalid*/
                 voodoo->texture_cache[0][c].refcount = 0;
                 if (voodoo->dual_tmus) {
-                        voodoo->texture_cache[1][c].data = malloc(
+                        voodoo->texture_cache[1][c].data = (uint32_t *)malloc(
                                 (256 * 256 + 256 * 256 + 128 * 128 + 64 * 64 + 32 * 32 + 16 * 16 + 8 * 8 + 4 * 4 + 2 * 2) * 4);
                         voodoo->texture_cache[1][c].base = -1; /*invalid*/
                         voodoo->texture_cache[1][c].refcount = 0;
@@ -1163,7 +1163,7 @@ void *voodoo_2d3d_card_init(int type) {
 }
 
 void *voodoo_init() {
-        voodoo_set_t *voodoo_set = malloc(sizeof(voodoo_set_t));
+        voodoo_set_t *voodoo_set = (voodoo_set_t *)malloc(sizeof(voodoo_set_t));
         uint32_t tmuConfig = 1;
         int type;
         memset(voodoo_set, 0, sizeof(voodoo_set_t));

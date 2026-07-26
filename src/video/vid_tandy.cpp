@@ -568,7 +568,7 @@ void tandy_poll(void *p) {
 
 void *tandy_init() {
         int display_type;
-        tandy_t *tandy = malloc(sizeof(tandy_t));
+        tandy_t *tandy = (tandy_t *)malloc(sizeof(tandy_t));
         memset(tandy, 0, sizeof(tandy_t));
 
         display_type = model_get_config_int("display_type");

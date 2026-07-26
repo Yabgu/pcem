@@ -231,7 +231,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
                 GetRawInputData((HRAWINPUT)lParam, RID_INPUT, NULL, &size, sizeof(RAWINPUTHEADER));
 
-                raw = malloc(size);
+                raw = (RAWINPUT *)malloc(size);
 
                 /* Here we read the raw input data for the keyboard */
                 GetRawInputData((HRAWINPUT)(lParam), RID_INPUT, raw, &size, sizeof(RAWINPUTHEADER));

@@ -42,7 +42,7 @@ typedef struct glw_t {
 } glw_t;
 
 glw_t *glw_init() {
-        glw_t *glw = malloc(sizeof(glw_t));
+        glw_t *glw = (glw_t *)malloc(sizeof(glw_t));
         glw->glActiveTexture = SDL_GL_GetProcAddress("glActiveTexture");
         glw->glCreateShader = SDL_GL_GetProcAddress("glCreateShader");
         glw->glShaderSource = SDL_GL_GetProcAddress("glShaderSource");

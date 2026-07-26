@@ -748,7 +748,7 @@ void sigma_poll(void *p) {
 
 void *sigma_init() {
         int display_type, contrast;
-        sigma_t *sigma = malloc(sizeof(sigma_t));
+        sigma_t *sigma = (sigma_t *)malloc(sizeof(sigma_t));
         memset(sigma, 0, sizeof(sigma_t));
 
         display_type = device_get_config_int("display_type");
@@ -761,7 +761,7 @@ void *sigma_init() {
          * and access it through sigma_bread() / sigma_bwrite() below */
         mem_mapping_disable(&sigma->bios_rom.mapping);
 
-        sigma->vram = malloc(0x8000 * 4);
+        sigma->vram = (uint8_t *)malloc(0x8000 * 4);
 
         timer_add(&sigma->timer, sigma_poll, sigma, 1);
         mem_mapping_add(&sigma->mapping, 0xb8000, 0x08000, sigma_read, NULL, NULL, sigma_write, NULL, NULL, NULL,

@@ -735,7 +735,7 @@ void tgui_pci_write(int func, int addr, uint8_t val, void *p) {
 }
 
 static void *tgui_init(char *bios_fn, int type, int mem_size) {
-        tgui_t *tgui = malloc(sizeof(tgui_t));
+        tgui_t *tgui = (tgui_t *)malloc(sizeof(tgui_t));
         memset(tgui, 0, sizeof(tgui_t));
 
         if (mem_size)

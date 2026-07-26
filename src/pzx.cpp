@@ -77,7 +77,7 @@ uint8_t *pzx_load_block(FILE *fp) {
                 return NULL; /* EoF */
 
         block_len = peek4(block_header + 4);
-        block_data = malloc(8 + block_len);
+        block_data = (uint8_t *)malloc(8 + block_len);
         if (!block_data)
                 return NULL;
         memcpy(block_data, block_header, 8);

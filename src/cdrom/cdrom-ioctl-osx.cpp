@@ -653,7 +653,7 @@ void ioctl_set_drive(char d) {
 int ioctl_open(char d) {
         atapi = &ioctl_atapi;
 
-        toc = malloc(2048);
+        toc = (CDTOC *)malloc(2048);
 
         cd_drive = d;
         return 0;

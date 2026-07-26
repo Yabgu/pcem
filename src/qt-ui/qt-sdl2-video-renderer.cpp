@@ -134,7 +134,7 @@ void sdl_video_renderer_present(SDL_Window *window, SDL_Rect texture_rect, SDL_R
 }
 
 sdl_renderer_t *sdl2_renderer_create() {
-        sdl_renderer_t *renderer = malloc(sizeof(sdl_renderer_t));
+        sdl_renderer_t *renderer = (sdl_renderer_t *)malloc(sizeof(sdl_renderer_t));
         renderer->init = sdl_video_renderer_init;
         renderer->close = sdl_video_renderer_close;
         renderer->update = sdl_video_renderer_update;

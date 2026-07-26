@@ -72,9 +72,9 @@ void codegen_init() {
 #if WIN64
         codeblock = VirtualAlloc(NULL, BLOCK_SIZE * sizeof(codeblock_t), MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 #else
-        codeblock = malloc(BLOCK_SIZE * sizeof(codeblock_t));
+        codeblock = (codeblock_t *)malloc(BLOCK_SIZE * sizeof(codeblock_t));
 #endif
-        codeblock_hash = malloc(HASH_SIZE * sizeof(codeblock_t *));
+        codeblock_hash = (codeblock_t **)malloc(HASH_SIZE * sizeof(codeblock_t *));
 
         memset(codeblock, 0, BLOCK_SIZE * sizeof(codeblock_t));
         memset(codeblock_hash, 0, HASH_SIZE * sizeof(codeblock_t *));

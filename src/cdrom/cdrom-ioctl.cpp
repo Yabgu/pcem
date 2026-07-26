@@ -435,7 +435,7 @@ static int ioctl_readsector(uint8_t *b, int sector, int count) {
                 DWORD returned;
                 uint8_t *data_buffer; //[IOCTL_DATA_BUFFER];
 
-                data_buffer = malloc(count * IOCTL_DATA_BUFFER);
+                data_buffer = (uint8_t *)malloc(count * IOCTL_DATA_BUFFER);
 
                 ioctl_open(0);
 

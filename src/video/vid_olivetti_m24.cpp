@@ -418,10 +418,10 @@ void m24_poll(void *p) {
 }
 
 void *m24_init() {
-        m24_t *m24 = malloc(sizeof(m24_t));
+        m24_t *m24 = (m24_t *)malloc(sizeof(m24_t));
         memset(m24, 0, sizeof(m24_t));
 
-        m24->vram = malloc(0x8000);
+        m24->vram = (uint8_t *)malloc(0x8000);
 
         timer_add(&m24->timer, m24_poll, m24, 1);
         mem_mapping_add(&m24->mapping, 0xb8000, 0x08000, m24_read, NULL, NULL, m24_write, NULL, NULL, NULL, 0, m24);

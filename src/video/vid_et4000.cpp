@@ -483,7 +483,7 @@ void et4000_kasan_recalctimings(svga_t *svga) {
 }
 
 void *et4000_init() {
-        et4000_t *et4000 = malloc(sizeof(et4000_t));
+        et4000_t *et4000 = (et4000_t *)malloc(sizeof(et4000_t));
         memset(et4000, 0, sizeof(et4000_t));
 
         rom_init(&et4000->bios_rom, "et4000.bin", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
@@ -499,7 +499,7 @@ void *et4000_init() {
 }
 
 void *et4000k_init() {
-        et4000_t *et4000 = malloc(sizeof(et4000_t));
+        et4000_t *et4000 = (et4000_t *)malloc(sizeof(et4000_t));
         memset(et4000, 0, sizeof(et4000_t));
 
         rom_init(&et4000->bios_rom, "tgkorvga.bin", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);
@@ -529,7 +529,7 @@ void *et4000k_init() {
 
 void *et4000_kasan_init() {
         int i;
-        et4000_t *et4000 = malloc(sizeof(et4000_t));
+        et4000_t *et4000 = (et4000_t *)malloc(sizeof(et4000_t));
         memset(et4000, 0, sizeof(et4000_t));
 
         rom_init(&et4000->bios_rom, "et4000_kasan16.bin", 0xc0000, 0x8000, 0x7fff, 0, MEM_MAPPING_EXTERNAL);

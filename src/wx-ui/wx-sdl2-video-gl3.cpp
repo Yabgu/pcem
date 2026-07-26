@@ -143,7 +143,7 @@ static int compile_shader(GLenum shader_type, const char *prepend, const char *p
         if (!status) {
                 GLint length;
                 glw->glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-                char *log = malloc(length);
+                char *log = (char *)malloc(length);
                 glw->glGetShaderInfoLog(shader, length, &length, log);
                 wx_simple_messagebox("GLSL Error", "Could not compile shader:\n%s", log);
                 pclog("Could not compile shader: %s\n", log);
@@ -177,7 +177,7 @@ static int create_program(struct shader_program *program) {
                 int maxLength;
                 int length;
                 glw->glGetProgramiv(program->id, GL_INFO_LOG_LENGTH, &maxLength);
-                char *log = malloc(maxLength);
+                char *log = (char *)malloc(maxLength);
                 glw->glGetProgramInfoLog(program->id, maxLength, &length, log);
                 wx_simple_messagebox("GLSL Error", "Program not linked:\n%s", log);
                 free(log);
@@ -477,7 +477,7 @@ static int load_texture(const char *f, struct shader_texture *tex) {
 
         int bpp = alpha ? 4 : 3;
 
-        GLubyte *data = malloc(width * height * bpp);
+        GLubyte *data = (GLubyte *)malloc(width * height * bpp);
 
         int x, y, Y;
         for (y = 0; y < height; ++y) {
@@ -655,7 +655,7 @@ static glsl_t *load_shaders(int num, char shaders[MAX_USER_SHADERS][512]) {
         int i;
         glsl_t *glsl;
 
-        glsl = malloc(sizeof(glsl_t));
+        glsl = (glsl_t *)malloc(sizeof(glsl_t));
         memset(glsl, 0, sizeof(glsl_t));
 
         glsl->num_shaders = num;
@@ -1487,7 +1487,7 @@ void gl3_present(SDL_Window *window, SDL_Rect video_rect, SDL_Rect window_rect, 
 }
 
 sdl_renderer_t *gl3_renderer_create() {
-        sdl_renderer_t *renderer = malloc(sizeof(sdl_renderer_t));
+        sdl_renderer_t *renderer = (sdl_renderer_t *)malloc(sizeof(sdl_renderer_t));
         renderer->init = gl3_init;
         renderer->close = gl3_close;
         renderer->update = gl3_update;

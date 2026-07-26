@@ -4121,7 +4121,7 @@ static void s3_virge_pci_write(int func, int addr, uint8_t val, void *p) {
 }
 
 static void *s3_virge_init() {
-        virge_t *virge = malloc(sizeof(virge_t));
+        virge_t *virge = (virge_t *)malloc(sizeof(virge_t));
         memset(virge, 0, sizeof(virge_t));
 
         virge->bilinear_enabled = device_get_config_int("bilinear");
@@ -4194,7 +4194,7 @@ static void *s3_virge_init() {
 }
 
 static void *s3_virge_375_init() {
-        virge_t *virge = malloc(sizeof(virge_t));
+        virge_t *virge = (virge_t *)malloc(sizeof(virge_t));
         memset(virge, 0, sizeof(virge_t));
 
         virge->bilinear_enabled = device_get_config_int("bilinear");

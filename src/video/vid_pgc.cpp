@@ -142,7 +142,7 @@ void pgc_ito_raster(pgc_core_t *pgc, int32_t *x, int32_t *y) {
  * arbitrarily large */
 int pgc_commandlist_append(pgc_commandlist_t *list, uint8_t v) {
         if (list->listmax == 0 || list->list == NULL) {
-                list->list = malloc(4096);
+                list->list = (uint8_t *)malloc(4096);
                 if (!list->list) {
                         PGCLOG(("Out of memory initialising command list\n"));
                         return 0;
@@ -483,9 +483,9 @@ void pgc_fill_polygon(pgc_core_t *pgc, unsigned corners, int32_t *x, int32_t *y)
 
         if (corners < 2)
                 return; /* Degenerate polygon */
-        nodex = malloc(corners * sizeof(double));
-        dx = malloc(corners * sizeof(double));
-        dy = malloc(corners * sizeof(double));
+        nodex = (double *)malloc(corners * sizeof(double));
+        dx = (double *)malloc(corners * sizeof(double));
+        dy = (double *)malloc(corners * sizeof(double));
         if (!nodex || !dx || !dy)
                 return;
 
@@ -642,7 +642,7 @@ static int parse_poly(pgc_core_t *pgc, pgc_commandlist_t *cl, int c) {
 
 /* Parse but don't execute a command with a fixed number of byte parameters */
 int pgc_parse_bytes(pgc_core_t *pgc, pgc_commandlist_t *cl, int count) {
-        uint8_t *param = malloc(count);
+        uint8_t *param = (uint8_t *)malloc(count);
         int n;
 
         if (!param) {
@@ -668,7 +668,7 @@ int pgc_parse_bytes(pgc_core_t *pgc, pgc_commandlist_t *cl, int count) {
 
 /* Parse but don't execute a command with a fixed number of word parameters */
 int pgc_parse_words(pgc_core_t *pgc, pgc_commandlist_t *cl, int count) {
-        int16_t *param = malloc(count * sizeof(int16_t));
+        int16_t *param = (int16_t *)malloc(count * sizeof(int16_t));
         int n;
 
         if (!param) {
@@ -691,7 +691,7 @@ int pgc_parse_words(pgc_core_t *pgc, pgc_commandlist_t *cl, int count) {
 
 /* Parse but don't execute a command with a fixed number of coord parameters */
 int pgc_parse_coords(pgc_core_t *pgc, pgc_commandlist_t *cl, int count) {
-        int32_t *param = malloc(count * sizeof(int32_t));
+        int32_t *param = (int32_t *)malloc(count * sizeof(int32_t));
         int n;
 
         if (!param) {
@@ -2094,8 +2094,8 @@ void pgc_core_init(pgc_core_t *pgc, int maxw, int maxh, int visw, int vish,
         pgc->maxh = maxh;
         pgc->visw = visw;
         pgc->vish = vish;
-        pgc->vram = malloc(maxw * maxh);
-        pgc->cga_vram = malloc(0x4000);
+        pgc->vram = (uint8_t *)malloc(maxw * maxh);
+        pgc->cga_vram = (uint8_t *)malloc(0x4000);
         pgc->clist = calloc(256, sizeof(pgc_commandlist_t));
         pgc->clcur = NULL;
         pgc->native_pixel_clock = native_pixel_clock;
@@ -2125,7 +2125,7 @@ void pgc_core_init(pgc_core_t *pgc, int maxw, int maxh, int visw, int vish,
 
 /* Initialisation code specific to the PGC */
 void *pgc_standalone_init() {
-        pgc_core_t *pgc = malloc(sizeof(pgc_core_t));
+        pgc_core_t *pgc = (pgc_core_t *)malloc(sizeof(pgc_core_t));
         memset(pgc, 0, sizeof(pgc_core_t));
 
         /* Framebuffer and screen are both 640x480 */

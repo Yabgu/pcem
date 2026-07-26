@@ -39,7 +39,7 @@ static char *load_file(const char *fn) {
         long fsize = ftell(f);
         fseek(f, 0, SEEK_SET);
 
-        char *data = malloc(fsize + 1);
+        char *data = (char *)malloc(fsize + 1);
 
         fread(data, fsize, 1, f);
         fclose(f);
@@ -124,7 +124,7 @@ static struct parameter *get_parameter(glslp_t *glslp, const char *id) {
 }
 
 static glslp_t *glsl_parse(const char *f) {
-        glslp_t *glslp = malloc(sizeof(glslp_t));
+        glslp_t *glslp = (glslp_t *)malloc(sizeof(glslp_t));
         memset(glslp, 0, sizeof(glslp_t));
         glslp->num_shaders = 1;
         struct shader *shader = &glslp->shaders[0];
@@ -161,7 +161,7 @@ glslp_t *glslp_parse(const char *f) {
                 return 0;
         }
 
-        glslp_t *glslp = malloc(sizeof(glslp_t));
+        glslp_t *glslp = (glslp_t *)malloc(sizeof(glslp_t));
         memset(glslp, 0, sizeof(glslp_t));
 
         get_glslp_name(f, glslp->name, sizeof(glslp->name));

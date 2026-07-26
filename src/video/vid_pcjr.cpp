@@ -507,7 +507,7 @@ void pcjr_poll(void *p) {
 
 static void *pcjr_video_init() {
         int display_type;
-        pcjr_t *pcjr = malloc(sizeof(pcjr_t));
+        pcjr_t *pcjr = (pcjr_t *)malloc(sizeof(pcjr_t));
         memset(pcjr, 0, sizeof(pcjr_t));
 
         display_type = model_get_config_int("display_type");

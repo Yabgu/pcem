@@ -383,7 +383,7 @@ void *ati28800k_init() {
 }
 
 void *ati28800k_spc4620p_init() {
-        ati28800_t *ati28800 = malloc(sizeof(ati28800_t));
+        ati28800_t *ati28800 = (ati28800_t *)malloc(sizeof(ati28800_t));
         memset(ati28800, 0, sizeof(ati28800_t));
 
         ati28800->port_03dd_val = 0;
@@ -418,7 +418,7 @@ void *ati28800k_spc4620p_init() {
 }
 
 void *ati28800k_spc6033p_init() {
-        ati28800_t *ati28800 = malloc(sizeof(ati28800_t));
+        ati28800_t *ati28800 = (ati28800_t *)malloc(sizeof(ati28800_t));
         memset(ati28800, 0, sizeof(ati28800_t));
 
         ati28800->port_03dd_val = 0;

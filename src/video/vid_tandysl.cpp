@@ -637,7 +637,7 @@ static void tandysl_poll(void *p) {
 }
 
 static void *tandysl_init() {
-        tandysl_t *tandy = malloc(sizeof(tandysl_t));
+        tandysl_t *tandy = (tandysl_t *)malloc(sizeof(tandysl_t));
         memset(tandy, 0, sizeof(tandysl_t));
 
         tandy->memctrl = -1;

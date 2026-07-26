@@ -2871,7 +2871,7 @@ static int vram_sizes[] = {
 };
 
 static void *s3_init(char *bios_fn, int chip) {
-        s3_t *s3 = malloc(sizeof(s3_t));
+        s3_t *s3 = (s3_t *)malloc(sizeof(s3_t));
         svga_t *svga = &s3->svga;
         int vram;
         uint32_t vram_size;

@@ -59,9 +59,9 @@ void hline(VIDEO_BITMAP *b, int x1, int y, int x2, int col) {
 void destroy_bitmap(VIDEO_BITMAP *b) { free(b); }
 
 VIDEO_BITMAP *create_bitmap(int x, int y) {
-        VIDEO_BITMAP *b = malloc(sizeof(VIDEO_BITMAP) + (y * sizeof(uint8_t *)));
+        VIDEO_BITMAP *b = (VIDEO_BITMAP *)malloc(sizeof(VIDEO_BITMAP) + (y * sizeof(uint8_t *)));
         int c;
-        b->dat = malloc(x * y * 4);
+        b->dat = (uint8_t *)malloc(x * y * 4);
         for (c = 0; c < y; c++) {
                 b->line[c] = b->dat + (c * x * 4);
         }

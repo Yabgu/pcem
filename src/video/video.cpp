@@ -1087,11 +1087,11 @@ void initvideo() {
                 }
         }
 
-        video_15to32 = malloc(4 * 65536);
+        video_15to32 = (uint32_t *)malloc(4 * 65536);
         for (c = 0; c < 65536; c++)
                 video_15to32[c] = ((c & 31) << 3) | (((c >> 5) & 31) << 11) | (((c >> 10) & 31) << 19);
 
-        video_16to32 = malloc(4 * 65536);
+        video_16to32 = (uint32_t *)malloc(4 * 65536);
         for (c = 0; c < 65536; c++)
                 video_16to32[c] = ((c & 31) << 3) | (((c >> 5) & 63) << 10) | (((c >> 11) & 31) << 19);
 
