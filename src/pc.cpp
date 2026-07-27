@@ -4,9 +4,6 @@
 #ifdef __APPLE__
 #include <string.h>
 #include <dispatch/dispatch.h>
-#ifdef __aarch64__
-#include <pthread.h>
-#endif
 #endif
 #include "ibm.h"
 #include "device.h"

@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-#if defined(__APPLE__) && defined(__aarch64__)
-#include <pthread.h>
-#endif
 #include "ibm.h"
 #include "x86.h"
 #include "x86_ops.h"
