@@ -62,7 +62,6 @@ bool App::OnInit() {
 
 int App::OnRun() { return wxApp::OnRun(); }
 
-#include <sstream>
 
 Frame::Frame(App *app, const wxString &title, const wxPoint &pos, const wxSize &size)
         : wxFrame(NULL, wxID_ANY, title, pos, size, 0) // wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER))

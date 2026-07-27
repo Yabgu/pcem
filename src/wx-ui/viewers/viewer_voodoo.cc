@@ -11,7 +11,6 @@
 #include <wx/xrc/xmlres.h>
 #include <list>
 #include <mutex>
-#include <string>
 #include <vector>
 #include "viewer.h"
 #include "viewer_voodoo.h"

@@ -18,7 +18,6 @@
 //  ---------------------------------------------------------------------------
 
 #include "resid-fp/sid.h"
-#include <stdio.h>
 #include <math.h>
 
 extern float convolve(const float *a, const float *b, int n);

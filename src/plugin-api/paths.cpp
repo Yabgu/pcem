@@ -2,7 +2,6 @@
 #include "config.h"
 #include <string.h>
 #include <SDL.h>
-#include <sys/stat.h>
 #include "ibm.h"
 #include "ui-utils.h"
 

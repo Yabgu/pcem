@@ -12,8 +12,6 @@
 #include "x86.h"
 
 #if defined(__linux__) || defined(__APPLE__)
-#include <sys/mman.h>
-#include <unistd.h>
 #include <stdlib.h>
 #endif
 #if defined WIN32 || defined _WIN32 || defined _WIN32

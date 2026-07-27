@@ -11,7 +11,6 @@
 // version: 1.7.4
 //
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "dosbox/nukedopl.h"

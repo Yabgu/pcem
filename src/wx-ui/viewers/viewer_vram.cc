@@ -5,7 +5,6 @@
 #include <wx/rawbmp.h>
 #include <wx/spinctrl.h>
 #include <wx/xrc/xmlres.h>
-#include <string>
 #include "viewer.h"
 #include "ibm.h"
 #include "mem.h"

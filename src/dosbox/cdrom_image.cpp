@@ -19,12 +19,10 @@
 /* Modified for use with PCem by bit */
 
 #include <cctype>
-#include <cmath>
 #include <cstdio>
 #include <cstring>
 #include <fstream>
 #include <iostream>
-#include <limits>
 #include <limits.h> //GCC 2.95
 #include <sstream>
 #include <vector>

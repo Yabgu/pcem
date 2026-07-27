@@ -3,7 +3,6 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <errno.h>
 
 #ifdef _WIN32
@@ -11,7 +10,6 @@
 #include <shlobj.h>
 #include <windows.h>
 #else
-#include <unistd.h>
 #endif
 
 int wx_dir_exists(char *path) {
