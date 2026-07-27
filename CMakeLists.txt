@@ -199,6 +199,15 @@ find_package(OpenGL REQUIRED)
 
 add_subdirectory(src)
 
+# Copy compile_commands.json to project root for tools (e.g. clangd, LSP) that expect it there
+add_custom_target(copy_compile_commands ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${CMAKE_BINARY_DIR}/compile_commands.json"
+                "${CMAKE_SOURCE_DIR}/compile_commands.json"
+        COMMENT "Copying compile_commands.json to project root"
+        DEPENDS "${CMAKE_BINARY_DIR}/compile_commands.json"
+)
+
 if(USE_EXPERIMENTAL)
         add_subdirectory(experimental)
 endif()
