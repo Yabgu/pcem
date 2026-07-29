@@ -135,7 +135,7 @@ class CDROM_Interface_Image : public CDROM_Interface {
         CDROM_Interface_Image();
         virtual ~CDROM_Interface_Image(void);
         void InitNewMedia(void);
-        bool SetDevice(char *path, int forceCD);
+        bool SetDevice(const char *path, int forceCD);
         bool GetUPC(unsigned char &attr, char *upc);
         bool GetAudioTracks(int &stTrack, int &end, TMSF &leadOut);
         bool GetAudioTrackInfo(int track, int &number, TMSF &start, unsigned char &attr);

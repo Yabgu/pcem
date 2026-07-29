@@ -76,7 +76,7 @@ CDROM_Interface_Image::~CDROM_Interface_Image() {
 void CDROM_Interface_Image::InitNewMedia() {
 }
 
-bool CDROM_Interface_Image::SetDevice(char *path, int forceCD) {
+bool CDROM_Interface_Image::SetDevice(const char *path, int forceCD) {
 	if (LoadCueSheet(path))
 		return true;
 	if (LoadIsoFile(path))

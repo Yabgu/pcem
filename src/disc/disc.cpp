@@ -1,5 +1,7 @@
-#include "ibm.h"
+#include <filesystem>
+#include <string>
 
+#include "ibm.h"
 #include "config.h"
 #include "disc.h"
 #include "disc_fdi.h"
@@ -44,15 +46,16 @@ static int driveloaders[4];
 
 void disc_load(int drive, const char *fn) {
         int c = 0, size;
-        char *p;
+        std::string ext_str;
         FILE *f;
         //        pclog("disc_load %i %s\n", drive, fn);
         //        setejecttext(drive, "");
         if (!fn)
                 return;
-        p = get_extension(fn);
-        if (!p)
-                return;
+        ext_str = std::filesystem::path(fn).extension().string();
+        if (!ext_str.empty() && ext_str[0] == '.')
+                ext_str = ext_str.substr(1);
+        const char *p = ext_str.c_str();
         //        setejecttext(drive, fn);
         pclog("Loading :%i %s %s\n", drive, fn, p);
         f = fopen(fn, "rb");

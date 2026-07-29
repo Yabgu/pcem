@@ -7,7 +7,6 @@ extern char *get_filename(char *s);
 extern void append_filename(char *dest, const char *s1, const char *s2, int size);
 extern void append_slash(char *s, int size);
 extern void put_backslash(char *s);
-extern char *get_extension(char *s);
 
 extern void config_load(int is_global, const char *fn);
 extern void config_save(int is_global, const char *fn);

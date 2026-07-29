@@ -1,3 +1,5 @@
+#include <filesystem>
+#include <string>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -202,18 +204,13 @@ void initpc(int argc, char *argv[]) {
                 } else if (!strcasecmp(argv[c], "--fullscreen")) {
                         start_in_fullscreen = 1;
                 } else if (!strcasecmp(argv[c], "--config")) {
-                        char *ext;
-
                         if ((c + 1) == argc)
                                 break;
                         strncpy(config_file_default, argv[c + 1], 256);
                         strcpy(config_name, get_filename(config_file_default));
 
-                        ext = get_extension(config_name);
-                        if (ext && ext[0]) {
-                                ext--;
-                                *ext = 0;
-                        }
+                        std::string stem = std::filesystem::path(config_name).stem().string();
+                        strncpy(config_name, stem.c_str(), 256);
 
                         config_override = 1;
                         c++;
