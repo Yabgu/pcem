@@ -1,4 +1,5 @@
-#include <stdlib.h>
+#include <cstdlib>
+#include <filesystem>
 #include "ibm.h"
 #include "device.h"
 #include "mem.h"
@@ -35,7 +36,7 @@ typedef struct flash_t {
         uint32_t addr_mask;
 } flash_t;
 
-static char flash_path[1024];
+static std::filesystem::path flash_path;
 
 static uint8_t flash_read(uint32_t addr, void *p) {
         flash_t *flash = (flash_t *)p;
@@ -171,47 +172,46 @@ void *intel_flash_init(uint8_t type, uint8_t flash_id) {
         FILE *f;
         flash_t *flash = (flash_t *)malloc(sizeof(flash_t));
         memset(flash, 0, sizeof(flash_t));
-        char fpath[1024];
         int i;
 
         flash->type = type;
 
         switch (romset) {
         case ROM_REVENGE:
-                strcpy(flash_path, "revenge/");
+                flash_path = "revenge";
                 break;
         case ROM_PB520R:
-                strcpy(flash_path, "pb520r/");
+                flash_path = "pb520r";
                 break;
         case ROM_ENDEAVOR:
-                strcpy(flash_path, "endeavor/");
+                flash_path = "endeavor";
                 break;
         case ROM_PB570:
-                strcpy(flash_path, "pb570/");
+                flash_path = "pb570";
                 break;
         case ROM_ZAPPA:
-                strcpy(flash_path, "zappa/");
+                flash_path = "zappa";
                 break;
         case ROM_P55VA:
-                strcpy(flash_path, "p55va/");
+                flash_path = "p55va";
                 break;
         case ROM_P55TVP4:
-                strcpy(flash_path, "p55tvp4/");
+                flash_path = "p55tvp4";
                 break;
         case ROM_430VX:
-                strcpy(flash_path, "430vx/");
+                flash_path = "430vx";
                 break;
         case ROM_P55T2P4:
-                strcpy(flash_path, "p55t2p4/");
+                flash_path = "p55t2p4";
                 break;
         case ROM_ITAUTEC_INFOWAYM:
-                strcpy(flash_path, "infowaym/");
+                flash_path = "infowaym";
                 break;
         case ROM_VS440FX:
-                strcpy(flash_path, "vs440fx/");
+                flash_path = "vs440fx";
                 break;
         case ROM_GA686BX:
-                strcpy(flash_path, "ga686bx/");
+                flash_path = "ga686bx";
                 break;
 
         default:
@@ -315,10 +315,7 @@ void *intel_flash_init(uint8_t type, uint8_t flash_id) {
         flash->command = CMD_READ_ARRAY;
         flash->status = 0;
 
-        strcpy(fpath, flash_path);
-        strcat(fpath, "flash.bin");
-        f = romfopen(fpath, "rb");
-        if (f) {
+        if (f = romfopen(flash_path / "flash.bin", "rb")) {
                 fread(&(flash->array[flash->block_start[BLOCK_MAIN]]), flash->block_len[BLOCK_MAIN], 1, f);
                 if (type & FLASH_2MBIT)
                         fread(&(flash->array[flash->block_start[BLOCK_MAIN2]]), flash->block_len[BLOCK_MAIN2], 1, f);
@@ -347,11 +344,7 @@ void intel_flash_close(void *p) {
         FILE *f;
         flash_t *flash = (flash_t *)p;
 
-        char fpath[1024];
-
-        strcpy(fpath, flash_path);
-        strcat(fpath, "flash.bin");
-        f = romfopen(fpath, "wb");
+        f = romfopen(flash_path / "flash.bin", "wb");
         fwrite(&(flash->array[flash->block_start[BLOCK_MAIN]]), flash->block_len[BLOCK_MAIN], 1, f);
         if (flash->type & FLASH_2MBIT)
                 fwrite(&(flash->array[flash->block_start[BLOCK_MAIN2]]), flash->block_len[BLOCK_MAIN2], 1, f);

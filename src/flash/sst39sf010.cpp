@@ -1,4 +1,5 @@
-#include <stdlib.h>
+#include <cstdlib>
+#include <filesystem>
 #include "ibm.h"
 #include "device.h"
 #include "mem.h"
@@ -11,7 +12,7 @@ typedef struct sst_t {
         int erase;
         int dirty;
 
-        char flash_path[1024];
+        std::filesystem::path flash_path;
         uint8_t data[0x20000];
 } sst_t;
 
@@ -165,18 +166,17 @@ static void *sst_39sf010_init() {
 
         switch (romset) {
         case ROM_XI8088:
-                strcpy(sst->flash_path, "xi8088/");
+                sst->flash_path = "xi8088";
                 break;
 
         case ROM_FIC_VA503P:
-                strcpy(sst->flash_path, "fic_va503p/");
+                sst->flash_path = "fic_va503p";
                 break;
 
         default:
                 fatal("sst_39sf010_init on unsupported ROM set %i\n", romset);
         }
-        strcat(sst->flash_path, "flash.bin");
-        f = romfopen(sst->flash_path, "rb");
+        f = romfopen(sst->flash_path / "flash.bin", "rb");
         if (f) {
                 switch (romset) {
                 case ROM_XI8088:
@@ -205,7 +205,7 @@ static void sst_39sf010_close(void *p) {
         sst_t *sst = (sst_t *)p;
 
         if (sst->dirty) {
-                FILE *f = romfopen(sst->flash_path, "wb");
+                FILE *f = romfopen(sst->flash_path / "flash.bin", "wb");
                 switch (romset) {
                 case ROM_XI8088:
                         if (xi8088_bios_128kb())

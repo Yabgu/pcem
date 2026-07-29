@@ -346,7 +346,7 @@ void tvga_recalctimings(svga_t *svga) {
         }
 }
 
-static void *tvga_common_init(char *fn, uint32_t id, int vram_size) {
+static void *tvga_common_init(const char *fn, uint32_t id, int vram_size) {
         tvga_t *tvga = (tvga_t *)malloc(sizeof(tvga_t));
         memset(tvga, 0, sizeof(tvga_t));
 

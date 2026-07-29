@@ -104,7 +104,7 @@ static bool _scsi_zip_cmd_init = ([]{
         return true;
 }());
 
-void zip_load(char *fn) {
+void zip_load(const char *fn) {
         if (zip_data) {
                 FILE *f;
                 int read_only = 0;

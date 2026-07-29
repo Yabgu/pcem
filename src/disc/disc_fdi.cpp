@@ -66,7 +66,7 @@ int fdi_hole(int drive) {
         }
 }
 
-void fdi_load(int drive, char *fn) {
+void fdi_load(int drive, const char *fn) {
         writeprot[drive] = fwriteprot[drive] = 1;
         fdi[drive].f = fopen(fn, "rb");
         if (!fdi[drive].f)

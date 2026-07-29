@@ -115,7 +115,7 @@ static void initialize_xdf_maps() {
         xdf_maps_initialized = 1;
 }
 
-void img_load(int drive, char *fn) {
+void img_load(int drive, const char *fn) {
         int size;
         double bit_rate_300;
         uint16_t bpb_bps;

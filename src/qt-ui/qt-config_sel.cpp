@@ -1,6 +1,8 @@
 #include "ibm.h"
 #include "config.h"
 #include "qt-utils.h"
+#include <filesystem>
+#include <string>
 #include "paths.h"
 #include "qt-hostconfig.h"
 
@@ -43,9 +45,9 @@ static void config_list_update(void *hdlg) {
         int num, p;
         void *h;
 
-        strcpy(s, configs_path);
-        put_backslash(s);
-        strcat(s, "*.cfg");
+        std::filesystem::path glob_path = std::filesystem::path(configs_path) / "*.cfg";
+        auto glob_str = glob_path.string();
+        strcpy(s, glob_str.c_str());
         pclog("Dir %s\n", s);
 
         h = wx_getdlgitem(hdlg, WX_ID("IDC_LIST"));
@@ -75,18 +77,13 @@ static int run(void *hdlg) {
 
         pclog("wx_dlgdirselectex returned %i %s\n", ret, s);
         if (s[0]) {
-                char cfg[512];
-
                 active_config = wx_sendmessage(wx_getdlgitem(hdlg, WX_ID("IDC_LIST")), WX_LB_GETCURSEL, 0, 0);
 
-                strcpy(cfg, configs_path);
-                put_backslash(cfg);
-                strcat(cfg, s);
-                strcat(cfg, "cfg");
-                //                                        sprintf(cfg, "%s\\configs\\%scfg", config_path, s);
-                pclog("Config name %s\n", cfg);
+                std::filesystem::path cfg_path = std::filesystem::path(configs_path) / (std::string(s) + "cfg");
+                auto cfg_str = cfg_path.string();
+                pclog("Config name %s\n", cfg_str.c_str());
 
-                strcpy(config_file_default, cfg);
+                strcpy(config_file_default, cfg_str.c_str());
                 strcpy(config_name, s);
                 if (config_name[strlen(config_name) - 1] == '.')
                         config_name[strlen(config_name) - 1] = 0;
@@ -132,7 +129,6 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
                                                 wx_simple_messagebox("Invalid name", "The following characters cannot be in the "
                                                                                      "name: /, <, >, :, \", \\, |, ?, *");
                                         } else {
-                                                char cfg[512];
 
                                                 strcpy(cfg, configs_path);
                                                 put_backslash(cfg);
@@ -168,7 +164,6 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
 
                         pclog("wx_dlgdirselectex returned %i %s\n", ret, s);
                         if (s[0]) {
-                                char cfg[512];
                                 char prev_cfg[512];
 
                                 strcpy(cfg, configs_path);
@@ -204,23 +199,17 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
 
                                 while (!done) {
                                         if (wx_textentrydialog(hdlg, "Enter name:", "New name", name, 1, 64, (LONG_PARAM)name)) {
-                                                char old_path[512];
-                                                char new_path[512];
 
-                                                strcpy(old_path, configs_path);
-                                                put_backslash(old_path);
-                                                strcat(old_path, old_name);
-                                                strcat(old_path, ".cfg");
+                                                std::filesystem::path old_path =
+                                                    std::filesystem::path(configs_path) / (std::string(old_name) + ".cfg");
+                                                std::filesystem::path new_path =
+                                                    std::filesystem::path(configs_path) / (std::string(name) + ".cfg");
+                                                auto old_str = old_path.string();
+                                                auto new_str = new_path.string();
+                                                pclog("Rename %s to %s\n", old_str.c_str(), new_str.c_str());
 
-                                                strcpy(new_path, configs_path);
-                                                put_backslash(new_path);
-                                                strcat(new_path, name);
-                                                strcat(new_path, ".cfg");
-
-                                                pclog("Rename %s to %s\n", old_path, new_path);
-
-                                                if (!wx_file_exists(new_path)) {
-                                                        rename(old_path, new_path);
+                                                if (!wx_file_exists(new_str.data())) {
+                                                        rename(old_str.c_str(), new_str.c_str());
 
                                                         config_list_update(hdlg);
                                                         done = 1;
@@ -247,23 +236,17 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
 
                                 while (!done) {
                                         if (wx_textentrydialog(hdlg, "Enter name:", "New name", name, 1, 64, (LONG_PARAM)name)) {
-                                                char old_path[512];
-                                                char new_path[512];
 
-                                                strcpy(old_path, configs_path);
-                                                put_backslash(old_path);
-                                                strcat(old_path, old_name);
-                                                strcat(old_path, ".cfg");
+                                                std::filesystem::path old_path =
+                                                    std::filesystem::path(configs_path) / (std::string(old_name) + ".cfg");
+                                                std::filesystem::path new_path =
+                                                    std::filesystem::path(configs_path) / (std::string(name) + ".cfg");
+                                                auto old_str = old_path.string();
+                                                auto new_str = new_path.string();
+                                                pclog("Copy %s to %s\n", old_str.c_str(), new_str.c_str());
 
-                                                strcpy(new_path, configs_path);
-                                                put_backslash(new_path);
-                                                strcat(new_path, name);
-                                                strcat(new_path, ".cfg");
-
-                                                pclog("Copy %s to %s\n", old_path, new_path);
-
-                                                if (!wx_file_exists(new_path)) {
-                                                        wx_copy_file(old_path, new_path, 1);
+                                                if (!wx_file_exists(new_str.data())) {
+                                                        wx_copy_file(old_str.c_str(), new_str.c_str(), 1);
 
                                                         config_list_update(hdlg);
                                                         done = 1;
@@ -287,10 +270,10 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
                                 wx_sendmessage(h, WX_LB_GETTEXT, c, (LONG_PARAM)name);
                                 sprintf(s, "Do you want to delete \"%s\"?", name);
                                 if (wx_messagebox(NULL, s, "PCem", WX_MB_OKCANCEL) == WX_IDOK) {
-                                        strcpy(s, configs_path);
-                                        put_backslash(s);
-                                        strcat(s, name);
-                                        strcat(s, ".cfg");
+                                        std::filesystem::path del_path =
+                                            std::filesystem::path(configs_path) / (std::string(name) + ".cfg");
+                                        auto del_str = del_path.string();
+                                        strcpy(s, del_str.c_str());
 
                                         remove(s);
 

@@ -2093,7 +2093,7 @@ static void aha1542c_write(uint32_t addr, uint8_t val, void *p) {
                 scsi->shadow_ram[addr] = val;
 }
 
-static void aha1542c_eeprom_load(aha154x_t *scsi, char *fn) {
+static void aha1542c_eeprom_load(aha154x_t *scsi, const char *fn) {
         FILE *f;
 
         strcpy(scsi->fn, fn);

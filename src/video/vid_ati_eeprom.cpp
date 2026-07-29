@@ -15,7 +15,7 @@ enum {
 
 enum { EEPROM_OP_EWDS = 0, EEPROM_OP_WRAL = 1, EEPROM_OP_ERAL = 2, EEPROM_OP_EWEN = 3 };
 
-void ati_eeprom_load(ati_eeprom_t *eeprom, char *fn, int type) {
+void ati_eeprom_load(ati_eeprom_t *eeprom, const char *fn, int type) {
         FILE *f;
         eeprom->type = type;
         strcpy(eeprom->fn, fn);

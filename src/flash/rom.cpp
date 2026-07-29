@@ -1,7 +1,9 @@
 #include <assert.h>
 #include <cstdint>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
+#include <filesystem>
+#include <string>
 #include "ibm.h"
 #include "config.h"
 #include "mem.h"
@@ -9,19 +11,21 @@
 #include "paths.h"
 
 FILE *romfopen(const char *fn, const char *mode) {
-        FILE *f;
-        char s[512];
-        int i;
+        std::string fn_str(fn);
 
-        for (i = 0; i < num_roms_paths; ++i) {
+        for (int i = 0; i < num_roms_paths; ++i) {
+                char s[512];
                 get_roms_path(i, s, 511);
-                put_backslash(s);
-                strcat(s, fn);
-                f = fopen(s, mode);
+                std::filesystem::path p = std::filesystem::path(s) / fn_str;
+                FILE *f = fopen(p.c_str(), mode);
                 if (f)
                         return f;
         }
-        return 0;
+        return nullptr;
+}
+
+FILE *romfopen(const std::filesystem::path &fn, const char *mode) {
+        return romfopen(fn.c_str(), mode);
 }
 
 int rom_present(const char *fn) {

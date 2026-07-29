@@ -451,7 +451,7 @@ void image_close(void) {
         //        memset(image_path, 0, 1024);
 }
 
-int image_open(char *fn) {
+int image_open(const char *fn) {
         if (strcmp(fn, image_path) != 0)
                 image_changed = 1;
 

@@ -1,7 +1,10 @@
 #ifndef _ROM_H_
 #define _ROM_H_
 
+#include <filesystem>
+
 FILE *romfopen(const char *fn, const char *mode);
+FILE *romfopen(const std::filesystem::path &fn, const char *mode);
 int rom_present(const char *fn);
 
 typedef struct rom_t {

@@ -22,7 +22,7 @@
 
 //#define EMU8K_DEBUG_REGISTERS
 
-char *PORT_NAMES[][8] = {
+const char *PORT_NAMES[][8] = {
         /* Data 0 ( 0x620/0x622) */
         {
                 "AWE_CPF",

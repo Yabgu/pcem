@@ -93,7 +93,10 @@ void mem_write_null(uint32_t addr, uint8_t val, void *p);
 void mem_write_nullw(uint32_t addr, uint16_t val, void *p);
 void mem_write_nulll(uint32_t addr, uint32_t val, void *p);
 
+#include <filesystem>
+
 FILE *romfopen(const char *fn, const char *mode);
+FILE *romfopen(const std::filesystem::path &fn, const char *mode);
 
 extern mem_mapping_t bios_mapping[8];
 extern mem_mapping_t bios_high_mapping[9];

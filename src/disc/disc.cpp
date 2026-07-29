@@ -34,7 +34,7 @@ int fdc_indexcount = 52;
 
 static struct {
         const char *const ext;
-        void (*load)(int drive, char *fn);
+        void (*load)(int drive, const char *fn);
         void (*close)(int drive);
         int size;
 } loaders[] = {{"IMG", img_load, img_close, -1}, {"IMA", img_load, img_close, -1}, {"360", img_load, img_close, -1},
@@ -42,7 +42,7 @@ static struct {
 
 static int driveloaders[4];
 
-void disc_load(int drive, char *fn) {
+void disc_load(int drive, const char *fn) {
         int c = 0, size;
         char *p;
         FILE *f;

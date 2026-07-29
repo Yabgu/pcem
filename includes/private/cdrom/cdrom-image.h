@@ -5,7 +5,7 @@
 
 extern char image_path[1024];
 
-int image_open(char *fn);
+int image_open(const char *fn);
 void image_reset();
 void image_close();
 

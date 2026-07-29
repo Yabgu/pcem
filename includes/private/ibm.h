@@ -60,7 +60,10 @@ void outw(uint16_t port, uint16_t val);
 uint32_t inl(uint16_t port);
 void outl(uint16_t port, uint32_t val);
 
+#include <filesystem>
+
 FILE *romfopen(const char *fn, const char *mode);
+FILE *romfopen(const std::filesystem::path &fn, const char *mode);
 extern int mem_size;
 
 /*Processor*/
@@ -394,7 +397,7 @@ extern float isa_timing, bus_timing;
 uint64_t timer_read();
 extern uint64_t timer_freq;
 
-void loadconfig(char *fn);
+void loadconfig(const char *fn);
 extern int config_override;
 
 extern int infocus;
@@ -420,7 +423,7 @@ void resetpc();
 void resetpchard();
 void speedchanged();
 
-void saveconfig(char *fn);
+void saveconfig(const char *fn);
 void saveconfig_global_only();
 
 #define UNUSED(x) (void)x

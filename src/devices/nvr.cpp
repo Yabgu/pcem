@@ -1,5 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <filesystem>
+#include <string>
 #include "ibm.h"
 #include "device.h"
 #include "io.h"
@@ -31,24 +33,17 @@ typedef struct nvr_t {
 } nvr_t;
 
 FILE *nvrfopen(const char *fn, const char *mode) {
-        char s[512];
-        FILE *f;
-
-        strcpy(s, nvr_path);
-        put_backslash(s);
-        strcat(s, config_name);
-        strcat(s, ".");
-        strcat(s, fn);
-        pclog("NVR try opening %s\n", s);
-        f = fopen(s, mode);
+        std::filesystem::path p = std::filesystem::path(nvr_path) / (std::string(config_name) + "." + fn);
+        pclog("NVR try opening %s\n", p.c_str());
+        FILE *f = fopen(p.c_str(), mode);
         if (f)
                 return f;
 
         if (mode[0] == 'r') {
-                snprintf(s, 512, "%s%s", nvr_default_path, fn);
-                return fopen(s, mode);
+                p = std::filesystem::path(nvr_default_path) / fn;
+                return fopen(p.c_str(), mode);
         } else {
-                pclog("Failed to open file '%s' for write\n", s);
+                pclog("Failed to open file '%s' for write\n", p.c_str());
                 return NULL;
         }
 }

@@ -93,7 +93,7 @@ int framecount = 0, fps = 0;
 
 int atfullspeed;
 
-void saveconfig(char *fn);
+void saveconfig(const char *fn);
 int infocus = 1;
 extern int mousecapture;
 
@@ -593,7 +593,7 @@ void closepc() {
 
 END_OF_MAIN();*/
 
-void loadconfig(char *fn) {
+void loadconfig(const char *fn) {
         int c, d;
         char s[512];
         char global_config_file[512];
@@ -825,7 +825,7 @@ void loadconfig(char *fn) {
         config_dump(CFG_MACHINE);
 }
 
-void saveconfig(char *fn) {
+void saveconfig(const char *fn) {
         int c, d;
         char global_config_file[512];
 
