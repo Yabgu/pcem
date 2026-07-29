@@ -241,19 +241,19 @@ void cd_set_speed(int speed) {
 
 static struct {
         // suffix numbers are sizes from the specs
-        char *vendor_8;
-        char *model_and_firmware_40;
-        char *serial_20;
-        char *model_16;
-        char *firmware_4;
+        const char *vendor_8;
+        const char *model_and_firmware_40;
+        const char *serial_20;
+        const char *model_16;
+        const char *firmware_4;
 
-        char *serial2_20;
-        char *firmware2_8;
-        char *model2_40;
+        const char *serial2_20;
+        const char *firmware2_8;
+        const char *model2_40;
 
         // for PCem config only
-        char *model_string_40;
-        char *model_config_string_40;
+        const char *model_string_40;
+        const char *model_config_string_40;
         int interfaces;
         int speed; // Not an index, but a "speed" value. -1 == allow override
 } const cd_models[] = {

@@ -16,8 +16,14 @@
 #define ABS(x) ((x) > 0 ? (x) : -(x))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
+// TODO: Make use of likely unlikely of C++
+#if WIN32
+#define likely(x)  (x)
+#define unlikely(x) (x)
+#else
 #define likely(x)   __builtin_expect(!!(x), 1)
 #define unlikely(x) __builtin_expect(!!(x), 0)
+#endif
 
 #define READFLASH_FDC 0
 #define READFLASH_HDC 4

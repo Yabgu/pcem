@@ -2,7 +2,7 @@
 
 #include <windows.h>
 #include <io.h>
-#ifdef __MINGW64_VERSION_MAJOR
+#if defined(__MINGW64_VERSION_MAJOR) || defined(_MSC_VER)
 #include "ntddcdrm.h"
 #include "ntddscsi.h"
 #else
@@ -16,7 +16,7 @@
 int cdrom_drive;
 int old_cdrom_drive;
 
-#ifndef __MINGW64_VERSION_MAJOR
+#if !defined(__MINGW64_VERSION_MAJOR) && !defined(_MSC_VER) 
 typedef struct _CDROM_TOC_SESSION_DATA {
         UCHAR Length[2];
         UCHAR FirstCompleteSession;
@@ -717,7 +717,7 @@ void ioctl_set_drive(char d) {
 int ioctl_open(char d) {
         if (hIOCTL)
                 ioctl_close();
-        hIOCTL = CreateFile(ioctl_path, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0,
+        hIOCTL = CreateFileA(ioctl_path, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0,
                             NULL);
         if (!hIOCTL) {
                 // fatal("IOCTL");

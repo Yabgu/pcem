@@ -3,7 +3,7 @@
 
 //#ifdef __amd64__
 //#include "codegen_x86-64.h"
-#if defined __amd64__
+#if defined(__amd64__) || defined(_M_X64) || defined(_M_AMD64)
 #include "codegen_backend_x86-64.h"
 #elif defined i386 || defined __i386 || defined __i386__ || defined _X86_
 #include "codegen_backend_x86.h"
