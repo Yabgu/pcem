@@ -426,6 +426,11 @@ build-*/
 cmake-build-*/
 output/
 !.vs/launch.vs.json
+
+# vcpkg
+vcpkg_installed/
+
+# ai
 .codewhale
 .deepseek
 .vscode

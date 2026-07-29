@@ -8,7 +8,7 @@
 #include "rom.h"
 #include "paths.h"
 
-FILE *romfopen(const char *fn, char *mode) {
+FILE *romfopen(const char *fn, const char *mode) {
         FILE *f;
         char s[512];
         int i;

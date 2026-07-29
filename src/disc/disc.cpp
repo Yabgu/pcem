@@ -33,7 +33,7 @@ int motoron;
 int fdc_indexcount = 52;
 
 static struct {
-        char *ext;
+        const char *const ext;
         void (*load)(int drive, char *fn);
         void (*close)(int drive);
         int size;

@@ -1,0 +1,13 @@
+{
+  "name": "pcem",
+  "version": "1.0.0",
+  "description": "PC Emulator - emulator of retro x86-based computer systems",
+  "builtin-baseline": "908da3a305a0a8028d9602ab241b433652b3df69",
+  "dependencies": [
+    "freetype",
+    "openal-soft",
+    "sdl2",
+    "wxwidgets",
+    "libpcap", "pkgconf", "libslirp"
+  ]
+}
