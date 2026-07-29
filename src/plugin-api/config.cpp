@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <string>
 #include <pcem/logging.h>
 #include "config.h"
 
-char config_file_default[256];
-char config_name[256];
+std::string config_file_default;
+std::string config_name;
 config_callback_t config_callbacks[CALLBACK_MAX];
 int num_config_callbacks = 0;
-static char config_file[256];
+static std::string config_file;
 
 typedef struct list_t {
         struct list_t *next;
@@ -219,21 +220,18 @@ void config_load(int is_global, const char *fn) {
 }
 
 void config_new() {
-        FILE *f = fopen(config_file, "wt");
+        FILE *f = fopen(config_file.c_str(), "wt");
         fclose(f);
 }
 
-static section_t *find_section(const char *name, int is_global) {
+static section_t *find_section(std::string_view name, int is_global) {
         section_t *current_section;
-        char blank[256] = "";
         list_t *head = is_global ? &global_config_head : &machine_config_head;
 
         current_section = (section_t *)head->next;
-        if (!name)
-                name = blank;
 
         while (current_section) {
-                if (!strncmp(current_section->name, name, 256))
+                if (name == current_section->name)
                         return current_section;
 
                 current_section = (section_t *)current_section->list.next;
@@ -241,13 +239,13 @@ static section_t *find_section(const char *name, int is_global) {
         return NULL;
 }
 
-static entry_t *find_entry(section_t *section, const char *name) {
+static entry_t *find_entry(section_t *section, std::string_view name) {
         entry_t *current_entry;
 
         current_entry = (entry_t *)section->entry_head.next;
 
         while (current_entry) {
-                if (!strncmp(current_entry->name, name, 256))
+                if (name == current_entry->name)
                         return current_entry;
 
                 current_entry = (entry_t *)current_entry->list.next;
@@ -255,27 +253,31 @@ static entry_t *find_entry(section_t *section, const char *name) {
         return NULL;
 }
 
-static section_t *create_section(const char *name, int is_global) {
+static section_t *create_section(std::string_view name, int is_global) {
         section_t *new_section = (section_t *)malloc(sizeof(section_t));
         list_t *head = is_global ? &global_config_head : &machine_config_head;
 
         memset(new_section, 0, sizeof(section_t));
-        strncpy(new_section->name, name, 256);
+        size_t len = std::min(name.size(), sizeof(new_section->name) - 1);
+        memcpy(new_section->name, name.data(), len);
+        new_section->name[len] = 0;
         list_add(&new_section->list, head);
 
         return new_section;
 }
 
-static entry_t *create_entry(section_t *section, const char *name) {
+static entry_t *create_entry(section_t *section, std::string_view name) {
         entry_t *new_entry = (entry_t *)malloc(sizeof(entry_t));
         memset(new_entry, 0, sizeof(entry_t));
-        strncpy(new_entry->name, name, 256);
+        size_t len = std::min(name.size(), sizeof(new_entry->name) - 1);
+        memcpy(new_entry->name, name.data(), len);
+        new_entry->name[len] = 0;
         list_add(&new_entry->list, &section->entry_head);
 
         return new_entry;
 }
 
-int config_get_int(int is_global, const char *head, const char *name, int def) {
+int config_get_int(int is_global, const char *head, std::string_view name, int def) {
         section_t *section;
         entry_t *entry;
         int value;
@@ -295,7 +297,7 @@ int config_get_int(int is_global, const char *head, const char *name, int def) {
         return value;
 }
 
-float config_get_float(int is_global, const char *head, const char *name, float def) {
+float config_get_float(int is_global, const char *head, std::string_view name, float def) {
         section_t *section;
         entry_t *entry;
         float value;
@@ -315,7 +317,7 @@ float config_get_float(int is_global, const char *head, const char *name, float 
         return value;
 }
 
-const char *config_get_string(int is_global, const char *head, const char *name, const char *def) {
+const char *config_get_string(int is_global, const char *head, std::string_view name, const char *def) {
         section_t *section;
         entry_t *entry;
 
@@ -332,7 +334,7 @@ const char *config_get_string(int is_global, const char *head, const char *name,
         return entry->data;
 }
 
-void config_set_int(int is_global, const char *head, const char *name, int val) {
+void config_set_int(int is_global, const char *head, std::string_view name, int val) {
         section_t *section;
         entry_t *entry;
 
@@ -349,7 +351,7 @@ void config_set_int(int is_global, const char *head, const char *name, int val) 
         sprintf(entry->data, "%i", val);
 }
 
-void config_set_float(int is_global, const char *head, const char *name, float val) {
+void config_set_float(int is_global, const char *head, std::string_view name, float val) {
         section_t *section;
         entry_t *entry;
 
@@ -366,7 +368,7 @@ void config_set_float(int is_global, const char *head, const char *name, float v
         sprintf(entry->data, "%f", val);
 }
 
-void config_set_string(int is_global, const char *head, const char *name, const char *val) {
+void config_set_string(int is_global, const char *head, std::string_view name, std::string_view val) {
         section_t *section;
         entry_t *entry;
 
@@ -380,7 +382,9 @@ void config_set_string(int is_global, const char *head, const char *name, const 
         if (!entry)
                 entry = create_entry(section, name);
 
-        strncpy(entry->data, val, 256);
+        size_t len = std::min(val.size(), sizeof(entry->data) - 1);
+        memcpy(entry->data, val.data(), len);
+        entry->data[len] = 0;
 }
 
 char *get_filename(char *s) {
@@ -393,7 +397,7 @@ char *get_filename(char *s) {
         return s;
 }
 
-void append_filename(char *dest, const char *s1, const char *s2, int size) { sprintf(dest, "%s%s", s1, s2); }
+void append_filename(char *dest, std::string_view s1, std::string_view s2, int size) { snprintf(dest, size, "%.*s%.*s", (int)s1.size(), s1.data(), (int)s2.size(), s2.data()); }
 
 void append_slash(char *s, int size) {
         int c = strlen(s) - 1;
@@ -413,8 +417,8 @@ void put_backslash(char *s) {
         }
 }
 
-void config_save(int is_global, const char *fn) {
-        FILE *f = fopen(fn, "wt");
+void config_save(int is_global, std::string fn) {
+        FILE *f = fopen(fn.c_str(), "wt");
         section_t *current_section;
         list_t *head = is_global ? &global_config_head : &machine_config_head;
 

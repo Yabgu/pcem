@@ -2,6 +2,7 @@
 #define _IBM_H_
 #include <stdio.h>
 #include <stdint.h>
+#include <string>
 #include <string.h>
 
 #include "timer.h"
@@ -154,7 +155,7 @@ typedef struct PIC {
 extern PIC pic, pic2;
 extern int pic_intpending;
 
-extern char discfns[2][256];
+extern std::string discfns[2];
 extern int driveempty[2];
 
 #define PCJR (romset == ROM_IBMPCJR)

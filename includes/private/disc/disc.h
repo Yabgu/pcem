@@ -15,8 +15,8 @@ extern DRIVE drives[2];
 
 extern int curdrive;
 
-void disc_load(int drive, const char *fn);
-void disc_new(int drive, const char *fn);
+void disc_load(int drive, std::string_view fn);
+void disc_new(int drive, std::string_view fn);
 void disc_close(int drive);
 void disc_init();
 void disc_reset();

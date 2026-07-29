@@ -206,11 +206,10 @@ void initpc(int argc, char *argv[]) {
                 } else if (!strcasecmp(argv[c], "--config")) {
                         if ((c + 1) == argc)
                                 break;
-                        strncpy(config_file_default, argv[c + 1], 256);
-                        strcpy(config_name, get_filename(config_file_default));
+                        config_file_default = argv[c + 1];
+                        config_name = std::filesystem::path(config_file_default).filename().string();
 
-                        std::string stem = std::filesystem::path(config_name).stem().string();
-                        strncpy(config_name, stem.c_str(), 256);
+                        config_name = std::filesystem::path(config_name).stem().string();
 
                         config_override = 1;
                         c++;
@@ -218,14 +217,14 @@ void initpc(int argc, char *argv[]) {
                         if ((c + 1) == argc)
                                 break;
 
-                        strncpy(discfns[0], argv[c + 1], 256);
+                        discfns[0] = argv[c + 1];
                         c++;
                         override_drive_a = 1;
                 } else if (!strcasecmp(argv[c], "--load_drive_b")) {
                         if ((c + 1) == argc)
                                 break;
 
-                        strncpy(discfns[1], argv[c + 1], 256);
+                        discfns[1] = argv[c + 1];
                         c++;
                         override_drive_b = 1;
                 }
@@ -285,7 +284,7 @@ void initpc(int argc, char *argv[]) {
 #endif
         {
                 if (cdrom_drive == CDROM_IMAGE) {
-                        FILE *ff = fopen(image_path, "rb");
+                        FILE *ff = fopen(image_path.c_str(), "rb");
                         if (ff) {
                                 fclose(ff);
                                 image_open(image_path);
@@ -406,7 +405,7 @@ void resetpchard() {
 #endif
         {
                 if (cdrom_drive == CDROM_IMAGE) {
-                        FILE *ff = fopen(image_path, "rb");
+                        FILE *ff = fopen(image_path.c_str(), "rb");
                         if (ff) {
                                 fclose(ff);
                                 image_open(image_path);
@@ -593,10 +592,9 @@ END_OF_MAIN();*/
 void loadconfig(const char *fn) {
         int c, d;
         char s[512];
-        char global_config_file[512];
+        std::string global_config_file = (std::filesystem::path(pcem_path) / "pcem.cfg").string();
         char *p;
 
-        append_filename(global_config_file, pcem_path, "pcem.cfg", 511);
 
         config_load(CFG_GLOBAL, global_config_file);
 
@@ -658,17 +656,17 @@ void loadconfig(const char *fn) {
         if (!override_drive_a) {
                 p = (char *)config_get_string(CFG_MACHINE, NULL, "disc_a", "");
                 if (p)
-                        strcpy(discfns[0], p);
+                        discfns[0] = p;
                 else
-                        strcpy(discfns[0], "");
+                        discfns[0].clear();
         }
 
         if (!override_drive_b) {
                 p = (char *)config_get_string(CFG_MACHINE, NULL, "disc_b", "");
                 if (p)
-                        strcpy(discfns[1], p);
+                        discfns[1] = p;
                 else
-                        strcpy(discfns[1], "");
+                        discfns[1].clear();
         }
 
         p = (char *)config_get_string(CFG_MACHINE, NULL, "hdd_controller", "");
@@ -692,9 +690,9 @@ void loadconfig(const char *fn) {
 
         p = (char *)config_get_string(CFG_MACHINE, NULL, "cdrom_path", "");
         if (p)
-                strcpy(image_path, p);
+                image_path = p;
         else
-                strcpy(image_path, "");
+                image_path.clear();
 
         hdc[0].spt = config_get_int(CFG_MACHINE, NULL, "hdc_sectors", 0);
         hdc[0].hpc = config_get_int(CFG_MACHINE, NULL, "hdc_heads", 0);
@@ -758,7 +756,7 @@ void loadconfig(const char *fn) {
         bpb_disable = config_get_int(CFG_MACHINE, NULL, "bpb_disable", 0);
 
         cd_speed = config_get_int(CFG_MACHINE, NULL, "cd_speed", 24);
-        cd_model = cd_model_from_config((char *)config_get_string(CFG_MACHINE, NULL, "cd_model", cd_get_config_model(0)));
+        cd_model = cd_model_from_config(config_get_string(CFG_MACHINE, NULL, "cd_model", cd_get_config_model(0).c_str()));
 
         joystick_type = config_get_int(CFG_MACHINE, NULL, "joystick_type", 0);
         mouse_type = config_get_int(CFG_MACHINE, NULL, "mouse_type", 0);
@@ -824,9 +822,8 @@ void loadconfig(const char *fn) {
 
 void saveconfig(const char *fn) {
         int c, d;
-        char global_config_file[512];
+        std::string global_config_file = (std::filesystem::path(pcem_path) / "pcem.cfg").string();
 
-        append_filename(global_config_file, pcem_path, "pcem.cfg", 511);
 
         config_set_int(CFG_GLOBAL, NULL, "vid_resize", vid_resize);
         config_set_int(CFG_GLOBAL, NULL, "vid_force_aspect_ratio", video_force_aspect_ration);
@@ -947,19 +944,18 @@ void saveconfig(const char *fn) {
                 if (config_callbacks[d].saveconfig)
                         config_callbacks[d].saveconfig();
 
-        pclog("config_save(%s)\n", config_file_default);
+        pclog("config_save(%s)\n", config_file_default.c_str());
         if (fn)
                 config_save(CFG_MACHINE, fn);
-        else if (strlen(config_file_default))
+        else if (!config_file_default.empty())
                 config_save(CFG_MACHINE, config_file_default);
 
         config_save(CFG_GLOBAL, global_config_file);
 }
 
 void saveconfig_global_only() {
-        char global_config_file[512];
+        std::string global_config_file = (std::filesystem::path(pcem_path) / "pcem.cfg").string();
 
-        append_filename(global_config_file, pcem_path, "pcem.cfg", 511);
 
         config_save(CFG_GLOBAL, global_config_file);
 }

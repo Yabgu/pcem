@@ -21,6 +21,7 @@
 #ifndef __CDROM_INTERFACE__
 #define __CDROM_INTERFACE__
 
+#include <filesystem>
 #include <string.h>
 #include <string>
 #include <iostream>
@@ -74,14 +75,14 @@ typedef struct SCtrl {
         Bit8u vol[4]; // channel volume
 } TCtrl;
 
-extern int CDROM_GetMountType(char *path, int force);
+extern int CDROM_GetMountType(const std::filesystem::path &path, int force);
 
 class CDROM_Interface {
     public:
         //	CDROM_Interface						(void);
         virtual ~CDROM_Interface(void){};
 
-        virtual bool SetDevice(char *path, int forceCD) = 0;
+        virtual bool SetDevice(const std::filesystem::path &path, int forceCD) = 0;
 
         virtual bool GetUPC(unsigned char &attr, char *upc) = 0;
 
@@ -109,7 +110,7 @@ class CDROM_Interface_Image : public CDROM_Interface {
 
         class BinaryFile : public TrackFile {
             public:
-                BinaryFile(const char *filename, bool &error);
+                BinaryFile(const std::filesystem::path &filename, bool &error);
                 ~BinaryFile();
                 bool read(Bit8u *buffer, int seek, int count);
                 int getLength();
@@ -135,7 +136,7 @@ class CDROM_Interface_Image : public CDROM_Interface {
         CDROM_Interface_Image();
         virtual ~CDROM_Interface_Image(void);
         void InitNewMedia(void);
-        bool SetDevice(const char *path, int forceCD);
+        bool SetDevice(const std::filesystem::path &path, int forceCD);
         bool GetUPC(unsigned char &attr, char *upc);
         bool GetAudioTracks(int &stTrack, int &end, TMSF &leadOut);
         bool GetAudioTrackInfo(int track, int &number, TMSF &start, unsigned char &attr);
@@ -154,10 +155,10 @@ class CDROM_Interface_Image : public CDROM_Interface {
         static void CDAudioCallBack(Bitu len);
 
         void ClearTracks();
-        bool LoadIsoFile(char *filename);
+        bool LoadIsoFile(const std::filesystem::path &filename);
         bool CanReadPVD(TrackFile *file, int sectorSize, bool mode2);
         // cue sheet processing
-        bool LoadCueSheet(char *cuefile);
+        bool LoadCueSheet(const std::filesystem::path &cuefile);
         bool GetRealFileName(std::string &filename, std::string &pathname);
         bool GetCueKeyword(std::string &keyword, std::istream &in);
         bool GetCueFrame(int &frames, std::istream &in);

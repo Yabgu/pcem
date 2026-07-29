@@ -8,13 +8,13 @@ extern void append_filename(char *dest, const char *s1, const char *s2, int size
 extern void append_slash(char *s, int size);
 extern void put_backslash(char *s);
 
-extern void config_load(int is_global, const char *fn);
-extern void config_save(int is_global, const char *fn);
+extern void config_load(int is_global, std::string fn);
+extern void config_save(int is_global, std::string fn);
 extern void config_dump(int is_global);
 extern void config_free(int is_global);
 
-extern char config_file_default[256];
-extern char config_name[256];
+extern std::string config_file_default;
+extern std::string config_name;
 
 typedef struct config_callback_t {
         void (*loadconfig)();

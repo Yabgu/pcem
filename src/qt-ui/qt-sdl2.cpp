@@ -764,7 +764,7 @@ int custom_resolution_callback(void *window, int message, INT_PARAM wParam, LONG
 
 int wx_handle_command(void *hwnd, int wParam, int checked) {
         void *hmenu;
-        char temp_image_path[1024];
+        std::string temp_image_path;
         int new_cdrom_drive;
         hmenu = wx_getmenu(hwnd);
 
@@ -789,13 +789,13 @@ int wx_handle_command(void *hwnd, int wParam, int checked) {
                 //                wx_exit(hwnd, 0);
                 wx_stop_emulation(hwnd);
         } else if (ID_IS("IDM_DISC_A")) {
-                if (!getfile(hwnd, "Disc image (*.img;*.ima;*.fdi)|*.img;*.ima;*.fdi|All files (*.*)|*.*", discfns[0])) {
+                if (!getfile(hwnd, "Disc image (*.img;*.ima;*.fdi)|*.img;*.ima;*.fdi|All files (*.*)|*.*", discfns[0].c_str())) {
                         disc_close(0);
                         disc_load(0, openfilestring);
                         saveconfig(NULL);
                 }
         } else if (ID_IS("IDM_DISC_B")) {
-                if (!getfile(hwnd, "Disc image (*.img;*.ima;*.fdi)|*.img;*.ima;*.fdi|All files (*.*)|*.*", discfns[1])) {
+                if (!getfile(hwnd, "Disc image (*.img;*.ima;*.fdi)|*.img;*.ima;*.fdi|All files (*.*)|*.*", discfns[1].c_str())) {
                         disc_close(1);
                         disc_load(1, openfilestring);
                         saveconfig(NULL);
@@ -813,15 +813,15 @@ int wx_handle_command(void *hwnd, int wParam, int checked) {
         } else if (ID_IS("IDM_DISC_CREATE")) {
                 creatediscimage_open(hwnd);
         } else if (ID_IS("IDM_DISC_ZIP")) {
-                char zip_fn[256] = "";
+                std::string zip_fn;
 
-                if (!getfile(hwnd, "Disc image (*.img)|*.img|All files (*.*)|*.*", zip_fn)) {
+                if (!getfile(hwnd, "Disc image (*.img)|*.img|All files (*.*)|*.*", zip_fn.c_str())) {
                         zip_load(openfilestring);
                 }
         } else if (ID_IS("IDM_EJECT_ZIP")) {
                 zip_eject();
         } else if (ID_IS("IDM_CASSETTE_LOAD")) {
-                if (!getfile(hwnd, "Tape image (*.pzxi;*.pzx)|*.pzxi;*.pzx|All files (*.*)|*.*", cassettefn)) {
+                if (!getfile(hwnd, "Tape image (*.pzxi;*.pzx)|*.pzxi;*.pzx|All files (*.*)|*.*", cassettefn.c_str())) {
                         cassette_eject();
                         cassette_load(openfilestring);
                         saveconfig(NULL);
@@ -972,10 +972,10 @@ int wx_handle_command(void *hwnd, int wParam, int checked) {
                 saveconfig(NULL);
                 update_cdrom_menu(hmenu);
         } else if (ID_IS("IDM_CDROM_IMAGE") || ID_IS("IDM_CDROM_IMAGE_LOAD")) {
-                if (!getfile(hwnd, "CD-ROM image (*.iso;*.cue)|*.iso;*.cue|All files (*.*)|*.*", image_path)) {
+                if (!getfile(hwnd, "CD-ROM image (*.iso;*.cue)|*.iso;*.cue|All files (*.*)|*.*", image_path.c_str())) {
                         old_cdrom_drive = cdrom_drive;
-                        strcpy(temp_image_path, openfilestring);
-                        if ((strcmp(image_path, temp_image_path) == 0) && (cdrom_drive == CDROM_IMAGE)) {
+                        temp_image_path = openfilestring;
+                        if ((image_path == temp_image_path) && (cdrom_drive == CDROM_IMAGE)) {
                                 /* Switching from ISO to the same ISO. Do nothing. */
                                 update_cdrom_menu(hmenu);
                                 return 0;

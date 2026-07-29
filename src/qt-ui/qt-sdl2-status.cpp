@@ -45,7 +45,7 @@ drive_info_t *get_machine_info(char *s, int *num_drive_info) {
         for (i = 0; i < 2; ++i) {
                 drive = 'A' + i;
                 if (fdd_get_type(i) > 0) {
-                        strcpy(drive_info[pos].fn, discfns[i]);
+                        strcpy(drive_info[pos].fn, discfns[i].c_str());
                         drive_info[pos].enabled = strlen(drive_info[pos].fn) > 0;
                         drive_info[pos].drive = i;
                         drive_info[pos].drive_letter = drive;
@@ -62,9 +62,9 @@ drive_info_t *get_machine_info(char *s, int *num_drive_info) {
                         if (cdrom_drive < 0)
                                 continue;
                         if (cdrom_drive == CDROM_IMAGE) {
-                                if (!strlen(image_path))
+                                if (image_path.empty())
                                         continue;
-                                strcpy(drive_info[pos].fn, image_path);
+                                strcpy(drive_info[pos].fn, image_path.c_str());
                         } else
                                 strcpy(drive_info[pos].fn, "");
                         drive_info[pos].enabled = strlen(drive_info[pos].fn) > 0;

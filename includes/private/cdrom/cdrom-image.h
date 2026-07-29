@@ -1,11 +1,13 @@
 #ifndef CDROM_ISO_H
 #define CDROM_ISO_H
 
+#include <filesystem>
+#include <string>
 #include <stdint.h>
 
-extern char image_path[1024];
+extern std::string image_path;
 
-int image_open(const char *fn);
+int image_open(const std::filesystem::path &fn);
 void image_reset();
 void image_close();
 

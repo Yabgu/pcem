@@ -83,10 +83,10 @@ static int run(void *hdlg) {
                 auto cfg_str = cfg_path.string();
                 pclog("Config name %s\n", cfg_str.c_str());
 
-                strcpy(config_file_default, cfg_str.c_str());
-                strcpy(config_name, s);
-                if (config_name[strlen(config_name) - 1] == '.')
-                        config_name[strlen(config_name) - 1] = 0;
+                config_file_default = cfg_str;
+                config_name = s;
+                if (!config_name.empty() && config_name.back() == '.')
+                        config_name.pop_back();
 
                 wx_enddialog(hdlg, 1);
                 return TRUE;
@@ -133,7 +133,7 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
                                                 auto cfg_str = cfg_path.string();
                                                 pclog("Config %s\n", cfg_str.c_str());
 
-                                                if (!wx_file_exists(cfg_str.data())) {
+                                                if (!std::filesystem::exists(cfg_path)) {
                                                         if (config_open(hdlg)) {
                                                                 saveconfig(cfg_str.data());
 
@@ -192,7 +192,7 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
                                                 auto new_str = new_path.string();
                                                 pclog("Rename %s to %s\n", old_str.c_str(), new_str.c_str());
 
-                                                if (!wx_file_exists(new_str.data())) {
+                                                if (!std::filesystem::exists(new_path)) {
                                                         rename(old_str.c_str(), new_str.c_str());
 
                                                         config_list_update(hdlg);
@@ -229,8 +229,8 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
                                                 auto new_str = new_path.string();
                                                 pclog("Copy %s to %s\n", old_str.c_str(), new_str.c_str());
 
-                                                if (!wx_file_exists(new_str.data())) {
-                                                        wx_copy_file(old_str.c_str(), new_str.c_str(), 1);
+                                                if (!std::filesystem::exists(new_path)) {
+                                                        std::filesystem::copy_file(old_path, new_path, std::filesystem::copy_options::overwrite_existing);
 
                                                         config_list_update(hdlg);
                                                         done = 1;

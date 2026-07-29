@@ -18,6 +18,7 @@
 
 /* Modified for use with PCem by bit */
 
+#include <filesystem>
 #include <cctype>
 #include <cstdio>
 #include <cstring>
@@ -26,25 +27,15 @@
 #include <limits.h> //GCC 2.95
 #include <sstream>
 #include <vector>
-#include <sys/stat.h>
 #include "dosbox/cdrom.h"
-
-#if !defined(WIN32)
-#include <libgen.h>
-#else
-#include <string.h>
-#endif
 
 using namespace std;
 
 #define MAX_LINE_LENGTH 512
 #define MAX_FILENAME_LENGTH 256
-#define CROSS_LEN 512
-
-#define safe_strncpy(a, b, n) do { strncpy((a),(b),(n)-1); (a)[(n)-1] = 0; } while (0)
-
-CDROM_Interface_Image::BinaryFile::BinaryFile(const char *filename, bool &error) {
-	file = new ifstream(filename, ios::in | ios::binary);
+CDROM_Interface_Image::BinaryFile::BinaryFile(const std::filesystem::path &filename, bool &error) {
+	std::string fn_str = filename.string();
+	file = new ifstream(fn_str, ios::in | ios::binary);
 	error = (file == NULL) || (file->fail());
 }
 
@@ -76,7 +67,7 @@ CDROM_Interface_Image::~CDROM_Interface_Image() {
 void CDROM_Interface_Image::InitNewMedia() {
 }
 
-bool CDROM_Interface_Image::SetDevice(const char *path, int forceCD) {
+bool CDROM_Interface_Image::SetDevice(const std::filesystem::path &path, int forceCD) {
 	if (LoadCueSheet(path))
 		return true;
 	if (LoadIsoFile(path))
@@ -181,7 +172,7 @@ bool CDROM_Interface_Image::ReadSector(Bit8u *buffer, bool raw, unsigned long se
 	return tracks[track].file->read(buffer, seek, length);
 }
 
-bool CDROM_Interface_Image::LoadIsoFile(char *filename) {
+bool CDROM_Interface_Image::LoadIsoFile(const std::filesystem::path &filename) {
 	tracks.clear();
 
 	// data track
@@ -240,23 +231,7 @@ bool CDROM_Interface_Image::CanReadPVD(TrackFile *file, int sectorSize, bool mod
 		(pvd[8] == 1 && !strncmp((char *)(&pvd[9]), "CDROM", 5) && pvd[14] == 1));
 }
 
-#if defined(WIN32)
-static string dirname(char *file) {
-	char *sep = strrchr(file, '\\');
-	if (sep == NULL)
-		sep = strrchr(file, '/');
-	if (sep == NULL)
-		return "";
-	else {
-		int len = (int)(sep - file);
-		char tmp[MAX_FILENAME_LENGTH];
-		safe_strncpy(tmp, file, len + 1);
-		return tmp;
-	}
-}
-#endif
-
-bool CDROM_Interface_Image::LoadCueSheet(char *cuefile) {
+bool CDROM_Interface_Image::LoadCueSheet(const std::filesystem::path &cuefile) {
 	Track track = {0, 0, 0, 0, 0, 0, 0, false, NULL};
 	tracks.clear();
 	int shift = 0;
@@ -265,11 +240,9 @@ bool CDROM_Interface_Image::LoadCueSheet(char *cuefile) {
 	int prestart = 0;
 	bool success;
 	bool canAddTrack = false;
-	char tmp[MAX_FILENAME_LENGTH];        // dirname can change its argument
-	safe_strncpy(tmp, cuefile, MAX_FILENAME_LENGTH);
-	string pathname(dirname(tmp));
+	string pathname = cuefile.parent_path().string();
 	ifstream in;
-	in.open(cuefile, ios::in);
+	in.open(cuefile.string(), ios::in);
 	if (in.fail())
 		return false;
 
@@ -466,13 +439,12 @@ bool CDROM_Interface_Image::HasAudioTracks(void) {
 
 bool CDROM_Interface_Image::GetRealFileName(string &filename, string &pathname) {
 	// check if file exists
-	struct stat test;
-	if (stat(filename.c_str(), &test) == 0)
+	if (std::filesystem::exists(filename))
 		return true;
 
 	// check if file with path relative to cue file exists
 	string tmpstr(pathname + "/" + filename);
-	if (stat(tmpstr.c_str(), &test) == 0) {
+	if (std::filesystem::exists(tmpstr)) {
 		filename = tmpstr;
 		return true;
 	}
@@ -488,13 +460,13 @@ bool CDROM_Interface_Image::GetRealFileName(string &filename, string &pathname) 
 		if(copy[i] == '\\') copy[i] = '/';
 	}
 
-	if (stat(copy.c_str(), &test) == 0) {
+	if (std::filesystem::exists(copy)) {
 		filename = copy;
 		return true;
 	}
 
 	tmpstr = pathname + "/" + copy;
-	if (stat(tmpstr.c_str(), &test) == 0) {
+	if (std::filesystem::exists(tmpstr)) {
 		filename = tmpstr;
 		return true;
 	}

@@ -27,7 +27,7 @@
 #include "device.h"
 #include "pzx.h"
 
-char cassettefn[256];
+std::string cassettefn;
 
 typedef struct cassette_t {
         uint8_t motor; /* Motor status */
@@ -55,20 +55,20 @@ void cassette_eject(void) {
         if (st_cas->pzx.input) {
                 pzx_close(&st_cas->pzx);
         }
-        cassettefn[0] = 0;
+        cassettefn.clear();
 }
 
-void cassette_load(const char *filename) {
+void cassette_load(std::string_view filename) {
         FILE *fp;
         unsigned char magic[8];
 
-        if (!filename)
+        if (filename.empty())
                 return;
-
-        fp = fopen(filename, "rb");
+        std::string fn_str(filename);
+        fp = fopen(fn_str.c_str(), "rb");
         if (!fp) {
                 /* Warn user? */
-                CAS_LOG(("Failed to open cassette input %s\n", filename));
+                CAS_LOG(("Failed to open cassette input %s\n", fn_str.c_str()));
                 return;
         }
         memset(magic, 0, sizeof(magic));
@@ -82,11 +82,11 @@ void cassette_load(const char *filename) {
                 result = pzx_open(&st_cas->pzx, fp);
 
                 if (result) {
-                        CAS_LOG(("Failed to open %s as PZX: %s\n", filename, result));
+                        CAS_LOG(("Failed to open %s as PZX: %s\n", fn_str.c_str(), result));
                         fclose(fp);
                         return;
                 }
-                strcpy(cassettefn, filename);
+                cassettefn = filename;
         }
 }
 

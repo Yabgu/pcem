@@ -3,7 +3,7 @@
 #include "fdc.h"
 #include "fdd.h"
 
-char discfns[2][256];
+std::string discfns[2];
 
 static struct {
         int type;

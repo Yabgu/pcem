@@ -462,22 +462,22 @@ static struct {
 
 };
 
-char *cd_model = NULL;
+std::string cd_model;
 
-char *cd_get_model(int i) { return cd_models[i].model_string_40; }
+std::string cd_get_model(int i) { return cd_models[i].model_string_40; }
 
-char *cd_get_config_model(int i) { return cd_models[i].model_config_string_40; }
+std::string cd_get_config_model(int i) { return cd_models[i].model_config_string_40; }
 
-void cd_set_model(char *model) {
+void cd_set_model(std::string_view model) {
         if (cd_data) {
                 int c = 0;
 
                 while (1) {
-                        if (!model)
+                        if (model.empty())
                                 break;
                         if (c > MAX_CD_MODEL)
                                 break;
-                        if (!strncmp(cd_models[c].model_string_40, model, 40))
+                        if (model == cd_models[c].model_string_40)
                                 break;
 
                         c++;
@@ -491,17 +491,17 @@ int cd_get_model_interfaces(int i) { return cd_models[i].interfaces; }
 
 int cd_get_model_speed(int i) { return cd_models[i].speed; }
 
-char *cd_model_to_config(char *model) {
+std::string cd_model_to_config(std::string_view model) {
         int c = 0;
 
         while (1) {
-                if (!model)
+                if (model.empty())
                         break;
                 if (c > MAX_CD_MODEL) {
                         c = 0; // default
                         break;
                 }
-                if (!strncmp(cd_models[c].model_string_40, model, 40))
+                if (model == cd_models[c].model_string_40)
                         break;
 
                 c++;
@@ -509,17 +509,17 @@ char *cd_model_to_config(char *model) {
         return cd_models[c].model_config_string_40;
 }
 
-char *cd_model_from_config(char *config) {
+std::string cd_model_from_config(std::string_view config) {
         int c = 0;
 
         while (1) {
-                if (!config)
+                if (config.empty())
                         break;
                 if (c > MAX_CD_MODEL) {
                         c = 0; // default
                         break;
                 }
-                if (!strncmp(cd_models[c].model_config_string_40, config, 40))
+                if (config == cd_models[c].model_config_string_40)
                         break;
 
                 c++;

@@ -83,10 +83,10 @@ static int run(void *hdlg) {
                 auto cfg_str = cfg_path.string();
                 pclog("Config name %s\n", cfg_str.c_str());
 
-                strcpy(config_file_default, cfg_str.c_str());
-                strcpy(config_name, s);
-                if (config_name[strlen(config_name) - 1] == '.')
-                        config_name[strlen(config_name) - 1] = 0;
+                config_file_default = cfg_str;
+                config_name = s;
+                if (!config_name.empty() && config_name.back() == '.')
+                        config_name.pop_back();
 
                 wx_enddialog(hdlg, 1);
                 //                                        pause = 0;
@@ -137,7 +137,7 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
 
                                                 pclog("Config %s\n", cfg);
 
-                                                if (!wx_file_exists(cfg)) {
+                                                if (!std::filesystem::exists(cfg)) {
                                                         /* Load from the new (empty) file to reset
                                                            globals to defaults for a fresh config */
                                                         loadconfig(cfg);
@@ -164,7 +164,7 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
 
                         pclog("wx_dlgdirselectex returned %i %s\n", ret, s);
                         if (s[0]) {
-                                char prev_cfg[512];
+                                std::string prev_cfg;
 
                                 strcpy(cfg, configs_path);
                                 put_backslash(cfg);
@@ -173,13 +173,13 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
                                 pclog("Config name %s\n", cfg);
 
                                 /* Save current config path so we can restore on cancel */
-                                strcpy(prev_cfg, config_file_default);
+                                prev_cfg = config_file_default;
                                 loadconfig(cfg);
                                 if (config_open(hdlg)) {
                                         saveconfig(cfg);
                                 } else {
                                         /* Cancelled — restore previous config state */
-                                        if (prev_cfg[0])
+                                        if (!prev_cfg.empty())
                                                 loadconfig(prev_cfg);
                                 }
                         }
@@ -208,7 +208,7 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
                                                 auto new_str = new_path.string();
                                                 pclog("Rename %s to %s\n", old_str.c_str(), new_str.c_str());
 
-                                                if (!wx_file_exists(new_str.data())) {
+                                                if (!std::filesystem::exists(new_path)) {
                                                         rename(old_str.c_str(), new_str.c_str());
 
                                                         config_list_update(hdlg);
@@ -245,8 +245,8 @@ static int config_selection_dlgproc(void *hdlg, int message, INT_PARAM wParam, L
                                                 auto new_str = new_path.string();
                                                 pclog("Copy %s to %s\n", old_str.c_str(), new_str.c_str());
 
-                                                if (!wx_file_exists(new_str.data())) {
-                                                        wx_copy_file(old_str.c_str(), new_str.c_str(), 1);
+                                                if (!std::filesystem::exists(new_path)) {
+                                                        std::filesystem::copy_file(old_path, new_path, std::filesystem::copy_options::overwrite_existing);
 
                                                         config_list_update(hdlg);
                                                         done = 1;

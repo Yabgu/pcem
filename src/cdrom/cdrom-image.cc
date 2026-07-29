@@ -5,7 +5,7 @@
 #include "ibm.h"
 #include "ide.h"
 
-char image_path[1024];
+std::string image_path;
 static int image_changed = 0;
 
 extern ATAPI image_atapi;
@@ -141,7 +141,7 @@ static int image_ready(void) {
         if (!cdrom)
                 return 0;
 
-        if (strlen(image_path) == 0)
+        if (image_path.empty())
                 return 0;
 
         if (image_changed)
@@ -178,7 +178,7 @@ static int image_medium_changed(void) {
         if (!cdrom)
                 return 0;
 
-        if (strlen(image_path) == 0)
+        if (image_path.empty())
                 return 0;
 
         if (old_cdrom_drive != cdrom_drive) {
@@ -448,19 +448,12 @@ void image_close(void) {
                 delete cdrom;
                 cdrom = NULL;
         }
-        //        memset(image_path, 0, 1024);
 }
 
-int image_open(const char *fn) {
-        if (strcmp(fn, image_path) != 0)
-                image_changed = 1;
-
-        /* Make sure image_changed stays when changing from an image to another image. */
-        if (cdrom_drive != CDROM_IMAGE)
-                image_changed = 1;
-        /* strcpy fails on OSX if both parameters are pointing to the same address */
-        if (image_path != fn)
-                strcpy(image_path, fn);
+int image_open(const std::filesystem::path &fn) {
+        std::string path_str = fn.string();
+        image_path = path_str;
+        image_changed = 1;
 
         cdrom = new CDROM_Interface_Image();
         if (!cdrom->SetDevice(fn, false)) {
