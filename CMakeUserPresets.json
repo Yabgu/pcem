@@ -3,6 +3,14 @@
   "configurePresets": [
     {
       "name": "default",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "vcpkg win32",
       "inherits": "vcpkg",
       "environment": {
         "VCPKG_ROOT": "C:/work/vcpkg"
