@@ -5,6 +5,12 @@
 #include <condition_variable>
 #include <chrono>
 
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <pthread.h>
+#endif
+
 /* thread_t : wraps std::thread */
 struct thread_impl {
 	std::thread t;
@@ -16,10 +22,21 @@ thread_t *thread_create(void (*thread_rout)(void *param), void *param) {
 	return (thread_t *)impl;
 }
 
+/* The emulator's worker threads (render/fifo/blit threads etc.) are infinite
+   loops that block on events and never return on their own, so they cannot be
+   stopped gracefully with join(). thread_kill() must therefore forcibly
+   terminate the underlying native thread, matching the pre-refactor
+   pthread_cancel()/TerminateThread() behavior. */
 void thread_kill(thread_t *handle) {
 	auto *impl = (thread_impl *)handle;
-	if (impl->t.joinable())
+	if (impl->t.joinable()) {
+#ifdef _WIN32
+		TerminateThread(impl->t.native_handle(), 0);
+#else
+		pthread_cancel(impl->t.native_handle());
+#endif
 		impl->t.join();
+	}
 	delete impl;
 }
 
