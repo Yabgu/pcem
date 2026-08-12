@@ -34,7 +34,7 @@ void device_add(device_t *d) { pcem_add_device(d); }
 void device_close_all() {
         int c;
 
-        for (c = 0; c < 256; c++) {
+        for (c = 0; c < DEV_MAX; c++) {
                 if (devices[c] != NULL) {
                         if (devices[c]->close != NULL)
                                 devices[c]->close(device_priv[c]);
