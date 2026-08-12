@@ -193,7 +193,7 @@ int pcem_model_get_config_int(device_t *device, const char *s) {
         return 0;
 }
 
-const char *pcem_model_get_config_string(device_t *device, const char *s) {
+const char *pcem_model_get_config_string(device_t *device, const std::string& s) {
         device_config_t *config;
 
         if (!device)
@@ -202,7 +202,7 @@ const char *pcem_model_get_config_string(device_t *device, const char *s) {
         config = device->config;
 
         while (config->type != -1) {
-                if (!strcmp(s, config->name))
+                if (s == config->name)
                         return config_get_string(CFG_MACHINE, device->name, s, config->default_string);
 
                 config++;

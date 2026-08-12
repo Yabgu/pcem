@@ -58,7 +58,7 @@ void cassette_eject(void) {
         cassettefn.clear();
 }
 
-void cassette_load(std::string_view filename) {
+void cassette_load(std::string filename) {
         FILE *fp;
         unsigned char magic[8];
 

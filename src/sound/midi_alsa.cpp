@@ -88,7 +88,7 @@ void midi_init() {
         if (!midi_queried)
                 midi_query();
 
-        midi_id = config_get_int(CFG_MACHINE, NULL, "midi", 0);
+        midi_id = config_get_int(CFG_MACHINE, "", "midi", 0);
 
         sprintf(portname, "hw:%i,%i,%i", midi_devices[midi_id].card, midi_devices[midi_id].device, midi_devices[midi_id].sub);
         pclog("Opening MIDI port %s\n", portname);

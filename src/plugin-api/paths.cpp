@@ -2,6 +2,7 @@
 #include "config.h"
 #include <string.h>
 #include <SDL.h>
+#include <filesystem>
 #include "ibm.h"
 #include "ui-utils.h"
 
@@ -198,17 +199,17 @@ void paths_init() {
         *p = 0;
 
         /* set up default paths for this session */
-        append_filename(s, pcem_path, "roms/", 512);
+        snprintf(s, 512, "%s", (std::filesystem::path(pcem_path) / "roms").c_str());
         set_default_roms_paths(s);
-        append_filename(s, pcem_path, "nvr/", 512);
+        snprintf(s, 512, "%s", (std::filesystem::path(pcem_path) / "nvr").c_str());
         set_default_nvr_path(s);
-        append_filename(s, pcem_path, "configs/", 512);
+        snprintf(s, 512, "%s", (std::filesystem::path(pcem_path) / "configs").c_str());
         set_default_configs_path(s);
-        append_filename(s, pcem_path, "screenshots/", 512);
+        snprintf(s, 512, "%s", (std::filesystem::path(pcem_path) / "screenshots").c_str());
         set_default_screenshots_path(s);
-        append_filename(s, pcem_path, "logs/", 512);
+        snprintf(s, 512, "%s", (std::filesystem::path(pcem_path) / "logs").c_str());
         set_default_logs_path(s);
-        append_filename(s, pcem_path, "nvr/default/", 512);
+        snprintf(s, 512, "%s", (std::filesystem::path(pcem_path) / "nvr" / "default").c_str());
         set_default_nvr_default_path(s);
 
         add_config_callback(paths_loadconfig, paths_saveconfig, paths_onconfigloaded);

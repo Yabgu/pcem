@@ -44,21 +44,19 @@ static struct {
 
 static int driveloaders[4];
 
-void disc_load(int drive, const char *fn) {
+void disc_load(int drive, const std::string& fn) {
         int c = 0, size;
         std::string ext_str;
         FILE *f;
         //        pclog("disc_load %i %s\n", drive, fn);
         //        setejecttext(drive, "");
-        if (!fn)
-                return;
         ext_str = std::filesystem::path(fn).extension().string();
         if (!ext_str.empty() && ext_str[0] == '.')
                 ext_str = ext_str.substr(1);
         const char *p = ext_str.c_str();
         //        setejecttext(drive, fn);
-        pclog("Loading :%i %s %s\n", drive, fn, p);
-        f = fopen(fn, "rb");
+        pclog("Loading :%i %s %s\n", drive, fn.c_str(), p);
+        f = fopen(fn.c_str(), "rb");
         if (!f)
                 return;
         fseek(f, -1, SEEK_END);
@@ -68,7 +66,7 @@ void disc_load(int drive, const char *fn) {
                 if (!strcasecmp(p, loaders[c].ext) && (size == loaders[c].size || loaders[c].size == -1)) {
                         pclog("Loading as %s\n", p);
                         driveloaders[drive] = c;
-                        loaders[c].load(drive, fn);
+                        loaders[c].load(drive, fn.c_str());
                         drive_empty[drive] = 0;
                         disc_changed[drive] = 1;
                         discfns[drive] = fn;
@@ -77,7 +75,7 @@ void disc_load(int drive, const char *fn) {
                 }
                 c++;
         }
-        pclog("Couldn't load %s %s\n", fn, p);
+        pclog("Couldn't load %s %s\n", fn.c_str(), p);
         drive_empty[drive] = 1;
         discfns[drive].clear();
 }

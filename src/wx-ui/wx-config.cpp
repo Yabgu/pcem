@@ -335,7 +335,7 @@ static void recalc_hdd_list(void *hdlg, int model, int use_selected_hdd, int for
 }
 
 // TODO: split this into model/speed recalcs?
-static void recalc_cd_list(void *hdlg, int cur_speed, std::string_view cur_model) {
+static void recalc_cd_list(void *hdlg, int cur_speed, std::string cur_model) {
         int temp_model = -1;
         void *h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO_CDMODEL"));
         int c = 0;
@@ -354,7 +354,7 @@ static void recalc_cd_list(void *hdlg, int cur_speed, std::string_view cur_model
                     (cd_get_model_interfaces(c) == CD_MODEL_INTERFACE_SCSI && hdd_controller_selected_is_scsi(hdlg))) {
 
                         model = cd_get_model(c);
-                        wx_sendmessage(model.c_str(), WX_CB_ADDSTRING, 0, (LONG_PARAM)s);
+                        wx_sendmessage(h, WX_CB_ADDSTRING, 0, (LONG_PARAM)const_cast<char*>(model.c_str()));
 
                         if (cur_model == model) {
                                 wx_sendmessage(h, WX_CB_SETCURSEL, c, 0);

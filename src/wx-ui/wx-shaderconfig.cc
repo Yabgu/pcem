@@ -15,7 +15,7 @@
 
 
 #include "config.h"
-void saveconfig(char *);
+void saveconfig(const char *);
 void resetpchard();
 int deviceconfig_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM lParam);
 void write_shader_config(glslp_t *shader);

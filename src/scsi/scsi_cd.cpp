@@ -468,7 +468,7 @@ std::string cd_get_model(int i) { return cd_models[i].model_string_40; }
 
 std::string cd_get_config_model(int i) { return cd_models[i].model_config_string_40; }
 
-void cd_set_model(std::string_view model) {
+void cd_set_model(std::string model) {
         if (cd_data) {
                 int c = 0;
 
@@ -491,7 +491,7 @@ int cd_get_model_interfaces(int i) { return cd_models[i].interfaces; }
 
 int cd_get_model_speed(int i) { return cd_models[i].speed; }
 
-std::string cd_model_to_config(std::string_view model) {
+std::string cd_model_to_config(std::string model) {
         int c = 0;
 
         while (1) {
@@ -509,7 +509,7 @@ std::string cd_model_to_config(std::string_view model) {
         return cd_models[c].model_config_string_40;
 }
 
-std::string cd_model_from_config(std::string_view config) {
+std::string cd_model_from_config(std::string config) {
         int c = 0;
 
         while (1) {

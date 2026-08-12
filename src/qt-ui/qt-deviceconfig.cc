@@ -13,7 +13,7 @@
 
 #include "config.h"
 #include "plat-midi.h"
-void saveconfig(char *);
+void saveconfig(const char *);
 void resetpchard();
 int deviceconfig_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM lParam);
 device_t *config_device = NULL;
@@ -65,7 +65,7 @@ int deviceconfig_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM l
                                 num = midi_get_num_devs();
                                 if (num > 0) {
                                         h = wx_getdlgitem(hdlg, id + 1);
-                                        val_int = config_get_int(CFG_MACHINE, NULL, config->name, config->default_int);
+                                        val_int = config_get_int(CFG_MACHINE, "", config->name, config->default_int);
 
                                         for (c = 0; c < num; c++) {
                                                 midi_get_dev_name(c, s);
@@ -126,7 +126,7 @@ int deviceconfig_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM l
                                 case CONFIG_MIDI:
                                         if (midi_get_num_devs() > 0) {
                                                 h = wx_getdlgitem(hdlg, id + 1);
-                                                val_int = config_get_int(CFG_MACHINE, NULL, config->name, config->default_int);
+                                                val_int = config_get_int(CFG_MACHINE, "", config->name, config->default_int);
 
                                                 c = wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0);
 
@@ -179,7 +179,7 @@ int deviceconfig_dlgproc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM l
                                         if (midi_get_num_devs() > 0) {
                                                 h = wx_getdlgitem(hdlg, id + 1);
                                                 c = wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0);
-                                                config_set_int(CFG_MACHINE, NULL, config->name, c);
+                                                config_set_int(CFG_MACHINE, "", config->name, c);
 
                                                 id += 2;
                                         }

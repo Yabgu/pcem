@@ -21,11 +21,11 @@ extern int cd_speed;
 
 std::string cd_get_model(int i);
 std::string cd_get_config_model(int i);
-void cd_set_model(std::string_view model);
+void cd_set_model(std::string model);
 int cd_get_model_interfaces(int i);
 int cd_get_model_speed(int i);
-std::string cd_model_to_config(std::string_view model);
-std::string cd_model_from_config(std::string_view config);
+std::string cd_model_to_config(std::string model);
+std::string cd_model_from_config(std::string config);
 
 extern std::string cd_model;
 

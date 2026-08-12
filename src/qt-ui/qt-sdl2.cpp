@@ -243,9 +243,9 @@ Uint32 timer_onesec(Uint32 interval, void *param) {
 }
 
 void sdl_loadconfig() {
-        vid_resize = config_get_int(CFG_MACHINE, NULL, "vid_resize", 0);
-        video_fullscreen_scale = config_get_int(CFG_MACHINE, NULL, "video_fullscreen_scale", 0);
-        video_fullscreen_first = config_get_int(CFG_MACHINE, NULL, "video_fullscreen_first", 1);
+        vid_resize = config_get_int(CFG_MACHINE, "", "vid_resize", 0);
+        video_fullscreen_scale = config_get_int(CFG_MACHINE, "", "video_fullscreen_scale", 0);
+        video_fullscreen_first = config_get_int(CFG_MACHINE, "", "video_fullscreen_first", 1);
 
         strcpy(screenshot_format, config_get_string(CFG_MACHINE, "SDL2", "screenshot_format", IMAGE_PNG));
         screenshot_flash = config_get_int(CFG_MACHINE, "SDL2", "screenshot_flash", 1);
@@ -280,9 +280,9 @@ void sdl_loadconfig() {
 }
 
 void sdl_saveconfig() {
-        config_set_int(CFG_MACHINE, NULL, "vid_resize", vid_resize);
-        config_set_int(CFG_MACHINE, NULL, "video_fullscreen_scale", video_fullscreen_scale);
-        config_set_int(CFG_MACHINE, NULL, "video_fullscreen_first", video_fullscreen_first);
+        config_set_int(CFG_MACHINE, "", "vid_resize", vid_resize);
+        config_set_int(CFG_MACHINE, "", "video_fullscreen_scale", video_fullscreen_scale);
+        config_set_int(CFG_MACHINE, "", "video_fullscreen_first", video_fullscreen_first);
 
         config_set_string(CFG_MACHINE, "SDL2", "screenshot_format", screenshot_format);
         config_set_int(CFG_MACHINE, "SDL2", "screenshot_flash", screenshot_flash);

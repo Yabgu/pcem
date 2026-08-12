@@ -31,7 +31,7 @@ extern device_t cassette_device;
 uint8_t cassette_input(void);
 void cassette_set_motor(uint8_t on);
 void cassette_eject(void);
-void cassette_load(std::string_view filename);
+void cassette_load(std::string filename);
 
 extern std::string cassettefn;
 

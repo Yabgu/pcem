@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
+#include <filesystem>
 
 #if defined(linux) || defined(__linux__)
 #include <dlfcn.h>
@@ -103,7 +104,7 @@ void init_plugin_engine() {
         memset(hdd_controllers, 0, sizeof(hdd_controllers));
         memset(network_cards, 0, sizeof(network_cards));
 
-        append_filename(default_plugin_path, pcem_path, "plugins/", 512);
+        snprintf(default_plugin_path, 512, "%s", (std::filesystem::path(pcem_path) / "plugins").c_str());
 
 #ifdef PLUGIN_ENGINE
         add_config_callback(pluginengine_load_config, pluginengine_save_config, pluginengine_init_config);

@@ -333,7 +333,7 @@ static void recalc_hdd_list(void *hdlg, int model, int use_selected_hdd, int for
 }
 
 // TODO: split this into model/speed recalcs?
-static void recalc_cd_list(void *hdlg, int cur_speed, std::string_view cur_model) {
+static void recalc_cd_list(void *hdlg, int cur_speed, std::string cur_model) {
         int temp_model = -1;
         void *h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO_CDMODEL"));
         int c = 0;

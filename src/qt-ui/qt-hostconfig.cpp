@@ -85,7 +85,7 @@ int hostconfig_dialog_proc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM
 
                 if (pcap_findalldevs(&alldevs, errbuf) == 0) {
 
-                        char *pcap_device = config_get_string(CFG_GLOBAL, NULL, "pcap_device", "nothing");
+                        char *pcap_device = config_get_string(CFG_GLOBAL, "", "pcap_device", "nothing");
 
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO_NETWORK_DEVICE"));
 
@@ -130,7 +130,7 @@ int hostconfig_dialog_proc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM
                         h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO_NETWORK_TYPE"));
                         wx_sendmessage(h, WX_CB_ADDSTRING, 0, (LONG_PARAM) "PCAP");
 
-                        if (config_get_int(CFG_GLOBAL, NULL, "net_type", NET_SLIRP) == NET_PCAP) {
+                        if (config_get_int(CFG_GLOBAL, "", "net_type", NET_SLIRP) == NET_PCAP) {
                                 wx_sendmessage(h, WX_CB_SETCURSEL, 1, 0);
                                 h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO_NETWORK_DEVICE"));
                                 wx_sendmessage(h, WX_CB_SETCURSEL, match, 0);
@@ -155,13 +155,13 @@ int hostconfig_dialog_proc(void *hdlg, int message, INT_PARAM wParam, LONG_PARAM
                                 h = wx_getdlgitem(hdlg, WX_ID("IDC_COMBO_NETWORK_DEVICE"));
                                 idev = wx_sendmessage(h, WX_CB_GETCURSEL, 0, 0);
 
-                                config_set_int(CFG_GLOBAL, NULL, "net_type", NET_PCAP);
-                                config_set_string(CFG_GLOBAL, NULL, "pcap_device", dev_names[idev]);
+                                config_set_int(CFG_GLOBAL, "", "net_type", NET_PCAP);
+                                config_set_string(CFG_GLOBAL, "", "pcap_device", dev_names[idev]);
                         } else /*SLiRP*/
                         {
 #endif
-                                config_set_int(CFG_GLOBAL, NULL, "net_type", NET_SLIRP);
-                                config_set_string(CFG_GLOBAL, NULL, "pcap_device", "nothing");
+                                config_set_int(CFG_GLOBAL, "", "net_type", NET_SLIRP);
+                                config_set_string(CFG_GLOBAL, "", "pcap_device", "nothing");
 #ifdef USE_PCAP_NETWORKING
                         }
 #endif

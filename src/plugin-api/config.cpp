@@ -125,8 +125,8 @@ int config_free_section(int is_global, const char *name) {
         return 0;
 }
 
-void config_load(int is_global, const char *fn) {
-        FILE *f = fopen(fn, "rt");
+void config_load(int is_global, std::string fn) {
+        FILE *f = fopen(fn.c_str(), "rt");
         section_t *current_section;
         list_t *head = is_global ? &global_config_head : &machine_config_head;
 
@@ -224,7 +224,7 @@ void config_new() {
         fclose(f);
 }
 
-static section_t *find_section(std::string_view name, int is_global) {
+static section_t *find_section(const std::string& name, int is_global) {
         section_t *current_section;
         list_t *head = is_global ? &global_config_head : &machine_config_head;
 
@@ -239,7 +239,7 @@ static section_t *find_section(std::string_view name, int is_global) {
         return NULL;
 }
 
-static entry_t *find_entry(section_t *section, std::string_view name) {
+static entry_t *find_entry(section_t *section, std::string name) {
         entry_t *current_entry;
 
         current_entry = (entry_t *)section->entry_head.next;
@@ -253,7 +253,7 @@ static entry_t *find_entry(section_t *section, std::string_view name) {
         return NULL;
 }
 
-static section_t *create_section(std::string_view name, int is_global) {
+static section_t *create_section(const std::string& name, int is_global) {
         section_t *new_section = (section_t *)malloc(sizeof(section_t));
         list_t *head = is_global ? &global_config_head : &machine_config_head;
 
@@ -266,7 +266,7 @@ static section_t *create_section(std::string_view name, int is_global) {
         return new_section;
 }
 
-static entry_t *create_entry(section_t *section, std::string_view name) {
+static entry_t *create_entry(section_t *section, std::string name) {
         entry_t *new_entry = (entry_t *)malloc(sizeof(entry_t));
         memset(new_entry, 0, sizeof(entry_t));
         size_t len = std::min(name.size(), sizeof(new_entry->name) - 1);
@@ -277,7 +277,7 @@ static entry_t *create_entry(section_t *section, std::string_view name) {
         return new_entry;
 }
 
-int config_get_int(int is_global, const char *head, std::string_view name, int def) {
+int config_get_int(int is_global, const std::string& head, const std::string& name, int def) {
         section_t *section;
         entry_t *entry;
         int value;
@@ -297,7 +297,7 @@ int config_get_int(int is_global, const char *head, std::string_view name, int d
         return value;
 }
 
-float config_get_float(int is_global, const char *head, std::string_view name, float def) {
+float config_get_float(int is_global, const std::string& head, const std::string& name, float def) {
         section_t *section;
         entry_t *entry;
         float value;
@@ -317,8 +317,8 @@ float config_get_float(int is_global, const char *head, std::string_view name, f
         return value;
 }
 
-const char *config_get_string(int is_global, const char *head, std::string_view name, const char *def) {
-        section_t *section;
+const char *config_get_string(int is_global, const std::string& head, const std::string& name, const char *def) {
+        section_t *section = nullptr;
         entry_t *entry;
 
         section = find_section(head, is_global);
@@ -334,7 +334,7 @@ const char *config_get_string(int is_global, const char *head, std::string_view 
         return entry->data;
 }
 
-void config_set_int(int is_global, const char *head, std::string_view name, int val) {
+void config_set_int(int is_global, const std::string& head, const std::string& name, int val) {
         section_t *section;
         entry_t *entry;
 
@@ -351,7 +351,7 @@ void config_set_int(int is_global, const char *head, std::string_view name, int 
         sprintf(entry->data, "%i", val);
 }
 
-void config_set_float(int is_global, const char *head, std::string_view name, float val) {
+void config_set_float(int is_global, const std::string& head, const std::string& name, float val) {
         section_t *section;
         entry_t *entry;
 
@@ -368,7 +368,7 @@ void config_set_float(int is_global, const char *head, std::string_view name, fl
         sprintf(entry->data, "%f", val);
 }
 
-void config_set_string(int is_global, const char *head, std::string_view name, std::string_view val) {
+void config_set_string(int is_global, const std::string& head, const std::string& name, std::string val) {
         section_t *section;
         entry_t *entry;
 
@@ -396,8 +396,6 @@ char *get_filename(char *s) {
         }
         return s;
 }
-
-void append_filename(char *dest, std::string_view s1, std::string_view s2, int size) { snprintf(dest, size, "%.*s%.*s", (int)s1.size(), s1.data(), (int)s2.size(), s2.data()); }
 
 void append_slash(char *s, int size) {
         int c = strlen(s) - 1;

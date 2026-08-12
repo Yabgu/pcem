@@ -3,6 +3,7 @@
 #include <pcem/plugin.h>
 #include <pcem/config.h>
 #include <string.h>
+#include <filesystem>
 
 #include "lpt_epsonlx810.h"
 
@@ -34,7 +35,7 @@ void save_config() { config_set_string(CFG_GLOBAL, "Paths", "printer_path", prin
 
 void init_config() {
         char s[512];
-        append_filename(s, pcem_path, "printer/", 512);
+        snprintf(s, 512, "%s", (std::filesystem::path(pcem_path) / "printer").c_str());
         set_printer_path(s);
 }
 

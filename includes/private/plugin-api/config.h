@@ -4,7 +4,6 @@
 #include <pcem/config.h>
 
 extern char *get_filename(char *s);
-extern void append_filename(char *dest, const char *s1, const char *s2, int size);
 extern void append_slash(char *s, int size);
 extern void put_backslash(char *s);
 

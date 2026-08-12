@@ -2,6 +2,7 @@
 #define _PCEM_DEVICES_H_
 
 #include <pcem/cpu.h>
+#include <string>
 
 #define CONFIG_STRING 0
 #define CONFIG_INT 1
@@ -126,7 +127,7 @@ extern void pcem_add_device(device_t *device);
 extern int pcem_device_get_config_int(device_t *device, const char *name);
 extern const char *pcem_device_get_config_string(device_t *device, const char *s);
 extern int pcem_model_get_config_int(device_t *device, const char *s);
-extern const char *pcem_model_get_config_string(device_t *device, const char *s);
+extern const char *pcem_model_get_config_string(device_t *device, const std::string& s);
 extern device_t *pcem_model_getdevice(int model);
 
 #endif /* _PCEM_DEVICES_H_ */

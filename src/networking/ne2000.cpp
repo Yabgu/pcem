@@ -1573,7 +1573,7 @@ void *ne2000_common_init() {
         ne2000_t *ne2000 = (ne2000_t *)malloc(sizeof(ne2000_t));
         memset(ne2000, 0, sizeof(ne2000_t));
 
-        macstring = config_get_string(CFG_MACHINE, NULL, "macaddr", "");
+        macstring = config_get_string(CFG_MACHINE, std::string(), "macaddr", "");
 
         if (sscanf(macstring, "%02x:%02x:%02x:%02x:%02x:%02x", &macint[0], &macint[1], &macint[2], &macint[3], &macint[4],
                    &macint[5]) != 6) {
@@ -1599,11 +1599,11 @@ void *ne2000_common_init() {
         // 1 slirp
         //
 #ifdef USE_PCAP_NETWORKING
-        net_is_slirp = (config_get_int(CFG_GLOBAL, NULL, "net_type", NET_SLIRP) == NET_SLIRP) ? 1 : 0;
-        pclog("ne2000 pcap device %s\n", config_get_string(CFG_GLOBAL, NULL, "pcap_device", "nothing"));
+        net_is_slirp = (config_get_int(CFG_GLOBAL, std::string(), "net_type", NET_SLIRP) == NET_SLIRP) ? 1 : 0;
+        pclog("ne2000 pcap device %s\n", config_get_string(CFG_GLOBAL, std::string(), "pcap_device", "nothing"));
 
         // Check that we have a string setup, otherwise turn pcap off
-        if (!strcmp("nothing", config_get_string(CFG_GLOBAL, NULL, "pcap_device", "nothing")))
+        if (!strcmp("nothing", config_get_string(CFG_GLOBAL, std::string(), "pcap_device", "nothing")))
                 net_is_pcap = 0;
         else if (net_is_slirp == 0)
                 net_is_pcap = 1;
@@ -1675,10 +1675,10 @@ void *ne2000_common_init() {
                     pcap_getnonblock) {
                         pclog("ne2000 Pcap version [%s]\n", pcap_lib_version());
 
-                        if ((net_pcap = pcap_open_live(config_get_string(CFG_GLOBAL, NULL, "pcap_device", "nothing"), 1518, 1, 15,
+                        if ((net_pcap = pcap_open_live(config_get_string(CFG_GLOBAL, std::string(), "pcap_device", "nothing"), 1518, 1, 15,
                                                        errbuf)) == 0) {
                                 pclog("ne2000 pcap_open_live error on %s!\n",
-                                      config_get_string(CFG_GLOBAL, NULL, "pcap_device", "whatever the ethernet is"));
+                                      config_get_string(CFG_GLOBAL, std::string(), "pcap_device", "whatever the ethernet is"));
                                 net_is_pcap = 0;
                                 return (ne2000); // YUCK!!!
                         }
